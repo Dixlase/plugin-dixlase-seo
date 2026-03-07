@@ -1,0 +1,90 @@
+{
+    "name": "DixlaseSEO",
+    "package_name": "plugins/dixlase-seo",
+    "slug": "dixlase-seo",
+    "version": "1.0.0",
+    "description": "This is the DixlaseSEO plugin.",
+    "author": "",
+    "email": "your-email@example.com",
+    "url": "https://example.com",
+    "license": "GPL",
+    "license_template": "license-gpl.txt",
+    "thumbnail": "thumbnail.png",
+    "namespace": "Plugins\\DixlaseSEO",
+    "providers": [
+        "Plugins\\DixlaseSEO\\App\\Providers\\DixlaseSEOServiceProvider"
+    ],
+    "type": "dixlase-plugin",
+    "category": "general",
+    "tags": ["custom"],
+    "requires": {
+        "dixlase": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "provides": {
+        "admin_menu": false,
+        "front_routes": false,
+        "api_routes": false,
+        "settings_page": false,
+        "shortcodes": false,
+        "helper_functions": false
+    },
+    "permissions": {
+        "database": {
+            "own_tables": false,
+            "core_tables": []
+        },
+        "storage": {
+            "own_directory": false,
+            "public_uploads": false,
+            "temp_files": false
+        },
+        "settings": {
+            "read_core": false,
+            "write_own": true
+        },
+        "members": {
+            "read": false,
+            "write": false,
+            "create": false,
+            "delete": false
+        },
+        "mail": {
+            "send": false,
+            "bulk_send": false
+        },
+        "content": {
+            "read_other_plugins": [],
+            "write_other_plugins": []
+        },
+        "system": {
+            "register_shortcodes": false,
+            "register_middleware": false,
+            "register_commands": false,
+            "register_blade_directives": false,
+            "modify_routes": false
+        },
+        "_optional": [],
+        "_notes": {
+            "ja": "",
+            "en": ""
+        }
+    },
+    "declares": {
+        "configs": {
+            "roles": false,
+            "database_cleanup": false,
+            "navigation": false
+        },
+        "contracts": [],
+        "migrations": false,
+        "commands": false,
+        "middleware": false
+    },
+    "files": {},
+    "signing": {
+        "algo": "ed25519",
+        "key_id": null,
+        "signed_at": null
+    }
+}
