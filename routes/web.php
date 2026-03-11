@@ -21,23 +21,17 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use Plugins\DixlaseSEO\App\Http\Controllers\RobotsTxtController;
+use Plugins\DixlaseSEO\App\Http\Controllers\SitemapController;
 
 /*
 |--------------------------------------------------------------------------
 | DixlaseSEO Web Routes
 |--------------------------------------------------------------------------
-|
-| フロントエンド用のルート定義
-|
-| 注意: このファイルは自動的に以下のミドルウェアが適用されます
-| - web: セッション、CSRF保護
-| - front.ip: フロントエンドIPアドレス制限
-|
-| セキュリティに関する注意:
-| - front.ip ミドルウェアでIPアドレスフィルタリングを実施します
-| - IPアドレスフィルタリングを実施しないとセキュリティリスクが高まります
-|
 */
 
-// フロントエンド用のルート
-// 例: Route::get('/dixlase-seo', [Controller::class, 'index'])->name('dixlase-seo.index');
+Route::get('sitemap.xml', [SitemapController::class, 'index'])
+    ->name('dixlase-seo.sitemap');
+
+Route::get('robots.txt', [RobotsTxtController::class, 'index'])
+    ->name('dixlase-seo.robots');

@@ -21,25 +21,19 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\DixlaseSeoAdminSettingsController;
 
 /*
 |--------------------------------------------------------------------------
 | DixlaseSEO Admin Routes
 |--------------------------------------------------------------------------
-|
-| 管理画面用のルート定義
-| 
-| 注意: このファイルは自動的に以下のミドルウェアが適用されます
-| - web: セッション、CSRF保護
-| - auth:member: 管理者認証
-| - admin.ip: 管理画面IPアドレス制限
-|
-| セキュリティに関する注意:
-| - auth:member ミドルウェアで認証を要求します
-| - admin.ip ミドルウェアでIPアドレスフィルタリングを実施します
-| - IPアドレスフィルタリングを実施しないとセキュリティリスクが高まります
-|
 */
 
-// 管理画面用のルート
-// 例: Route::resource('dixlase-seo', Controller::class);
+Route::prefix('dixlase-seo')
+    ->name('dixlase-seo.')
+    ->group(function () {
+        Route::get('settings', [DixlaseSeoAdminSettingsController::class, 'settings'])
+            ->name('settings');
+        Route::patch('settings', [DixlaseSeoAdminSettingsController::class, 'updateSettings'])
+            ->name('settings.update');
+    });

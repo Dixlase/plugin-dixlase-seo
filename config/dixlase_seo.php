@@ -20,6 +20,56 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+/*
+|--------------------------------------------------------------------------
+| DixlaseSEO デフォルト設定
+|--------------------------------------------------------------------------
+|
+| SEOプラグインのデフォルト設定値を定義します。
+| これらの値はデータベースに保存された設定で上書きされます。
+|
+*/
+
 return [
-    // Your plugin configuration here...
+    // タイトル区切り文字
+    'title_separator' => '|',
+
+    // デフォルトのメタディスクリプション
+    'default_description' => '',
+
+    // デフォルトのOGP画像パス（メディアライブラリのパス）
+    'default_ogp_image' => '',
+
+    // OGPタイプ（サイト全体）
+    'ogp_type' => 'website',
+
+    // Twitter Cardタイプ
+    'twitter_card_type' => 'summary_large_image',
+
+    // Twitter ユーザー名（@なし）
+    'twitter_site' => '',
+
+    // 組織名
+    'organization_name' => '',
+
+    // 組織ロゴURL
+    'organization_logo' => '',
+
+    // 組織URL
+    'organization_url' => '',
+
+    // robots.txtカスタム内容
+    'robots_txt' => '',
+
+    // robots.txt管理モード（'auto' または 'custom'）
+    'robots_txt_mode' => 'auto',
+
+    // サイトマップ有効化
+    'sitemap_enabled' => true,
+
+    // サイトマップの変更頻度
+    'sitemap_changefreq' => 'weekly',
+
+    // サイトマップの優先度
+    'sitemap_priority' => '0.5',
 ];

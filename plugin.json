@@ -3,7 +3,7 @@
     "package_name": "plugins/dixlase-seo",
     "slug": "dixlase-seo",
     "version": "1.0.0",
-    "description": "This is the DixlaseSEO plugin.",
+    "description": "SEO optimization plugin for Dixlase CMS. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
     "author": "",
     "email": "your-email@example.com",
     "url": "https://example.com",
@@ -16,22 +16,24 @@
     ],
     "type": "dixlase-plugin",
     "category": "general",
-    "tags": ["custom"],
+    "tags": [
+        "custom"
+    ],
     "requires": {
         "dixlase": ">=1.0.0",
         "php": ">=8.2"
     },
     "provides": {
-        "admin_menu": false,
-        "front_routes": false,
+        "admin_menu": true,
+        "front_routes": true,
         "api_routes": false,
-        "settings_page": false,
+        "settings_page": true,
         "shortcodes": false,
         "helper_functions": false
     },
     "permissions": {
         "database": {
-            "own_tables": false,
+            "own_tables": true,
             "core_tables": []
         },
         "storage": {
@@ -40,7 +42,7 @@
             "temp_files": false
         },
         "settings": {
-            "read_core": false,
+            "read_core": true,
             "write_own": true
         },
         "members": {
@@ -59,27 +61,29 @@
         },
         "system": {
             "register_shortcodes": false,
-            "register_middleware": false,
+            "register_middleware": true,
             "register_commands": false,
             "register_blade_directives": false,
-            "modify_routes": false
+            "modify_routes": true
         },
         "_optional": [],
         "_notes": {
-            "ja": "",
-            "en": ""
+            "ja": "SEOメタタグ注入のためにwebミドルウェアグループにミドルウェアを登録。サイトマップ・robots.txtのフロントルートを追加。コア設定（サイト名等）を読み取り、プラグイン独自の設定テーブルに書き込み。",
+            "en": "Registers middleware to the web middleware group for SEO meta tag injection. Adds front routes for sitemap.xml and robots.txt. Reads core settings (site name, etc.) and writes to plugin's own settings table."
         }
     },
     "declares": {
         "configs": {
-            "roles": false,
+            "roles": true,
             "database_cleanup": false,
-            "navigation": false
+            "navigation": true
         },
-        "contracts": [],
-        "migrations": false,
+        "contracts": [
+            "App\\Contracts\\CspPolicyProvider"
+        ],
+        "migrations": true,
         "commands": false,
-        "middleware": false
+        "middleware": true
     },
     "files": {},
     "signing": {

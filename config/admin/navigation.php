@@ -24,31 +24,21 @@
 |--------------------------------------------------------------------------
 | 管理画面ナビゲーション設定
 |--------------------------------------------------------------------------
-|
-| 管理画面のサイドバーに表示されるメニュー項目を定義します。
-| このファイルが不要な場合は削除してください。
-|
 */
 
 return [
-    // 'dixlase-seo' => [
-    //     '_insert_after' => 'front',
-    //     'text' => 'dixlase-seo::admin/navigation.dixlase-seo.text',
-    //     'icon' => 'fas fa-fw fa-puzzle-piece',
-    //     'can' => 'admin',
-    //     'children' => [
-    //         'index' => [
-    //             'text' => 'dixlase-seo::admin/navigation.dixlase-seo.index',
-    //             'route' => 'dixlase-seo::admin.dixlase-seo.index',
-    //             'icon' => 'fas fa-fw fa-list',
-    //             'can' => 'admin',
-    //         ],
-    //         'settings' => [
-    //             'text' => 'dixlase-seo::admin/navigation.dixlase-seo.settings',
-    //             'route' => 'dixlase-seo::admin.dixlase-seo.settings',
-    //             'icon' => 'fas fa-fw fa-cog',
-    //             'can' => 'admin',
-    //         ],
-    //     ],
-    // ],
+    'dixlase-seo' => [
+        '_insert_after' => 'front',
+        'text' => 'dixlase-seo::admin/navigation.dixlase-seo.text',
+        'icon' => 'fas fa-fw fa-search',
+        'can' => 'admin',
+        'children' => [
+            'settings' => [
+                'text' => 'dixlase-seo::admin/navigation.dixlase-seo.settings',
+                'route' => 'dixlase-seo::admin.dixlase-seo.settings',
+                'icon' => 'fas fa-fw fa-cog',
+                'can' => 'admin',
+            ],
+        ],
+    ],
 ];
