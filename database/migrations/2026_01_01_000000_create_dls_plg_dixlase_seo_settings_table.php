@@ -4,7 +4,7 @@
  * This file is part of DixlaseSEO.
  *
  * Copyright (C) 2026
- * example.com
+ * https://example.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +20,30 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
-|--------------------------------------------------------------------------
-| プラグインのデフォルト権限設定
-|--------------------------------------------------------------------------
-*/
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use App\Enums\MemberRole;
+return new class extends Migration
+{
+    /**
+     * マイグレーション実行
+     */
+    public function up(): void
+    {
+        Schema::create('dls_plg_dixlase_seo_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->text('value')->nullable();
+            $table->timestamps();
+        });
+    }
 
-return [
-    'permissions' => [
-        // SEO設定画面（管理者のみ）
-        'settings.dixlase-seo.settings' => [
-            'access_roles' => MemberRole::ADMIN->value,
-            'view_roles' => MemberRole::ADMIN->value,
-        ],
-    ],
-];
+    /**
+     * ロールバック
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('dls_plg_dixlase_seo_settings');
+    }
+};

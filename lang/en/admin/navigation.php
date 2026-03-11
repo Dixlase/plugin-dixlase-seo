@@ -20,20 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/*
-|--------------------------------------------------------------------------
-| プラグインのデフォルト権限設定
-|--------------------------------------------------------------------------
-*/
-
-use App\Enums\MemberRole;
-
 return [
-    'permissions' => [
-        // SEO設定画面（管理者のみ）
-        'settings.dixlase-seo.settings' => [
-            'access_roles' => MemberRole::ADMIN->value,
-            'view_roles' => MemberRole::ADMIN->value,
-        ],
+    'dixlase-seo' => [
+        'text' => 'SEO',
+        'settings' => 'SEO Settings',
     ],
 ];

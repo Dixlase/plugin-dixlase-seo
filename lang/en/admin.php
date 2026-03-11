@@ -23,6 +23,6 @@
 return [
     'plugin' => [
         'name' => 'DixlaseSEO',
-        'description' => 'This is the DixlaseSEO plugin.',
+        'description' => 'SEO optimization plugin. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.',
     ],
 ];

@@ -23,21 +23,21 @@
 namespace Plugins\DixlaseSEO\App\Providers;
 
 use App\Contracts\CspPolicyProvider;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+use Plugins\DixlaseSEO\App\Http\Middleware\InjectSeoMetaTags;
+use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
+use Plugins\DixlaseSEO\App\Services\JsonLdGenerator;
+use Plugins\DixlaseSEO\App\Services\SitemapGenerator;
 
 /**
- * プラグインのServiceProvider
- * 
- * CspPolicyProviderを実装することで、プラグインが必要とする
- * 外部リソースのCSPディレクティブを宣言できます。
- * 外部リソースが不要な場合は、implements CspPolicyProvider と
- * getCspDirectives() メソッドを削除してください。
+ * DixlaseSEOプラグインのServiceProvider
  */
 class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProvider
 {
     /**
-     * Register services.
+     * サービスを登録する
      */
     public function register(): void
     {
@@ -46,14 +46,28 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
             __DIR__ . '/../../config/dixlase_seo.php',
             'dixlase_seo'
         );
+
+        // サービスをシングルトンで登録
+        $this->app->singleton(SeoMetaGenerator::class);
+        $this->app->singleton(JsonLdGenerator::class);
+
+        // SitemapGeneratorにLinkableProviderを注入
+        $this->app->singleton(SitemapGenerator::class, function ($app) {
+            $providers = [];
+            if ($app->bound('linkable.providers')) {
+                $providers = iterator_to_array($app->tagged('linkable.providers'));
+            }
+
+            return new SitemapGenerator($providers);
+        });
     }
 
     /**
-     * Bootstrap services.
+     * サービスを起動する
      */
     public function boot(): void
     {
-        // CSPポリシーの登録（外部リソースが必要な場合）
+        // CSPポリシーの登録
         $this->registerCspPolicy();
 
         // ビューの登録
@@ -64,6 +78,9 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
 
         // マイグレーションの登録
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+
+        // ミドルウェアの登録
+        $this->registerMiddleware();
 
         // ルートの登録
         $this->registerRoutes();
@@ -81,10 +98,7 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     }
 
     /**
-     * CSPポリシーを登録
-     * 
-     * 外部リソースが不要な場合は、このメソッドと
-     * getCspDirectives() メソッドを削除してください。
+     * CSPポリシーを登録する
      */
     protected function registerCspPolicy(): void
     {
@@ -95,58 +109,39 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     }
 
     /**
-     * CSPディレクティブを取得
-     * 
-     * プラグインが必要とする外部リソースのドメインを指定します。
-     * 不要な場合は空の配列を返すか、このメソッドを削除してください。
-     * 
+     * CSPディレクティブを取得する
+     *
      * @return array<string, array<string>>
      */
     public function getCspDirectives(): array
     {
-        return [
-            // 例: 外部スクリプトが必要な場合
-            // 'script-src' => ['https://cdn.example.com'],
-            // 
-            // 例: 外部スタイルシートが必要な場合
-            // 'style-src' => ['https://fonts.googleapis.com'],
-            // 
-            // 例: APIへの接続が必要な場合
-            // 'connect-src' => ['https://api.example.com'],
-            // 
-            // 例: 外部画像が必要な場合
-            // 'img-src' => ['https://images.example.com'],
-            // 
-            // 例: iframeの埋め込みが必要な場合
-            // 'frame-src' => ['https://youtube.com', 'https://vimeo.com'],
-        ];
+        return [];
     }
 
     /**
-     * ルートを登録
-     * 
-     * 注意: plugin.web と plugin.admin ミドルウェアグループは
-     * コアによって強制的にセキュリティミドルウェアが適用されます。
-     * これらのミドルウェアグループを変更しないでください。
+     * ミドルウェアを登録する
+     */
+    protected function registerMiddleware(): void
+    {
+        /** @var Router $router */
+        $router = $this->app->make(Router::class);
+
+        // SEOメタタグ注入ミドルウェアをwebグループに追加（全フロントページで動作）
+        $router->pushMiddlewareToGroup('web', InjectSeoMetaTags::class);
+    }
+
+    /**
+     * ルートを登録する
      */
     protected function registerRoutes(): void
     {
-        // Web routes (フロントエンド)
-        // plugin.web グループにより以下が自動適用されます:
-        // - セッション管理
-        // - CSRF保護
-        // - IP制限（front.ip）← コアにより強制
+        // フロントエンドルート
         if (file_exists(__DIR__ . '/../../routes/web.php')) {
             Route::middleware(['plugin.web'])
                 ->group(__DIR__ . '/../../routes/web.php');
         }
 
-        // Admin routes (管理画面)
-        // plugin.admin グループにより以下が自動適用されます:
-        // - セッション管理
-        // - CSRF保護
-        // - 認証（auth:member）← コアにより強制
-        // - IP制限（admin.ip）← コアにより強制
+        // 管理画面ルート
         if (file_exists(__DIR__ . '/../../routes/admin.php')) {
             Route::middleware(['plugin.admin'])
                 ->prefix(config('admin.url', 'admin'))
