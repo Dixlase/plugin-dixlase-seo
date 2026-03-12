@@ -144,7 +144,7 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         // 管理画面ルート
         if (file_exists(__DIR__ . '/../../routes/admin.php')) {
             Route::middleware(['plugin.admin'])
-                ->prefix(config('admin.url', 'admin'))
+                ->prefix(config('admin.url.admin_url', 'admin'))
                 ->name('admin.')
                 ->group(__DIR__ . '/../../routes/admin.php');
         }
