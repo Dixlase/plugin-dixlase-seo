@@ -30,7 +30,7 @@ use Plugins\DixlaseSEO\App\Http\Controllers\Admin\DixlaseSeoAdminSettingsControl
 */
 
 Route::prefix('dixlase-seo')
-    ->name('dixlase-seo.')
+    ->name('dixlase-seo::admin.dixlase-seo.')
     ->group(function () {
         Route::get('settings', [DixlaseSeoAdminSettingsController::class, 'settings'])
             ->name('settings');

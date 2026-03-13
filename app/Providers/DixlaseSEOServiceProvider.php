@@ -24,7 +24,6 @@ namespace Plugins\DixlaseSEO\App\Providers;
 
 use App\Contracts\CspPolicyProvider;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Plugins\DixlaseSEO\App\Http\Middleware\InjectSeoMetaTags;
 use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
@@ -82,8 +81,7 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         // ミドルウェアの登録
         $this->registerMiddleware();
 
-        // ルートの登録
-        $this->registerRoutes();
+        // Note: routes (routes/web.php, routes/admin.php) are auto-loaded by PluginServiceProvider
 
         // 公開可能なアセット
         if ($this->app->runningInConsole()) {
@@ -130,23 +128,4 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         $router->pushMiddlewareToGroup('web', InjectSeoMetaTags::class);
     }
 
-    /**
-     * ルートを登録する
-     */
-    protected function registerRoutes(): void
-    {
-        // フロントエンドルート
-        if (file_exists(__DIR__ . '/../../routes/web.php')) {
-            Route::middleware(['plugin.web'])
-                ->group(__DIR__ . '/../../routes/web.php');
-        }
-
-        // 管理画面ルート
-        if (file_exists(__DIR__ . '/../../routes/admin.php')) {
-            Route::middleware(['plugin.admin'])
-                ->prefix(config('admin.url.admin_url', 'admin'))
-                ->name('admin.')
-                ->group(__DIR__ . '/../../routes/admin.php');
-        }
-    }
 }
