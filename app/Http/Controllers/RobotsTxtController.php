@@ -22,7 +22,7 @@
 
 namespace Plugins\DixlaseSEO\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Http\Response;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
