@@ -199,6 +199,34 @@
             </div>
         </div>
     </section>
+
+    {{-- 外部サービス連携 --}}
+    <section class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            <i class="fas fa-plug mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/settings.section_external') }}
+        </h2>
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-6">
+            <div>
+                <x-form-label for="google_analytics_id" :text="__('dixlase-seo::admin/dixlase-seo/settings.google_analytics_id')" class="mb-1" />
+                <x-form-text
+                    name="google_analytics_id"
+                    :value="old('google_analytics_id', $settings['google_analytics_id'] ?? '')"
+                    :placeholder="__('dixlase-seo::admin/dixlase-seo/settings.google_analytics_id_placeholder')"
+                />
+                <x-form-help-text :text="__('dixlase-seo::admin/dixlase-seo/settings.google_analytics_id_help')" />
+            </div>
+
+            <div>
+                <x-form-label for="google_site_verification" :text="__('dixlase-seo::admin/dixlase-seo/settings.google_site_verification')" class="mb-1" />
+                <x-form-text
+                    name="google_site_verification"
+                    :value="old('google_site_verification', $settings['google_site_verification'] ?? '')"
+                    :placeholder="__('dixlase-seo::admin/dixlase-seo/settings.google_site_verification_placeholder')"
+                />
+                <x-form-help-text :text="__('dixlase-seo::admin/dixlase-seo/settings.google_site_verification_help')" />
+            </div>
+        </div>
+    </section>
 </form>
 @endsection
 

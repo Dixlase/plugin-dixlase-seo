@@ -25,6 +25,7 @@ namespace Plugins\DixlaseSEO\App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Services\JsonLdGenerator;
 use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,8 +51,27 @@ class InjectSeoMetaTags
         $metaHtml = $this->metaGenerator->generate($url);
         $jsonLdHtml = $this->jsonLdGenerator->generate($url);
 
-        // 全ビューでアクセス可能な変数として共有
+        // Google Analytics script
+        $gaId = DixlaseSeoSetting::getValue('google_analytics_id', config('dixlase_seo.google_analytics_id', ''));
+        $gaHtml = '';
+        if ($gaId) {
+            $escapedId = e($gaId);
+            $gaHtml = <<<GA
+            <script async src="https://www.googletagmanager.com/gtag/js?id={$escapedId}"></script>
+            <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{$escapedId}');
+            </script>
+            GA;
+        }
+
+        // Combine all head content
         $headMeta = trim($metaHtml . "\n    " . $jsonLdHtml);
+        if ($gaHtml) {
+            $headMeta = $gaHtml . "\n    " . $headMeta;
+        }
         View::share('seoHeadMeta', $headMeta);
 
         return $next($request);

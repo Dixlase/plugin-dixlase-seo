@@ -59,6 +59,8 @@ class UpdateSeoSettingsRequest extends FormRequest
             'sitemap_priority' => ['required', 'numeric', 'min:0', 'max:1'],
             'robots_txt_mode' => ['required', Rule::in(['auto', 'custom'])],
             'robots_txt' => ['nullable', 'string', 'max:10000'],
+            'google_analytics_id' => ['nullable', 'string', 'regex:/^(G-[A-Z0-9]+)?$/'],
+            'google_site_verification' => ['nullable', 'string', 'max:100'],
         ];
     }
 }

@@ -82,6 +82,15 @@ return [
     'robots_txt_content' => 'robots.txt Content',
     'robots_txt_content_help' => 'Customize the content output to robots.txt.',
 
+    // External services
+    'section_external' => 'External Services',
+    'google_analytics_id' => 'Google Analytics Measurement ID',
+    'google_analytics_id_help' => 'Enter your GA4 measurement ID to automatically embed the tracking code on your site.',
+    'google_analytics_id_placeholder' => 'G-XXXXXXXXXX',
+    'google_site_verification' => 'Google Search Console Verification Code',
+    'google_site_verification_help' => 'Enter the content attribute value from the "HTML tag" verification method in Search Console.',
+    'google_site_verification_placeholder' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+
     // Flash messages
     'updated' => 'SEO settings have been updated.',
 ];

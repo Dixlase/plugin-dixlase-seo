@@ -25,6 +25,7 @@ namespace Plugins\DixlaseSEO\App\Providers;
 use App\Contracts\CspPolicyProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Http\Middleware\InjectSeoMetaTags;
 use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Plugins\DixlaseSEO\App\Services\JsonLdGenerator;
@@ -113,7 +114,27 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
      */
     public function getCspDirectives(): array
     {
-        return [];
+        $gaId = DixlaseSeoSetting::getValue('google_analytics_id', config('dixlase_seo.google_analytics_id', ''));
+
+        if (! $gaId) {
+            return [];
+        }
+
+        return [
+            'script-src' => [
+                'https://www.googletagmanager.com',
+                'https://www.google-analytics.com',
+            ],
+            'connect-src' => [
+                'https://www.google-analytics.com',
+                'https://*.google-analytics.com',
+                'https://*.analytics.google.com',
+            ],
+            'img-src' => [
+                'https://www.google-analytics.com',
+                'https://www.googletagmanager.com',
+            ],
+        ];
     }
 
     /**
