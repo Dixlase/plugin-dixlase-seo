@@ -72,4 +72,10 @@ return [
 
     // サイトマップの優先度
     'sitemap_priority' => '0.5',
+
+    // Google Analytics 測定ID（GA4）
+    'google_analytics_id' => '',
+
+    // Google Search Console サイト確認コード
+    'google_site_verification' => '',
 ];

@@ -82,6 +82,15 @@ return [
     'robots_txt_content' => 'robots.txt内容',
     'robots_txt_content_help' => 'robots.txtに出力する内容をカスタマイズできます。',
 
+    // 外部サービス連携
+    'section_external' => '外部サービス連携',
+    'google_analytics_id' => 'Google Analytics 測定ID',
+    'google_analytics_id_help' => 'GA4の測定IDを入力すると、トラッキングコードが自動的にサイトに埋め込まれます。',
+    'google_analytics_id_placeholder' => 'G-XXXXXXXXXX',
+    'google_site_verification' => 'Google Search Console 確認コード',
+    'google_site_verification_help' => 'Search Consoleの「HTMLタグ」確認方法で表示されるcontent属性の値を入力してください。',
+    'google_site_verification_placeholder' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+
     // フラッシュメッセージ
     'updated' => 'SEO設定を更新しました。',
 ];

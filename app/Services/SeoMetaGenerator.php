@@ -95,6 +95,12 @@ class SeoMetaGenerator
             $lines[] = '<meta name="twitter:site" content="@' . e($twitterSite) . '">';
         }
 
+        // Google Search Console verification
+        $googleVerification = $settings['google_site_verification'] ?? '';
+        if ($googleVerification) {
+            $lines[] = '<meta name="google-site-verification" content="' . e($googleVerification) . '">';
+        }
+
         return implode("\n    ", $lines);
     }
 
