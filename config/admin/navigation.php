@@ -28,7 +28,7 @@
 
 return [
     'dixlase-seo' => [
-        '_insert_after' => 'front',
+        '_insert_after' => 'media',
         'text' => 'dixlase-seo::admin/navigation.dixlase-seo.text',
         'icon' => 'fas fa-fw fa-search',
         'can' => 'admin',
