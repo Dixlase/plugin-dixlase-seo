@@ -22,7 +22,6 @@
 
 return [
     'plugin' => [
-        'name' => 'DixlaseSEO',
         'description' => 'SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txt管理機能を提供します。',
     ],
 ];
