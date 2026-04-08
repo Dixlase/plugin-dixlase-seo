@@ -1,10 +1,10 @@
 <?php
 
 /**
- * This file is part of DixlaseSEO.
+ * This file is part of Dixlase SEO.
  *
- * Copyright (C) 2026
- * example.com
+ * Copyright (C) 2026 exc-D inc.
+ * https://exc-d.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
