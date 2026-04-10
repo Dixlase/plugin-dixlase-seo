@@ -43,7 +43,7 @@
         },
         "settings": {
             "read_core": true,
-            "write_own": true
+            "write_own": false
         },
         "members": {
             "read": false,
