@@ -63,42 +63,42 @@ class SeoMetaGenerator
         // 基本メタタグ
         $description = $settings['default_description'] ?? '';
         if ($description) {
-            $lines[] = '<meta name="description" content="' . e($description) . '">';
+            $lines[] = '<meta name="description" content="'.e($description).'">';
         }
 
         // canonical URL
-        $lines[] = '<link rel="canonical" href="' . e($url) . '">';
+        $lines[] = '<link rel="canonical" href="'.e($url).'">';
 
         // OGPタグ
-        $lines[] = '<meta property="og:type" content="' . e($settings['ogp_type'] ?? 'website') . '">';
-        $lines[] = '<meta property="og:url" content="' . e($url) . '">';
-        $lines[] = '<meta property="og:title" content="' . e($this->buildTitle()) . '">';
+        $lines[] = '<meta property="og:type" content="'.e($settings['ogp_type'] ?? 'website').'">';
+        $lines[] = '<meta property="og:url" content="'.e($url).'">';
+        $lines[] = '<meta property="og:title" content="'.e($this->buildTitle()).'">';
 
         if ($description) {
-            $lines[] = '<meta property="og:description" content="' . e($description) . '">';
+            $lines[] = '<meta property="og:description" content="'.e($description).'">';
         }
 
         $ogpImage = $settings['default_ogp_image'] ?? '';
-        if ($ogpImage) {
-            $ogpImageUrl = $this->resolveImageUrl($ogpImage);
-            $lines[] = '<meta property="og:image" content="' . e($ogpImageUrl) . '">';
-        }
+        $ogpImageUrl = $ogpImage
+            ? $this->resolveImageUrl($ogpImage)
+            : url('assets/images/default-ogp.png');
+        $lines[] = '<meta property="og:image" content="'.e($ogpImageUrl).'">';
 
-        $lines[] = '<meta property="og:site_name" content="' . e(config('app.name', '')) . '">';
+        $lines[] = '<meta property="og:site_name" content="'.e(config('app.name', '')).'">';
 
         // Twitter Cardタグ
         $twitterCardType = $settings['twitter_card_type'] ?? 'summary_large_image';
-        $lines[] = '<meta name="twitter:card" content="' . e($twitterCardType) . '">';
+        $lines[] = '<meta name="twitter:card" content="'.e($twitterCardType).'">';
 
         $twitterSite = $settings['twitter_site'] ?? '';
         if ($twitterSite) {
-            $lines[] = '<meta name="twitter:site" content="@' . e($twitterSite) . '">';
+            $lines[] = '<meta name="twitter:site" content="@'.e($twitterSite).'">';
         }
 
         // Google Search Console verification
         $googleVerification = $settings['google_site_verification'] ?? '';
         if ($googleVerification) {
-            $lines[] = '<meta name="google-site-verification" content="' . e($googleVerification) . '">';
+            $lines[] = '<meta name="google-site-verification" content="'.e($googleVerification).'">';
         }
 
         return implode("\n    ", $lines);

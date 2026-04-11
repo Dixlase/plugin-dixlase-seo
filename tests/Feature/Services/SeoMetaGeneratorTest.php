@@ -34,7 +34,6 @@ class SeoMetaGeneratorTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @var SeoMetaGenerator */
     private SeoMetaGenerator $generator;
 
     protected function setUp(): void
@@ -50,7 +49,7 @@ class SeoMetaGeneratorTest extends TestCase
             '--realpath' => true,
         ]);
 
-        $this->generator = new SeoMetaGenerator();
+        $this->generator = new SeoMetaGenerator;
     }
 
     /**
@@ -114,7 +113,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('default_description', 'このサイトの説明文です。');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringContainsString('<meta name="description" content="このサイトの説明文です。">', $output);
@@ -128,7 +127,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('default_description', '');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringNotContainsString('<meta name="description"', $output);
@@ -152,7 +151,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('twitter_card_type', 'summary');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringContainsString('<meta name="twitter:card" content="summary">', $output);
@@ -165,7 +164,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('twitter_site', 'mytwitterhandle');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringContainsString('<meta name="twitter:site" content="@mytwitterhandle">', $output);
@@ -178,7 +177,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('twitter_site', '');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringNotContainsString('twitter:site', $output);
@@ -191,7 +190,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('default_ogp_image', 'https://example.com/ogp.jpg');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringContainsString('<meta property="og:image" content="https://example.com/ogp.jpg">', $output);
@@ -204,7 +203,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('default_ogp_image', '/images/ogp.jpg');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringContainsString('<meta property="og:image" content="', $output);
@@ -213,16 +212,17 @@ class SeoMetaGeneratorTest extends TestCase
     }
 
     /**
-     * OGP画像が空の場合に og:image タグが生成されないこと
+     * OGP画像が空の場合にデフォルトOGP画像にフォールバックすること
      */
-    public function test_generate_omits_og_image_when_empty(): void
+    public function test_generate_falls_back_to_default_ogp_image_when_empty(): void
     {
         DixlaseSeoSetting::setValue('default_ogp_image', '');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
-        $this->assertStringNotContainsString('og:image', $output);
+        $this->assertStringContainsString('og:image', $output);
+        $this->assertStringContainsString('assets/images/default-ogp.png', $output);
     }
 
     /**
@@ -232,7 +232,7 @@ class SeoMetaGeneratorTest extends TestCase
     {
         DixlaseSeoSetting::setValue('default_description', 'Test <script>alert("xss")</script>');
 
-        $generator = new SeoMetaGenerator();
+        $generator = new SeoMetaGenerator;
         $output = $generator->generate('https://example.com/');
 
         $this->assertStringNotContainsString('<script>alert("xss")</script>', $output);
