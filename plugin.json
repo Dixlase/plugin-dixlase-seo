@@ -3,7 +3,10 @@
     "package_name": "plugins/dixlase-seo",
     "slug": "dixlase-seo",
     "version": "1.0.0",
-    "description": "SEO optimization plugin for Dixlase CMS. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
+    "description": {
+        "en": "SEO optimization plugin for Dixlase CMS. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
+        "ja": "Dixlase CMS用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
+    },
     "author": "",
     "email": "your-email@example.com",
     "url": "https://example.com",
