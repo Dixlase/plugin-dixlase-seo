@@ -40,12 +40,12 @@ return [
     // OGP設定
     'default_ogp_image' => 'デフォルトOGP画像',
     'default_ogp_image_help' => 'SNSでシェアされたときに表示されるデフォルト画像です。推奨サイズ: 1200x630px',
-    'twitter_card_type' => 'Twitter Cardタイプ',
-    'twitter_card_type_help' => 'Twitterでシェアされたときのカード表示形式です。',
+    'twitter_card_type' => 'X Cardタイプ',
+    'twitter_card_type_help' => 'X（旧Twitter）でシェアされたときのカード表示形式です。旧Twitter Cards仕様に基づきます。',
     'twitter_card_summary' => 'Summary（小さいカード）',
     'twitter_card_summary_large' => 'Summary Large Image（大きいカード）',
-    'twitter_site' => 'Twitter アカウント',
-    'twitter_site_help' => 'サイトに関連付けるTwitterアカウント名です（@なし）。',
+    'twitter_site' => 'X アカウント',
+    'twitter_site_help' => 'サイトに関連付けるX（旧Twitter）のアカウント名です（@なし）。',
 
     // 組織情報
     'organization_name' => '組織名',
