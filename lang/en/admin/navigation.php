@@ -22,7 +22,7 @@
 
 return [
     'dixlase-seo' => [
-        'text' => 'SEO',
+        'text' => 'SEO Management',
         'settings' => 'SEO Settings',
     ],
 ];

@@ -40,12 +40,12 @@ return [
     // OGP settings
     'default_ogp_image' => 'Default OGP Image',
     'default_ogp_image_help' => 'Default image displayed when shared on social media. Recommended: 1200x630px',
-    'twitter_card_type' => 'Twitter Card Type',
-    'twitter_card_type_help' => 'Card display format when shared on Twitter.',
+    'twitter_card_type' => 'X Card Type',
+    'twitter_card_type_help' => 'Card display format when shared on X (formerly Twitter). Based on the Twitter Cards specification.',
     'twitter_card_summary' => 'Summary (small card)',
     'twitter_card_summary_large' => 'Summary Large Image (large card)',
-    'twitter_site' => 'Twitter Account',
-    'twitter_site_help' => 'Twitter account name associated with the site (without @).',
+    'twitter_site' => 'X Account',
+    'twitter_site_help' => 'X (formerly Twitter) account name associated with the site (without @).',
 
     // Organization info
     'organization_name' => 'Organization Name',

@@ -49,7 +49,7 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
         $defaults = config('dixlase_seo', []);
         $settings = DixlaseSeoSetting::getMany($defaults);
 
-        // Twitter Cardタイプの選択肢
+        // X（旧Twitter）Cardタイプの選択肢
         $twitterCardOptions = [
             [
                 'value' => 'summary',
