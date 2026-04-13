@@ -22,7 +22,9 @@
 
 namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
+use App\Contracts\Repositories\BaseSettingRepositoryInterface;
 use App\Http\Controllers\Admin\AdminLoggedInController;
+use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateSeoSettingsRequest;
@@ -36,8 +38,9 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
     /**
      * コンストラクタ
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly BaseSettingRepositoryInterface $baseSettingRepository,
+    ) {
         parent::__construct();
     }
 
@@ -48,6 +51,21 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
     {
         $defaults = config('dixlase_seo', []);
         $settings = DixlaseSeoSetting::getMany($defaults);
+
+        // コアのサイト説明をフォールバックとして提供
+        $coreSiteDescription = (string) $this->baseSettingRepository->get('site_description', '');
+
+        // 組織ロゴ: メディアIDからMediaモデルを解決
+        $organizationLogoMedia = null;
+        if (! empty($settings['organization_logo'])) {
+            $organizationLogoMedia = Media::find($settings['organization_logo']);
+        }
+
+        // デフォルトOGP画像: メディアIDからMediaモデルを解決
+        $defaultOgpImageMedia = null;
+        if (! empty($settings['default_ogp_image'])) {
+            $defaultOgpImageMedia = Media::find($settings['default_ogp_image']);
+        }
 
         // X（旧Twitter）Cardタイプの選択肢
         $twitterCardOptions = [
@@ -97,6 +115,9 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
             'twitterCardOptions' => $twitterCardOptions,
             'robotsTxtModeOptions' => $robotsTxtModeOptions,
             'changefreqOptions' => $changefreqOptions,
+            'coreSiteDescription' => $coreSiteDescription,
+            'organizationLogoMedia' => $organizationLogoMedia,
+            'defaultOgpImageMedia' => $defaultOgpImageMedia,
         ]));
     }
 

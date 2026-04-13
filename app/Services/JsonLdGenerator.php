@@ -76,7 +76,7 @@ class JsonLdGenerator
         $lines = [];
         foreach ($schemas as $schema) {
             $json = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-            $lines[] = '<script type="application/ld+json">' . "\n" . $json . "\n" . '</script>';
+            $lines[] = '<script type="application/ld+json">'."\n".$json."\n".'</script>';
         }
 
         return implode("\n    ", $lines);
@@ -129,10 +129,35 @@ class JsonLdGenerator
 
         $orgLogo = $settings['organization_logo'] ?? '';
         if ($orgLogo) {
-            $logoUrl = str_starts_with($orgLogo, 'http') ? $orgLogo : url($orgLogo);
-            $schema['logo'] = $logoUrl;
+            $logoUrl = $this->resolveLogoUrl($orgLogo);
+            if ($logoUrl) {
+                $schema['logo'] = $logoUrl;
+            }
         }
 
         return $schema;
+    }
+
+    /**
+     * 組織ロゴの値（メディアID・URL・パス）を絶対URLに解決する
+     */
+    private function resolveLogoUrl(mixed $value): string
+    {
+        if (empty($value)) {
+            return '';
+        }
+
+        if (is_numeric($value)) {
+            $media = \App\Models\Media::find((int) $value);
+            if ($media && $media->path) {
+                return asset('storage/media/'.$media->path);
+            }
+
+            return '';
+        }
+
+        $str = (string) $value;
+
+        return str_starts_with($str, 'http') ? $str : url($str);
     }
 }
