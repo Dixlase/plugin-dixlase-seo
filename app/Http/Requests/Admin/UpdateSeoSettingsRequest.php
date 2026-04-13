@@ -48,11 +48,11 @@ class UpdateSeoSettingsRequest extends FormRequest
         return [
             'title_separator' => ['required', 'string', 'max:10'],
             'default_description' => ['nullable', 'string', 'max:300'],
-            'default_ogp_image' => ['nullable', 'string', 'max:500'],
+            'default_ogp_image' => ['nullable', 'integer', 'exists:media,id'],
             'twitter_card_type' => ['required', Rule::in(['summary', 'summary_large_image'])],
             'twitter_site' => ['nullable', 'string', 'max:100'],
             'organization_name' => ['nullable', 'string', 'max:200'],
-            'organization_logo' => ['nullable', 'string', 'max:500'],
+            'organization_logo' => ['nullable', 'integer', 'exists:media,id'],
             'organization_url' => ['nullable', 'url', 'max:500'],
             'sitemap_enabled' => ['nullable'],
             'sitemap_changefreq' => ['required', Rule::in(['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])],

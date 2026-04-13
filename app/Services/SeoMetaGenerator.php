@@ -22,6 +22,7 @@
 
 namespace Plugins\DixlaseSEO\App\Services;
 
+use App\Contracts\Repositories\BaseSettingRepositoryInterface;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
@@ -35,6 +36,10 @@ class SeoMetaGenerator
      * @var array<string, mixed>|null
      */
     private ?array $settings = null;
+
+    public function __construct(
+        private readonly ?BaseSettingRepositoryInterface $baseSettingRepository = null,
+    ) {}
 
     /**
      * 設定値を取得する（遅延読み込み）
@@ -60,8 +65,11 @@ class SeoMetaGenerator
         $settings = $this->getSettings();
         $lines = [];
 
-        // 基本メタタグ
+        // 基本メタタグ（プラグイン設定が空ならコアの site_description にフォールバック）
         $description = $settings['default_description'] ?? '';
+        if (! $description && $this->baseSettingRepository) {
+            $description = (string) $this->baseSettingRepository->get('site_description', '');
+        }
         if ($description) {
             $lines[] = '<meta name="description" content="'.e($description).'">';
         }
@@ -78,10 +86,8 @@ class SeoMetaGenerator
             $lines[] = '<meta property="og:description" content="'.e($description).'">';
         }
 
-        $ogpImage = $settings['default_ogp_image'] ?? '';
-        $ogpImageUrl = $ogpImage
-            ? $this->resolveImageUrl($ogpImage)
-            : url('assets/images/default-ogp.png');
+        $ogpImageValue = $settings['default_ogp_image'] ?? '';
+        $ogpImageUrl = $this->resolveMediaUrl($ogpImageValue) ?: url('assets/images/default-ogp.png');
         $lines[] = '<meta property="og:image" content="'.e($ogpImageUrl).'">';
 
         $lines[] = '<meta property="og:site_name" content="'.e(config('app.name', '')).'">';
@@ -122,5 +128,28 @@ class SeoMetaGenerator
         }
 
         return url($path);
+    }
+
+    /**
+     * メディアID・URL・パスのいずれかを絶対URLに解決する
+     */
+    private function resolveMediaUrl(mixed $value): string
+    {
+        if (empty($value)) {
+            return '';
+        }
+
+        // 数値IDならMediaモデルから解決
+        if (is_numeric($value)) {
+            $media = \App\Models\Media::find((int) $value);
+            if ($media && $media->path) {
+                return asset('storage/media/'.$media->path);
+            }
+
+            return '';
+        }
+
+        // 文字列ならURLまたはパスとして扱う
+        return $this->resolveImageUrl((string) $value);
     }
 }

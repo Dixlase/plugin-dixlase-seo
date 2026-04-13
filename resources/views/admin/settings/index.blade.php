@@ -46,6 +46,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
                 <x-form-textarea
                     name="default_description"
                     :value="old('default_description', $settings['default_description'] ?? '')"
+                    :placeholder="$coreSiteDescription"
                     rows="3"
                 />
                 <x-form-help-text :text="__('dixlase-seo::admin/dixlase-seo/settings.default_description_help')" />
@@ -60,13 +61,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
         </h2>
         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 space-y-6">
             <div>
+                <x-form-label for="default_ogp_image" :text="__('dixlase-seo::admin/dixlase-seo/settings.default_ogp_image')" class="mb-1" />
                 <x-media.picker
                     name="default_ogp_image"
-                    :label="__('dixlase-seo::admin/dixlase-seo/settings.default_ogp_image')"
                     :value="old('default_ogp_image', $settings['default_ogp_image'] ?? '')"
-                    :help="__('dixlase-seo::admin/dixlase-seo/settings.default_ogp_image_help')"
+                    :media="$defaultOgpImageMedia"
                     aspectRatio="ogp"
                 />
+                <x-form-help-text :text="__('dixlase-seo::admin/dixlase-seo/settings.default_ogp_image_help')" />
             </div>
 
             <div>
@@ -109,10 +111,11 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
             <div>
                 <x-form-label for="organization_logo" :text="__('dixlase-seo::admin/dixlase-seo/settings.organization_logo')" class="mb-1" />
-                <x-form-text
+                <x-media.picker
                     name="organization_logo"
                     :value="old('organization_logo', $settings['organization_logo'] ?? '')"
-                    placeholder="https://example.com/logo.png"
+                    :media="$organizationLogoMedia"
+                    aspectRatio="square"
                 />
                 <x-form-help-text :text="__('dixlase-seo::admin/dixlase-seo/settings.organization_logo_help')" />
             </div>
