@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 @extends('layouts.admin')
 
 @section('content')
-<form method="POST" action="{{ route('dixlase-seo::admin.dixlase-seo.settings.update') }}" x-data="{ robotsTxtMode: '{{ old('robots_txt_mode', $settings['robots_txt_mode'] ?? 'auto') }}' }">
+<form id="dixlase-seo-settings-form" method="POST" action="{{ route('dixlase-seo::admin.dixlase-seo.settings.update') }}" x-data="{ robotsTxtMode: '{{ old('robots_txt_mode', $settings['robots_txt_mode'] ?? 'auto') }}' }">
     @csrf
     @method('PATCH')
 
@@ -234,5 +234,5 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 @endsection
 
 @section('save')
-    <x-admin.save-button form="true" />
+    <x-admin.save-button form="dixlase-seo-settings-form" />
 @endsection
