@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * This file is part of Dixlase SEO.
+ *
+ * Copyright (C) 2026 exc-D inc.
+ * https://exc-d.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+return [
+    'section_title' => 'SEO設定',
+    'description' => 'メタディスクリプション',
+    'description_help' => '検索結果に表示されるページの説明文です。160文字以内を推奨します。空欄の場合はサイト共通のデフォルトが使用されます。',
+    'ogp_media' => 'OGP画像',
+    'ogp_media_help' => 'SNSでこのページがシェアされたときに表示される画像です。推奨サイズ: 1200x630px。空欄の場合はサイト共通のデフォルトが使用されます。',
+];
