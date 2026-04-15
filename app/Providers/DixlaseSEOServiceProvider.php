@@ -25,6 +25,7 @@ namespace Plugins\DixlaseSEO\App\Providers;
 use App\Contracts\CspPolicyProvider;
 use App\Contracts\PluginIntegration\PageMetaProviderInterface;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Plugins\DixlaseSEO\App\Http\Middleware\InjectSeoMetaTags;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
@@ -77,6 +78,9 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
 
         // ビューの登録
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'dixlase-seo');
+
+        // 匿名Bladeコンポーネントの登録（他プラグインから <x-dixlase-seo::name /> で利用可能）
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'dixlase-seo');
 
         // 翻訳ファイルの登録
         $this->loadTranslationsFrom(__DIR__.'/../../lang', 'dixlase-seo');
