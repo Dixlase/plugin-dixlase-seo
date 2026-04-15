@@ -25,10 +25,10 @@ namespace Plugins\DixlaseSEO\App\Providers;
 use App\Contracts\CspPolicyProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Http\Middleware\InjectSeoMetaTags;
-use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Services\JsonLdGenerator;
+use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Plugins\DixlaseSEO\App\Services\SitemapGenerator;
 
 /**
@@ -43,7 +43,7 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     {
         // 設定ファイルをマージ
         $this->mergeConfigFrom(
-            __DIR__ . '/../../config/dixlase_seo.php',
+            __DIR__.'/../../config/dixlase_seo.php',
             'dixlase_seo'
         );
 
@@ -52,11 +52,10 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         $this->app->singleton(JsonLdGenerator::class);
 
         // SitemapGeneratorにLinkableProviderを注入
+        // Note: $app->tagged() はタグ登録の有無にかかわらず iterator を返すため、
+        // bound() チェックは不要（bound() はタグではなくバインディングを見るため常にfalse）
         $this->app->singleton(SitemapGenerator::class, function ($app) {
-            $providers = [];
-            if ($app->bound('linkable.providers')) {
-                $providers = iterator_to_array($app->tagged('linkable.providers'));
-            }
+            $providers = iterator_to_array($app->tagged('linkable.providers'));
 
             return new SitemapGenerator($providers);
         });
@@ -71,13 +70,13 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         $this->registerCspPolicy();
 
         // ビューの登録
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'dixlase-seo');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'dixlase-seo');
 
         // 翻訳ファイルの登録
-        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'dixlase-seo');
+        $this->loadTranslationsFrom(__DIR__.'/../../lang', 'dixlase-seo');
 
         // マイグレーションの登録
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
         // ミドルウェアの登録
         $this->registerMiddleware();
@@ -87,11 +86,11 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         // 公開可能なアセット
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../../config/dixlase_seo.php' => config_path('dixlase_seo.php'),
+                __DIR__.'/../../config/dixlase_seo.php' => config_path('dixlase_seo.php'),
             ], 'dixlase-seo-config');
 
             $this->publishes([
-                __DIR__ . '/../../resources/views' => resource_path('views/vendor/dixlase-seo'),
+                __DIR__.'/../../resources/views' => resource_path('views/vendor/dixlase-seo'),
             ], 'dixlase-seo-views');
         }
     }
@@ -148,5 +147,4 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         // SEOメタタグ注入ミドルウェアをwebグループに追加（全フロントページで動作）
         $router->pushMiddlewareToGroup('web', InjectSeoMetaTags::class);
     }
-
 }

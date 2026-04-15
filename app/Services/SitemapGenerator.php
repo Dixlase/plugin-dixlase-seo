@@ -31,7 +31,7 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 class SitemapGenerator
 {
     /**
-     * @param array<LinkableProviderInterface> $linkableProviders
+     * @param  array<LinkableProviderInterface>  $linkableProviders
      */
     public function __construct(
         private readonly array $linkableProviders = [],
@@ -48,8 +48,8 @@ class SitemapGenerator
 
         $urls = $this->collectUrls();
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         // トップページ
         $xml .= $this->buildUrlEntry(url('/'), $changefreq, '1.0');
@@ -72,10 +72,14 @@ class SitemapGenerator
     /**
      * LinkableProviderからURLを収集する
      *
+     * - 相対パスの場合は絶対URLに変換
+     * - 同一URLが複数プロバイダーから提供された場合は重複を除去
+     *
      * @return array<int, array{url: string, lastmod: string|null}>
      */
     private function collectUrls(): array
     {
+        $seen = [];
         $urls = [];
 
         foreach ($this->linkableProviders as $provider) {
@@ -85,14 +89,35 @@ class SitemapGenerator
 
             $items = $provider->getAvailableItems(1000);
             foreach ($items as $item) {
+                $absoluteUrl = $this->toAbsoluteUrl($item->url);
+                if ($absoluteUrl === '' || isset($seen[$absoluteUrl])) {
+                    continue;
+                }
+                $seen[$absoluteUrl] = true;
                 $urls[] = [
-                    'url' => $item->url,
+                    'url' => $absoluteUrl,
                     'lastmod' => $item->meta['updated_at'] ?? null,
                 ];
             }
         }
 
         return $urls;
+    }
+
+    /**
+     * 相対パスを絶対URLに変換する
+     */
+    private function toAbsoluteUrl(string $url): string
+    {
+        if ($url === '') {
+            return '';
+        }
+
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+
+        return url($url);
     }
 
     /**
@@ -105,14 +130,14 @@ class SitemapGenerator
         ?string $lastmod = null,
     ): string {
         $entry = "  <url>\n";
-        $entry .= '    <loc>' . htmlspecialchars($url, ENT_XML1, 'UTF-8') . "</loc>\n";
+        $entry .= '    <loc>'.htmlspecialchars($url, ENT_XML1, 'UTF-8')."</loc>\n";
 
         if ($lastmod) {
-            $entry .= '    <lastmod>' . htmlspecialchars($lastmod, ENT_XML1, 'UTF-8') . "</lastmod>\n";
+            $entry .= '    <lastmod>'.htmlspecialchars($lastmod, ENT_XML1, 'UTF-8')."</lastmod>\n";
         }
 
-        $entry .= '    <changefreq>' . htmlspecialchars($changefreq, ENT_XML1, 'UTF-8') . "</changefreq>\n";
-        $entry .= '    <priority>' . htmlspecialchars($priority, ENT_XML1, 'UTF-8') . "</priority>\n";
+        $entry .= '    <changefreq>'.htmlspecialchars($changefreq, ENT_XML1, 'UTF-8')."</changefreq>\n";
+        $entry .= '    <priority>'.htmlspecialchars($priority, ENT_XML1, 'UTF-8')."</priority>\n";
         $entry .= "  </url>\n";
 
         return $entry;
