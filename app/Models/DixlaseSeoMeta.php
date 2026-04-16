@@ -25,18 +25,18 @@ namespace Plugins\DixlaseSEO\App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * プラグイン生成ページ単位のSEOメタ情報モデル
+ * プラグイン生成コンテンツ単位のSEOメタ情報モデル
  *
  * (plugin_slug, entity_id) のペアで一意に識別される。
  */
-class DixlaseSeoPageMeta extends Model
+class DixlaseSeoMeta extends Model
 {
     /**
      * テーブル名
      *
      * @var string
      */
-    protected $table = 'dls_plg_dixlase_seo_page_meta';
+    protected $table = 'dls_plg_dixlase_seo_meta';
 
     /**
      * 一括代入可能な属性

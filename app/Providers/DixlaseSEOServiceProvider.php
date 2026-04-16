@@ -23,13 +23,13 @@
 namespace Plugins\DixlaseSEO\App\Providers;
 
 use App\Contracts\CspPolicyProvider;
-use App\Contracts\PluginIntegration\PageMetaProviderInterface;
+use App\Contracts\PluginIntegration\SeoMetaProviderInterface;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Plugins\DixlaseSEO\App\Http\Middleware\InjectSeoMetaTags;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
-use Plugins\DixlaseSEO\App\Services\DixlaseSeoPageMetaProvider;
+use Plugins\DixlaseSEO\App\Services\DixlaseSeoMetaProvider;
 use Plugins\DixlaseSEO\App\Services\JsonLdGenerator;
 use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Plugins\DixlaseSEO\App\Services\SitemapGenerator;
@@ -54,9 +54,9 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         $this->app->singleton(SeoMetaGenerator::class);
         $this->app->singleton(JsonLdGenerator::class);
 
-        // ページ単位SEOメタ情報のContract実装を登録
-        // 他プラグインは app(PageMetaProviderInterface::class) で解決可能
-        $this->app->singleton(PageMetaProviderInterface::class, DixlaseSeoPageMetaProvider::class);
+        // コンテンツ単位SEOメタ情報のContract実装を登録
+        // 他プラグインは app(SeoMetaProviderInterface::class) で解決可能
+        $this->app->singleton(SeoMetaProviderInterface::class, DixlaseSeoMetaProvider::class);
 
         // SitemapGeneratorにLinkableProviderを注入
         // Note: $app->tagged() はタグ登録の有無にかかわらず iterator を返すため、
