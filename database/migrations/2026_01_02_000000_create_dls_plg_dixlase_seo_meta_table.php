@@ -29,13 +29,13 @@ return new class extends Migration
     /**
      * マイグレーション実行
      *
-     * プラグイン生成ページ（DixlasePages, DixlaseLegal 等）の
+     * プラグイン生成コンテンツ（固定ページ、リーガルページ、ブログ記事など）の
      * SEOメタ情報を格納するテーブル。
      * (plugin_slug, entity_id) のペアで一意に識別される。
      */
     public function up(): void
     {
-        Schema::create('dls_plg_dixlase_seo_page_meta', function (Blueprint $table) {
+        Schema::create('dls_plg_dixlase_seo_meta', function (Blueprint $table) {
             $table->id();
             $table->string('plugin_slug', 100);
             $table->string('entity_id', 100);
@@ -53,6 +53,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dls_plg_dixlase_seo_page_meta');
+        Schema::dropIfExists('dls_plg_dixlase_seo_meta');
     }
 };

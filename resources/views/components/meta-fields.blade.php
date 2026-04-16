@@ -4,7 +4,7 @@
   Copyright (C) 2026 exc-D inc.
   https://exc-d.com
 
-  @api Available for plugins/themes as <x-dixlase-seo::page-meta-fields />
+  @api Available for plugins/themes as <x-dixlase-seo::meta-fields />
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,12 +21,12 @@
 --}}
 
 {{--
-  ページ単位SEOメタ情報入力コンポーネント
+  コンテンツ単位SEOメタ情報入力コンポーネント
 
-  プラグイン生成ページ（DixlasePages, DixlaseLegal 等）の編集画面で
-  使用される。送信時のフィールド名は `seo_meta[description]` と
+  プラグイン生成コンテンツ（固定ページ、リーガルページ、ブログ記事など）の
+  編集画面で使用される。送信時のフィールド名は `seo_meta[description]` と
   `seo_meta[ogp_media_id]` でネストされる（呼び出し側のコントローラーで
-  まとめて受け取り PageMetaProviderInterface::saveMeta() に渡す前提）。
+  まとめて受け取り SeoMetaProviderInterface::saveMeta() に渡す前提）。
 
   Props:
     - description (?string): 既存のメタディスクリプション
@@ -46,14 +46,14 @@
 
 <section class="mb-6">
     <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-3">
-        <i class="fas fa-search mr-2"></i>{{ $sectionTitle ?? __('dixlase-seo::components/page-meta-fields.section_title') }}
+        <i class="fas fa-search mr-2"></i>{{ $sectionTitle ?? __('dixlase-seo::components/meta-fields.section_title') }}
     </h3>
 
     <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4">
         <div>
             <x-form-label
                 for="{{ $fieldPrefix }}_description"
-                :text="__('dixlase-seo::components/page-meta-fields.description')"
+                :text="__('dixlase-seo::components/meta-fields.description')"
                 class="mb-1"
             />
             <x-form-textarea
@@ -63,13 +63,13 @@
                 rows="3"
                 maxlength="200"
             />
-            <x-form-help-text :text="__('dixlase-seo::components/page-meta-fields.description_help')" />
+            <x-form-help-text :text="__('dixlase-seo::components/meta-fields.description_help')" />
         </div>
 
         <div>
             <x-form-label
                 for="{{ $fieldPrefix }}_ogp_media_id"
-                :text="__('dixlase-seo::components/page-meta-fields.ogp_media')"
+                :text="__('dixlase-seo::components/meta-fields.ogp_media')"
                 class="mb-1"
             />
             <x-media.picker
@@ -79,7 +79,7 @@
                 :media="$ogpMedia"
                 aspectRatio="ogp"
             />
-            <x-form-help-text :text="__('dixlase-seo::components/page-meta-fields.ogp_media_help')" />
+            <x-form-help-text :text="__('dixlase-seo::components/meta-fields.ogp_media_help')" />
         </div>
     </div>
 </section>

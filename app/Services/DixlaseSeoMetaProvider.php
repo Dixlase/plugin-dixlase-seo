@@ -22,18 +22,18 @@
 
 namespace Plugins\DixlaseSEO\App\Services;
 
-use App\Contracts\PluginIntegration\PageMetaProviderInterface;
-use App\DTO\PluginIntegration\PageMetaDTO;
-use Plugins\DixlaseSEO\App\Models\DixlaseSeoPageMeta;
+use App\Contracts\PluginIntegration\SeoMetaProviderInterface;
+use App\DTO\PluginIntegration\SeoMetaDTO;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * PageMetaProviderInterface の DixlaseSEO による実装
+ * SeoMetaProviderInterface の DixlaseSEO による実装
  *
- * dls_plg_dixlase_seo_page_meta テーブルを読み書きして
- * プラグイン生成ページ単位のSEOメタ情報を管理します。
+ * dls_plg_dixlase_seo_meta テーブルを読み書きして
+ * プラグイン生成コンテンツ単位のSEOメタ情報を管理します。
  */
-class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
+class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
 {
     /**
      * プラグイン別SEO有効化設定のキー形式
@@ -45,9 +45,9 @@ class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
     /**
      * 指定プラグインの指定エンティティのメタ情報を取得
      */
-    public function getMeta(string $pluginSlug, string $entityId): ?PageMetaDTO
+    public function getMeta(string $pluginSlug, string $entityId): ?SeoMetaDTO
     {
-        $record = DixlaseSeoPageMeta::query()
+        $record = DixlaseSeoMeta::query()
             ->where('plugin_slug', $pluginSlug)
             ->where('entity_id', $entityId)
             ->first();
@@ -56,7 +56,7 @@ class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
             return null;
         }
 
-        return new PageMetaDTO(
+        return new SeoMetaDTO(
             description: $record->description,
             ogpMediaId: $record->ogp_media_id,
         );
@@ -67,7 +67,7 @@ class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
      *
      * 全フィールドが null の DTO が渡された場合はレコードを削除します。
      */
-    public function saveMeta(string $pluginSlug, string $entityId, PageMetaDTO $meta): void
+    public function saveMeta(string $pluginSlug, string $entityId, SeoMetaDTO $meta): void
     {
         if ($meta->isEmpty()) {
             $this->deleteMeta($pluginSlug, $entityId);
@@ -75,7 +75,7 @@ class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
             return;
         }
 
-        DixlaseSeoPageMeta::updateOrCreate(
+        DixlaseSeoMeta::updateOrCreate(
             [
                 'plugin_slug' => $pluginSlug,
                 'entity_id' => $entityId,
@@ -92,7 +92,7 @@ class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
      */
     public function deleteMeta(string $pluginSlug, string $entityId): void
     {
-        DixlaseSeoPageMeta::query()
+        DixlaseSeoMeta::query()
             ->where('plugin_slug', $pluginSlug)
             ->where('entity_id', $entityId)
             ->delete();
@@ -103,7 +103,7 @@ class DixlaseSeoPageMetaProvider implements PageMetaProviderInterface
      */
     public function purgeByPlugin(string $pluginSlug): int
     {
-        return DixlaseSeoPageMeta::query()
+        return DixlaseSeoMeta::query()
             ->where('plugin_slug', $pluginSlug)
             ->delete();
     }
