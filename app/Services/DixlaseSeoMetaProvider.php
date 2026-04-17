@@ -109,13 +109,28 @@ class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
     }
 
     /**
+     * SEOメタ対応を宣言するために必要なプラグイン capability
+     */
+    private const SEO_META_CAPABILITY = 'seo-meta';
+
+    /**
      * 指定プラグインのSEOメタ機能が有効化されているかを確認
      *
-     * SEOプラグインの設定に integration.{plugin_slug}.enabled が保存され、
-     * 明示的に '0' / false の場合のみ無効と判定します。未設定時はデフォルト有効。
+     * 2段階のチェックで判定：
+     * 1. 対象プラグインが plugin.json に `"capabilities": ["seo-meta"]` を宣言しているか
+     * 2. SEOプラグインの設定で integration.{plugin_slug}.enabled が無効化されていないか
+     *    （未設定時はデフォルト有効）
+     *
+     * capability を宣言していないプラグインは admin 設定に関係なく無効。
+     * これにより「意図せずSEOメタを使ってしまう」事故を防ぎ、
+     * 新規プラグインが seo-meta を宣言するだけで自動的に対応可能になる。
      */
     public function isEnabledForPlugin(string $pluginSlug): bool
     {
+        if (! \App\Helpers\PluginHelper::pluginHasCapability($pluginSlug, self::SEO_META_CAPABILITY)) {
+            return false;
+        }
+
         $key = sprintf(self::ENABLED_SETTING_KEY_FORMAT, $pluginSlug);
         $value = DixlaseSeoSetting::getValue($key, '1');
 
