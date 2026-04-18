@@ -21,7 +21,7 @@
  */
 
 return [
-    'heading' => 'Meta Tags & OGP',
+    'heading' => 'Base Settings',
     'description' => 'Configure site-wide meta tags, OGP (social media share appearance), and organization info (JSON-LD).',
 
     // Section headings

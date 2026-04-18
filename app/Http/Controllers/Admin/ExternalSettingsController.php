@@ -56,7 +56,7 @@ class ExternalSettingsController extends AdminLoggedInController
         DixlaseSeoSetting::setMany($request->validated());
 
         return redirect()
-            ->route('dixlase-seo::admin.dixlase-seo.external')
+            ->route('dixlase-seo::admin.seo.external')
             ->with('success', __('dixlase-seo::admin/dixlase-seo/external.updated'));
     }
 }

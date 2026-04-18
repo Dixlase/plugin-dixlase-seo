@@ -28,18 +28,18 @@ use App\Models\Member;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\BaseSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\CrawlerSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\MetaSettingsController;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Tests\TestCase;
 
 /**
  * SEO設定管理画面（4ページ分割版）のフィーチャーテスト
  *
- * - メタタグ・OGP（meta）
- * - サイトマップ・robots.txt（crawler）
+ * - 基本設定（base）
+ * - サイトマップ（crawler）
  * - 外部サービス連携（external）
  * - プラグイン連携（integrations）
  */
@@ -49,7 +49,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     private Member $admin;
 
-    private string $metaUrl;
+    private string $baseUrl;
 
     private string $crawlerUrl;
 
@@ -85,20 +85,20 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
         // ルートを手動登録
         $adminUrl = config('admin.admin_url', 'admin');
-        $this->metaUrl = "/{$adminUrl}/dixlase-seo/meta";
-        $this->crawlerUrl = "/{$adminUrl}/dixlase-seo/crawler";
-        $this->externalUrl = "/{$adminUrl}/dixlase-seo/external";
-        $this->integrationsUrl = "/{$adminUrl}/dixlase-seo/integrations";
+        $this->baseUrl = "/{$adminUrl}/seo/base";
+        $this->crawlerUrl = "/{$adminUrl}/seo/crawler";
+        $this->externalUrl = "/{$adminUrl}/seo/external";
+        $this->integrationsUrl = "/{$adminUrl}/seo/integrations";
 
         $router = app('router');
         $router->prefix($adminUrl)
             ->middleware(['web', 'auth:member'])
             ->group(function () use ($router) {
-                $router->prefix('dixlase-seo')
-                    ->name('dixlase-seo::admin.dixlase-seo.')
+                $router->prefix('seo')
+                    ->name('dixlase-seo::admin.seo.')
                     ->group(function () use ($router) {
-                        $router->get('meta', [MetaSettingsController::class, 'show'])->name('meta');
-                        $router->patch('meta', [MetaSettingsController::class, 'update'])->name('meta.update');
+                        $router->get('base', [BaseSettingsController::class, 'show'])->name('base');
+                        $router->patch('base', [BaseSettingsController::class, 'update'])->name('base.update');
                         $router->get('crawler', [CrawlerSettingsController::class, 'show'])->name('crawler');
                         $router->patch('crawler', [CrawlerSettingsController::class, 'update'])->name('crawler.update');
                         $router->get('external', [ExternalSettingsController::class, 'show'])->name('external');
@@ -132,7 +132,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    private function metaPayload(array $overrides = []): array
+    private function basePayload(array $overrides = []): array
     {
         return array_merge([
             'title_separator' => '|',
@@ -175,9 +175,9 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     // 認証・認可テスト
     // ========================================
 
-    public function test_guest_is_redirected_from_meta_page(): void
+    public function test_guest_is_redirected_from_base_page(): void
     {
-        $this->get($this->metaUrl)->assertRedirect();
+        $this->get($this->baseUrl)->assertRedirect();
     }
 
     public function test_guest_is_redirected_from_crawler_page(): void
@@ -195,9 +195,9 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $this->get($this->integrationsUrl)->assertRedirect();
     }
 
-    public function test_guest_cannot_update_meta_settings(): void
+    public function test_guest_cannot_update_base_settings(): void
     {
-        $this->patch($this->metaUrl, $this->metaPayload())->assertRedirect();
+        $this->patch($this->baseUrl, $this->basePayload())->assertRedirect();
     }
 
     public function test_guest_cannot_update_crawler_settings(): void
@@ -211,20 +211,20 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     }
 
     // ========================================
-    // メタタグ・OGP ページ
+    // 基本設定ページ
     // ========================================
 
-    public function test_admin_can_access_meta_page(): void
+    public function test_admin_can_access_base_page(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->baseUrl);
 
         $response->assertOk();
-        $response->assertViewIs('dixlase-seo::admin.meta');
+        $response->assertViewIs('dixlase-seo::admin.base');
     }
 
-    public function test_meta_page_has_required_view_data(): void
+    public function test_base_page_has_required_view_data(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->baseUrl);
 
         $response->assertViewHas('settings');
         $response->assertViewHas('twitterCardOptions');
@@ -233,17 +233,17 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     public function test_twitter_card_options_contain_expected_values(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->baseUrl);
 
         $values = array_column($response->viewData('twitterCardOptions'), 'value');
         $this->assertContains('summary', $values);
         $this->assertContains('summary_large_image', $values);
     }
 
-    public function test_admin_can_save_meta_settings(): void
+    public function test_admin_can_save_base_settings(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->metaUrl, $this->metaPayload(['title_separator' => '-']))
+            ->patch($this->baseUrl, $this->basePayload(['title_separator' => '-']))
             ->assertRedirect()
             ->assertSessionHas('success');
 
@@ -253,7 +253,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     public function test_can_save_default_description(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->metaUrl, $this->metaPayload(['default_description' => 'サイトの説明']));
+            ->patch($this->baseUrl, $this->basePayload(['default_description' => 'サイトの説明']));
 
         $this->assertSame('サイトの説明', DixlaseSeoSetting::getValue('default_description'));
     }
@@ -261,16 +261,16 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     public function test_can_save_twitter_card_type_summary(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->metaUrl, $this->metaPayload(['twitter_card_type' => 'summary']));
+            ->patch($this->baseUrl, $this->basePayload(['twitter_card_type' => 'summary']));
 
         $this->assertSame('summary', DixlaseSeoSetting::getValue('twitter_card_type'));
     }
 
-    public function test_meta_settings_are_loaded_from_database(): void
+    public function test_base_settings_are_loaded_from_database(): void
     {
         DixlaseSeoSetting::setValue('title_separator', '>>');
 
-        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->baseUrl);
 
         $this->assertSame('>>', $response->viewData('settings')['title_separator']);
     }
@@ -278,14 +278,14 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     public function test_invalid_twitter_card_type_fails_validation(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->metaUrl, $this->metaPayload(['twitter_card_type' => 'invalid']))
+            ->patch($this->baseUrl, $this->basePayload(['twitter_card_type' => 'invalid']))
             ->assertSessionHasErrors('twitter_card_type');
     }
 
     public function test_invalid_organization_url_fails_validation(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->metaUrl, $this->metaPayload(['organization_url' => 'not-a-url']))
+            ->patch($this->baseUrl, $this->basePayload(['organization_url' => 'not-a-url']))
             ->assertSessionHasErrors('organization_url');
     }
 

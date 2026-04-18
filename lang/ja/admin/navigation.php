@@ -23,8 +23,8 @@
 return [
     'dixlase-seo' => [
         'text' => 'SEO管理',
-        'meta' => 'メタタグ・OGP',
-        'crawler' => 'サイトマップ・robots.txt',
+        'base' => '基本設定',
+        'crawler' => 'サイトマップ',
         'external' => '外部サービス連携',
         'integrations' => 'プラグイン連携',
     ],

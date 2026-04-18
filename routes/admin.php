@@ -21,10 +21,10 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\BaseSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\CrawlerSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\MetaSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,12 +32,12 @@ use Plugins\DixlaseSEO\App\Http\Controllers\Admin\MetaSettingsController;
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('dixlase-seo')
-    ->name('dixlase-seo::admin.dixlase-seo.')
+Route::prefix('seo')
+    ->name('dixlase-seo::admin.seo.')
     ->group(function () {
-        // メタタグ・OGP設定
-        Route::get('meta', [MetaSettingsController::class, 'show'])->name('meta');
-        Route::patch('meta', [MetaSettingsController::class, 'update'])->name('meta.update');
+        // 基本設定（メタタグ・OGP・組織情報）
+        Route::get('base', [BaseSettingsController::class, 'show'])->name('base');
+        Route::patch('base', [BaseSettingsController::class, 'update'])->name('base.update');
 
         // サイトマップ・robots.txt設定
         Route::get('crawler', [CrawlerSettingsController::class, 'show'])->name('crawler');

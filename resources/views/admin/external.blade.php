@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 @extends('layouts.admin')
 
 @section('content')
-<form id="dixlase-seo-external-form" method="POST" action="{{ route('dixlase-seo::admin.dixlase-seo.external.update') }}">
+<form id="dixlase-seo-external-form" method="POST" action="{{ route('dixlase-seo::admin.seo.external.update') }}">
     @csrf
     @method('PATCH')
 

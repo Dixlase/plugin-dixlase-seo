@@ -33,27 +33,27 @@ return [
         'icon' => 'fas fa-fw fa-search',
         'can' => 'admin',
         'children' => [
-            'meta' => [
-                'text' => 'dixlase-seo::admin/navigation.dixlase-seo.meta',
-                'route' => 'dixlase-seo::admin.dixlase-seo.meta',
-                'icon' => 'fas fa-fw fa-tags',
+            'base' => [
+                'text' => 'dixlase-seo::admin/navigation.dixlase-seo.base',
+                'route' => 'dixlase-seo::admin.seo.base',
+                'icon' => 'fas fa-fw fa-cog',
                 'can' => 'admin',
             ],
             'crawler' => [
                 'text' => 'dixlase-seo::admin/navigation.dixlase-seo.crawler',
-                'route' => 'dixlase-seo::admin.dixlase-seo.crawler',
+                'route' => 'dixlase-seo::admin.seo.crawler',
                 'icon' => 'fas fa-fw fa-sitemap',
                 'can' => 'admin',
             ],
             'external' => [
                 'text' => 'dixlase-seo::admin/navigation.dixlase-seo.external',
-                'route' => 'dixlase-seo::admin.dixlase-seo.external',
+                'route' => 'dixlase-seo::admin.seo.external',
                 'icon' => 'fas fa-fw fa-plug',
                 'can' => 'admin',
             ],
             'integrations' => [
                 'text' => 'dixlase-seo::admin/navigation.dixlase-seo.integrations',
-                'route' => 'dixlase-seo::admin.dixlase-seo.integrations',
+                'route' => 'dixlase-seo::admin.seo.integrations',
                 'icon' => 'fas fa-fw fa-puzzle-piece',
                 'can' => 'admin',
             ],

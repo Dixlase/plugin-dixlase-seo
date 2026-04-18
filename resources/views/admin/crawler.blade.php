@@ -21,7 +21,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 @extends('layouts.admin')
 
 @section('content')
-<form id="dixlase-seo-crawler-form" method="POST" action="{{ route('dixlase-seo::admin.dixlase-seo.crawler.update') }}" x-data="{ robotsTxtMode: '{{ old('robots_txt_mode', $settings['robots_txt_mode'] ?? 'auto') }}' }">
+<form id="dixlase-seo-crawler-form" method="POST" action="{{ route('dixlase-seo::admin.seo.crawler.update') }}" x-data="{ robotsTxtMode: '{{ old('robots_txt_mode', $settings['robots_txt_mode'] ?? 'auto') }}' }">
     @csrf
     @method('PATCH')
 
