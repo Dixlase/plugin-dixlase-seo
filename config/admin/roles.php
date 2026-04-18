@@ -15,9 +15,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
 /*
@@ -30,8 +27,23 @@ use App\Enums\MemberRole;
 
 return [
     'permissions' => [
-        // SEO設定画面（管理者のみ）
-        'settings.dixlase-seo.settings' => [
+        // メタタグ・OGP設定（管理者のみ）
+        'settings.dixlase-seo.meta' => [
+            'access_roles' => MemberRole::ADMIN->value,
+            'view_roles' => MemberRole::ADMIN->value,
+        ],
+        // サイトマップ・robots.txt設定（管理者のみ）
+        'settings.dixlase-seo.crawler' => [
+            'access_roles' => MemberRole::ADMIN->value,
+            'view_roles' => MemberRole::ADMIN->value,
+        ],
+        // 外部サービス連携設定（管理者のみ）
+        'settings.dixlase-seo.external' => [
+            'access_roles' => MemberRole::ADMIN->value,
+            'view_roles' => MemberRole::ADMIN->value,
+        ],
+        // プラグイン連携設定（管理者のみ）
+        'settings.dixlase-seo.integrations' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,
         ],

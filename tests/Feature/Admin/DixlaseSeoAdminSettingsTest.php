@@ -28,25 +28,34 @@ use App\Models\Member;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\DixlaseSeoAdminSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\CrawlerSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\MetaSettingsController;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Tests\TestCase;
 
 /**
- * SEO設定管理画面のフィーチャーテスト
+ * SEO設定管理画面（4ページ分割版）のフィーチャーテスト
+ *
+ * - メタタグ・OGP（meta）
+ * - サイトマップ・robots.txt（crawler）
+ * - 外部サービス連携（external）
+ * - プラグイン連携（integrations）
  */
 class DixlaseSeoAdminSettingsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @var Member */
     private Member $admin;
 
-    /** @var string */
-    private string $indexUrl;
+    private string $metaUrl;
 
-    /** @var string */
-    private string $updateUrl;
+    private string $crawlerUrl;
+
+    private string $externalUrl;
+
+    private string $integrationsUrl;
 
     protected function setUp(): void
     {
@@ -76,8 +85,10 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
         // ルートを手動登録
         $adminUrl = config('admin.admin_url', 'admin');
-        $this->indexUrl = "/{$adminUrl}/dixlase-seo/settings";
-        $this->updateUrl = "/{$adminUrl}/dixlase-seo/settings";
+        $this->metaUrl = "/{$adminUrl}/dixlase-seo/meta";
+        $this->crawlerUrl = "/{$adminUrl}/dixlase-seo/crawler";
+        $this->externalUrl = "/{$adminUrl}/dixlase-seo/external";
+        $this->integrationsUrl = "/{$adminUrl}/dixlase-seo/integrations";
 
         $router = app('router');
         $router->prefix($adminUrl)
@@ -86,10 +97,13 @@ class DixlaseSeoAdminSettingsTest extends TestCase
                 $router->prefix('dixlase-seo')
                     ->name('dixlase-seo::admin.dixlase-seo.')
                     ->group(function () use ($router) {
-                        $router->get('settings', [DixlaseSeoAdminSettingsController::class, 'settings'])
-                            ->name('settings');
-                        $router->patch('settings', [DixlaseSeoAdminSettingsController::class, 'updateSettings'])
-                            ->name('settings.update');
+                        $router->get('meta', [MetaSettingsController::class, 'show'])->name('meta');
+                        $router->patch('meta', [MetaSettingsController::class, 'update'])->name('meta.update');
+                        $router->get('crawler', [CrawlerSettingsController::class, 'show'])->name('crawler');
+                        $router->patch('crawler', [CrawlerSettingsController::class, 'update'])->name('crawler.update');
+                        $router->get('external', [ExternalSettingsController::class, 'show'])->name('external');
+                        $router->patch('external', [ExternalSettingsController::class, 'update'])->name('external.update');
+                        $router->get('integrations', [IntegrationsController::class, 'show'])->name('integrations');
                     });
             });
 
@@ -116,13 +130,11 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     }
 
     /**
-     * 有効なデフォルトリクエストデータを返すヘルパー
-     *
      * @return array<string, mixed>
      */
-    private function validPayload(): array
+    private function metaPayload(array $overrides = []): array
     {
-        return [
+        return array_merge([
             'title_separator' => '|',
             'default_description' => '',
             'default_ogp_image' => '',
@@ -131,435 +143,303 @@ class DixlaseSeoAdminSettingsTest extends TestCase
             'organization_name' => '',
             'organization_logo' => '',
             'organization_url' => '',
+        ], $overrides);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function crawlerPayload(array $overrides = []): array
+    {
+        return array_merge([
             'sitemap_enabled' => '1',
             'sitemap_changefreq' => 'weekly',
             'sitemap_priority' => '0.5',
             'robots_txt_mode' => 'auto',
             'robots_txt' => '',
-        ];
+        ], $overrides);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function externalPayload(array $overrides = []): array
+    {
+        return array_merge([
+            'google_analytics_id' => '',
+            'google_site_verification' => '',
+        ], $overrides);
     }
 
     // ========================================
     // 認証・認可テスト
     // ========================================
 
-    /**
-     * 未ログインユーザーは設定画面にアクセスするとリダイレクトされること
-     */
-    public function test_guest_is_redirected_from_settings_page(): void
+    public function test_guest_is_redirected_from_meta_page(): void
     {
-        $response = $this->get($this->indexUrl);
-
-        $response->assertRedirect();
+        $this->get($this->metaUrl)->assertRedirect();
     }
 
-    /**
-     * 未ログインユーザーがPATCHリクエストを送るとリダイレクトされること
-     */
-    public function test_guest_cannot_update_settings(): void
+    public function test_guest_is_redirected_from_crawler_page(): void
     {
-        $response = $this->patch($this->updateUrl, $this->validPayload());
+        $this->get($this->crawlerUrl)->assertRedirect();
+    }
 
-        $response->assertRedirect();
+    public function test_guest_is_redirected_from_external_page(): void
+    {
+        $this->get($this->externalUrl)->assertRedirect();
+    }
+
+    public function test_guest_is_redirected_from_integrations_page(): void
+    {
+        $this->get($this->integrationsUrl)->assertRedirect();
+    }
+
+    public function test_guest_cannot_update_meta_settings(): void
+    {
+        $this->patch($this->metaUrl, $this->metaPayload())->assertRedirect();
+    }
+
+    public function test_guest_cannot_update_crawler_settings(): void
+    {
+        $this->patch($this->crawlerUrl, $this->crawlerPayload())->assertRedirect();
+    }
+
+    public function test_guest_cannot_update_external_settings(): void
+    {
+        $this->patch($this->externalUrl, $this->externalPayload())->assertRedirect();
     }
 
     // ========================================
-    // 設定画面表示テスト
+    // メタタグ・OGP ページ
     // ========================================
 
-    /**
-     * 管理者が設定画面にアクセスできること
-     */
-    public function test_admin_can_access_settings_page(): void
+    public function test_admin_can_access_meta_page(): void
     {
-        $response = $this->actingAs($this->admin, 'member')
-            ->get($this->indexUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
 
         $response->assertOk();
-        $response->assertViewIs('dixlase-seo::admin.settings.index');
+        $response->assertViewIs('dixlase-seo::admin.meta');
     }
 
-    /**
-     * 設定画面に必要なビュー変数が渡されること
-     */
-    public function test_settings_page_has_required_view_data(): void
+    public function test_meta_page_has_required_view_data(): void
     {
-        $response = $this->actingAs($this->admin, 'member')
-            ->get($this->indexUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
 
         $response->assertViewHas('settings');
         $response->assertViewHas('twitterCardOptions');
-        $response->assertViewHas('robotsTxtModeOptions');
-        $response->assertViewHas('changefreqOptions');
+        $response->assertViewHas('coreSiteDescription');
     }
 
-    /**
-     * twitterCardOptions に summary と summary_large_image が含まれること
-     */
     public function test_twitter_card_options_contain_expected_values(): void
     {
-        $response = $this->actingAs($this->admin, 'member')
-            ->get($this->indexUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
 
-        $options = $response->viewData('twitterCardOptions');
-        $values = array_column($options, 'value');
-
+        $values = array_column($response->viewData('twitterCardOptions'), 'value');
         $this->assertContains('summary', $values);
         $this->assertContains('summary_large_image', $values);
     }
 
-    /**
-     * robotsTxtModeOptions に auto と custom が含まれること
-     */
-    public function test_robots_txt_mode_options_contain_expected_values(): void
+    public function test_admin_can_save_meta_settings(): void
     {
-        $response = $this->actingAs($this->admin, 'member')
-            ->get($this->indexUrl);
-
-        $options = $response->viewData('robotsTxtModeOptions');
-        $values = array_column($options, 'value');
-
-        $this->assertContains('auto', $values);
-        $this->assertContains('custom', $values);
-    }
-
-    /**
-     * changefreqOptions に全頻度オプションが含まれること
-     */
-    public function test_changefreq_options_contain_all_expected_values(): void
-    {
-        $response = $this->actingAs($this->admin, 'member')
-            ->get($this->indexUrl);
-
-        $options = $response->viewData('changefreqOptions');
-
-        $this->assertArrayHasKey('always', $options);
-        $this->assertArrayHasKey('hourly', $options);
-        $this->assertArrayHasKey('daily', $options);
-        $this->assertArrayHasKey('weekly', $options);
-        $this->assertArrayHasKey('monthly', $options);
-        $this->assertArrayHasKey('yearly', $options);
-        $this->assertArrayHasKey('never', $options);
-    }
-
-    /**
-     * 設定値がデータベースの値で渡されること
-     */
-    public function test_settings_are_loaded_from_database(): void
-    {
-        DixlaseSeoSetting::setValue('title_separator', '>>');
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->get($this->indexUrl);
-
-        $settings = $response->viewData('settings');
-        $this->assertSame('>>', $settings['title_separator']);
-    }
-
-    // ========================================
-    // 設定保存テスト
-    // ========================================
-
-    /**
-     * 有効なデータで設定を保存できること
-     */
-    public function test_admin_can_save_settings(): void
-    {
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $this->validPayload());
-
-        $response->assertRedirect();
-        $response->assertSessionHas('success');
-    }
-
-    /**
-     * 保存後にセッションにsuccess メッセージが含まれること
-     */
-    public function test_saving_settings_flashes_success_message(): void
-    {
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $this->validPayload());
-
-        $response->assertSessionHas('success');
-    }
-
-    /**
-     * タイトル区切り文字を保存できること
-     */
-    public function test_can_save_title_separator(): void
-    {
-        $payload = array_merge($this->validPayload(), ['title_separator' => '-']);
-
         $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+            ->patch($this->metaUrl, $this->metaPayload(['title_separator' => '-']))
+            ->assertRedirect()
+            ->assertSessionHas('success');
 
         $this->assertSame('-', DixlaseSeoSetting::getValue('title_separator'));
     }
 
-    /**
-     * デフォルト説明文を保存できること
-     */
     public function test_can_save_default_description(): void
     {
-        $payload = array_merge($this->validPayload(), ['default_description' => 'このサイトの説明文です。']);
-
         $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+            ->patch($this->metaUrl, $this->metaPayload(['default_description' => 'サイトの説明']));
 
-        $this->assertSame('このサイトの説明文です。', DixlaseSeoSetting::getValue('default_description'));
+        $this->assertSame('サイトの説明', DixlaseSeoSetting::getValue('default_description'));
     }
 
-    /**
-     * Twitter Cardタイプをsummaryに変更できること
-     */
     public function test_can_save_twitter_card_type_summary(): void
     {
-        $payload = array_merge($this->validPayload(), ['twitter_card_type' => 'summary']);
-
         $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+            ->patch($this->metaUrl, $this->metaPayload(['twitter_card_type' => 'summary']));
 
         $this->assertSame('summary', DixlaseSeoSetting::getValue('twitter_card_type'));
     }
 
-    /**
-     * サイトマップが有効化できること
-     */
-    public function test_can_enable_sitemap(): void
+    public function test_meta_settings_are_loaded_from_database(): void
     {
-        $payload = array_merge($this->validPayload(), ['sitemap_enabled' => '1']);
+        DixlaseSeoSetting::setValue('title_separator', '>>');
 
-        $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+        $response = $this->actingAs($this->admin, 'member')->get($this->metaUrl);
 
-        $this->assertSame('1', DixlaseSeoSetting::getValue('sitemap_enabled'));
+        $this->assertSame('>>', $response->viewData('settings')['title_separator']);
     }
 
-    /**
-     * サイトマップが無効化できること（チェックボックスOFF = フィールドなし）
-     */
-    public function test_can_disable_sitemap_when_checkbox_absent(): void
+    public function test_invalid_twitter_card_type_fails_validation(): void
     {
-        // まず有効化
         $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $this->validPayload());
+            ->patch($this->metaUrl, $this->metaPayload(['twitter_card_type' => 'invalid']))
+            ->assertSessionHasErrors('twitter_card_type');
+    }
 
-        // sitemap_enabled を送信しないで無効化
-        $payload = $this->validPayload();
+    public function test_invalid_organization_url_fails_validation(): void
+    {
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->metaUrl, $this->metaPayload(['organization_url' => 'not-a-url']))
+            ->assertSessionHasErrors('organization_url');
+    }
+
+    // ========================================
+    // サイトマップ・robots.txt ページ
+    // ========================================
+
+    public function test_admin_can_access_crawler_page(): void
+    {
+        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+
+        $response->assertOk();
+        $response->assertViewIs('dixlase-seo::admin.crawler');
+    }
+
+    public function test_crawler_page_has_required_view_data(): void
+    {
+        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+
+        $response->assertViewHas('settings');
+        $response->assertViewHas('robotsTxtModeOptions');
+        $response->assertViewHas('changefreqOptions');
+    }
+
+    public function test_robots_txt_mode_options_contain_expected_values(): void
+    {
+        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+
+        $values = array_column($response->viewData('robotsTxtModeOptions'), 'value');
+        $this->assertContains('auto', $values);
+        $this->assertContains('custom', $values);
+    }
+
+    public function test_changefreq_options_contain_all_expected_values(): void
+    {
+        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+
+        $options = $response->viewData('changefreqOptions');
+        foreach (['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'] as $key) {
+            $this->assertArrayHasKey($key, $options);
+        }
+    }
+
+    public function test_admin_can_save_crawler_settings(): void
+    {
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_changefreq' => 'daily']))
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertSame('daily', DixlaseSeoSetting::getValue('sitemap_changefreq'));
+    }
+
+    public function test_sitemap_enabled_toggle_off_saves_zero(): void
+    {
+        $payload = $this->crawlerPayload();
         unset($payload['sitemap_enabled']);
 
-        $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+        $this->actingAs($this->admin, 'member')->patch($this->crawlerUrl, $payload);
 
         $this->assertSame('0', DixlaseSeoSetting::getValue('sitemap_enabled'));
     }
 
-    /**
-     * robots.txtモードをcustomに変更できること
-     */
-    public function test_can_save_robots_txt_mode_custom(): void
+    public function test_can_save_custom_robots_txt(): void
     {
-        $payload = array_merge($this->validPayload(), [
-            'robots_txt_mode' => 'custom',
-            'robots_txt' => "User-agent: *\nDisallow: /admin",
-        ]);
-
+        $custom = "User-agent: *\nDisallow: /admin/";
         $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+            ->patch($this->crawlerUrl, $this->crawlerPayload([
+                'robots_txt_mode' => 'custom',
+                'robots_txt' => $custom,
+            ]));
 
         $this->assertSame('custom', DixlaseSeoSetting::getValue('robots_txt_mode'));
-        $this->assertSame("User-agent: *\nDisallow: /admin", DixlaseSeoSetting::getValue('robots_txt'));
+        $this->assertSame($custom, DixlaseSeoSetting::getValue('robots_txt'));
     }
 
-    /**
-     * 組織名を保存できること
-     */
-    public function test_can_save_organization_name(): void
-    {
-        $payload = array_merge($this->validPayload(), ['organization_name' => '株式会社テスト']);
-
-        $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $this->assertSame('株式会社テスト', DixlaseSeoSetting::getValue('organization_name'));
-    }
-
-    // ========================================
-    // バリデーションテスト
-    // ========================================
-
-    /**
-     * タイトル区切り文字が必須であること
-     */
-    public function test_title_separator_is_required(): void
-    {
-        $payload = $this->validPayload();
-        unset($payload['title_separator']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('title_separator');
-    }
-
-    /**
-     * タイトル区切り文字が10文字を超えるとバリデーションエラーになること
-     */
-    public function test_title_separator_max_length_is_10(): void
-    {
-        $payload = array_merge($this->validPayload(), ['title_separator' => str_repeat('a', 11)]);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('title_separator');
-    }
-
-    /**
-     * デフォルト説明文が300文字を超えるとバリデーションエラーになること
-     */
-    public function test_default_description_max_length_is_300(): void
-    {
-        $payload = array_merge($this->validPayload(), ['default_description' => str_repeat('a', 301)]);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('default_description');
-    }
-
-    /**
-     * 無効なTwitter Cardタイプがバリデーションエラーになること
-     */
-    public function test_invalid_twitter_card_type_fails_validation(): void
-    {
-        $payload = array_merge($this->validPayload(), ['twitter_card_type' => 'invalid_type']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('twitter_card_type');
-    }
-
-    /**
-     * Twitter Cardタイプが必須であること
-     */
-    public function test_twitter_card_type_is_required(): void
-    {
-        $payload = $this->validPayload();
-        unset($payload['twitter_card_type']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('twitter_card_type');
-    }
-
-    /**
-     * 無効なrobots.txtモードがバリデーションエラーになること
-     */
     public function test_invalid_robots_txt_mode_fails_validation(): void
     {
-        $payload = array_merge($this->validPayload(), ['robots_txt_mode' => 'invalid_mode']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('robots_txt_mode');
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->crawlerUrl, $this->crawlerPayload(['robots_txt_mode' => 'invalid']))
+            ->assertSessionHasErrors('robots_txt_mode');
     }
 
-    /**
-     * robots.txtモードが必須であること
-     */
-    public function test_robots_txt_mode_is_required(): void
-    {
-        $payload = $this->validPayload();
-        unset($payload['robots_txt_mode']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('robots_txt_mode');
-    }
-
-    /**
-     * 無効なサイトマップ更新頻度がバリデーションエラーになること
-     */
     public function test_invalid_sitemap_changefreq_fails_validation(): void
     {
-        $payload = array_merge($this->validPayload(), ['sitemap_changefreq' => 'sometimes']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('sitemap_changefreq');
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_changefreq' => 'invalid']))
+            ->assertSessionHasErrors('sitemap_changefreq');
     }
 
-    /**
-     * サイトマップ優先度が0未満でバリデーションエラーになること
-     */
     public function test_sitemap_priority_below_zero_fails_validation(): void
     {
-        $payload = array_merge($this->validPayload(), ['sitemap_priority' => '-0.1']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('sitemap_priority');
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_priority' => '-0.1']))
+            ->assertSessionHasErrors('sitemap_priority');
     }
 
-    /**
-     * サイトマップ優先度が1超でバリデーションエラーになること
-     */
     public function test_sitemap_priority_above_one_fails_validation(): void
     {
-        $payload = array_merge($this->validPayload(), ['sitemap_priority' => '1.1']);
-
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('sitemap_priority');
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_priority' => '1.5']))
+            ->assertSessionHasErrors('sitemap_priority');
     }
 
-    /**
-     * 組織URLが不正な形式でバリデーションエラーになること
-     */
-    public function test_invalid_organization_url_fails_validation(): void
+    // ========================================
+    // 外部サービス連携 ページ
+    // ========================================
+
+    public function test_admin_can_access_external_page(): void
     {
-        $payload = array_merge($this->validPayload(), ['organization_url' => 'not-a-url']);
+        $response = $this->actingAs($this->admin, 'member')->get($this->externalUrl);
 
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionHasErrors('organization_url');
+        $response->assertOk();
+        $response->assertViewIs('dixlase-seo::admin.external');
     }
 
-    /**
-     * 組織URLがhttpsで始まる場合は有効であること
-     */
-    public function test_valid_organization_url_passes_validation(): void
+    public function test_admin_can_save_external_settings(): void
     {
-        $payload = array_merge($this->validPayload(), ['organization_url' => 'https://example.com']);
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->externalUrl, $this->externalPayload([
+                'google_analytics_id' => 'G-ABC123',
+                'google_site_verification' => 'verifycode',
+            ]))
+            ->assertRedirect()
+            ->assertSessionHas('success');
 
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
-
-        $response->assertSessionMissing('errors');
+        $this->assertSame('G-ABC123', DixlaseSeoSetting::getValue('google_analytics_id'));
+        $this->assertSame('verifycode', DixlaseSeoSetting::getValue('google_site_verification'));
     }
 
-    /**
-     * robots.txtが10000文字を超えるとバリデーションエラーになること
-     */
-    public function test_robots_txt_max_length_is_10000(): void
+    public function test_invalid_google_analytics_id_fails_validation(): void
     {
-        $payload = array_merge($this->validPayload(), [
-            'robots_txt_mode' => 'custom',
-            'robots_txt' => str_repeat('a', 10001),
-        ]);
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->externalUrl, $this->externalPayload(['google_analytics_id' => 'invalid-id']))
+            ->assertSessionHasErrors('google_analytics_id');
+    }
 
-        $response = $this->actingAs($this->admin, 'member')
-            ->patch($this->updateUrl, $payload);
+    // ========================================
+    // プラグイン連携 ページ
+    // ========================================
 
-        $response->assertSessionHasErrors('robots_txt');
+    public function test_admin_can_access_integrations_page(): void
+    {
+        $response = $this->actingAs($this->admin, 'member')->get($this->integrationsUrl);
+
+        $response->assertOk();
+        $response->assertViewIs('dixlase-seo::admin.integrations');
+    }
+
+    public function test_integrations_page_has_seo_meta_plugin_slugs(): void
+    {
+        $response = $this->actingAs($this->admin, 'member')->get($this->integrationsUrl);
+
+        $response->assertViewHas('seoMetaPluginSlugs');
+        $this->assertIsArray($response->viewData('seoMetaPluginSlugs'));
     }
 }

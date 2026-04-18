@@ -21,7 +21,10 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\DixlaseSeoAdminSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\CrawlerSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\MetaSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,8 +35,18 @@ use Plugins\DixlaseSEO\App\Http\Controllers\Admin\DixlaseSeoAdminSettingsControl
 Route::prefix('dixlase-seo')
     ->name('dixlase-seo::admin.dixlase-seo.')
     ->group(function () {
-        Route::get('settings', [DixlaseSeoAdminSettingsController::class, 'settings'])
-            ->name('settings');
-        Route::patch('settings', [DixlaseSeoAdminSettingsController::class, 'updateSettings'])
-            ->name('settings.update');
+        // メタタグ・OGP設定
+        Route::get('meta', [MetaSettingsController::class, 'show'])->name('meta');
+        Route::patch('meta', [MetaSettingsController::class, 'update'])->name('meta.update');
+
+        // サイトマップ・robots.txt設定
+        Route::get('crawler', [CrawlerSettingsController::class, 'show'])->name('crawler');
+        Route::patch('crawler', [CrawlerSettingsController::class, 'update'])->name('crawler.update');
+
+        // 外部サービス連携設定
+        Route::get('external', [ExternalSettingsController::class, 'show'])->name('external');
+        Route::patch('external', [ExternalSettingsController::class, 'update'])->name('external.update');
+
+        // プラグイン連携設定
+        Route::get('integrations', [IntegrationsController::class, 'show'])->name('integrations');
     });

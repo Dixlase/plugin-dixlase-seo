@@ -23,6 +23,9 @@
 return [
     'dixlase-seo' => [
         'text' => 'SEO管理',
-        'settings' => 'SEO設定',
+        'meta' => 'メタタグ・OGP',
+        'crawler' => 'サイトマップ・robots.txt',
+        'external' => '外部サービス連携',
+        'integrations' => 'プラグイン連携',
     ],
 ];

@@ -21,11 +21,13 @@
  */
 
 return [
-    'dixlase-seo' => [
-        'text' => 'SEO Management',
-        'meta' => 'Meta Tags & OGP',
-        'crawler' => 'Sitemap & robots.txt',
-        'external' => 'External Services',
-        'integrations' => 'Plugin Integrations',
-    ],
+    'heading' => 'プラグイン連携',
+    'description' => 'SEOメタ機能（メタディスクリプション・OGP画像）に対応したプラグインの有効/無効を切り替えます。',
+
+    // 未対応時の案内
+    'no_plugins_title' => 'SEOメタ対応プラグインが見つかりません',
+    'no_plugins_description' => 'plugin.json で "capabilities": ["seo-meta"] を宣言しているプラグインがありません。対応プラグインがインストール・有効化されると、ここに自動的に表示されます。',
+
+    // フラッシュメッセージ
+    'updated' => 'プラグイン連携設定を更新しました。',
 ];

@@ -21,15 +21,13 @@
  */
 
 return [
-    'heading' => 'SEO Settings',
-    'description' => 'Manage site-wide SEO settings. Configure meta tags, OGP, structured data, sitemap, and robots.txt.',
+    'heading' => 'Meta Tags & OGP',
+    'description' => 'Configure site-wide meta tags, OGP (social media share appearance), and organization info (JSON-LD).',
 
     // Section headings
     'section_general' => 'General Settings',
     'section_ogp' => 'OGP / Social Media',
     'section_organization' => 'Organization Info (JSON-LD)',
-    'section_sitemap' => 'Sitemap',
-    'section_robots' => 'robots.txt',
 
     // General settings
     'title_separator' => 'Title Separator',
@@ -51,46 +49,10 @@ return [
     'organization_name' => 'Organization Name',
     'organization_name_help' => 'Organization name displayed in search results.',
     'organization_logo' => 'Organization Logo',
-    'organization_logo_help' => 'URL of the organization logo for search results. Recommended: square, at least 112x112px.',
+    'organization_logo_help' => 'Organization logo for search results. Recommended: square, at least 112x112px.',
     'organization_url' => 'Organization URL',
     'organization_url_help' => 'Official website URL of the organization.',
 
-    // Sitemap
-    'sitemap_enabled' => 'XML Sitemap',
-    'sitemap_enabled_help' => 'When enabled, an XML sitemap is generated at /sitemap.xml.',
-    'sitemap_changefreq' => 'Change Frequency',
-    'sitemap_changefreq_help' => 'Hint for how frequently the content changes.',
-    'sitemap_priority' => 'Priority',
-    'sitemap_priority_help' => 'Priority of pages in the sitemap (0.0 to 1.0).',
-
-    // Change frequency options
-    'changefreq_always' => 'Always',
-    'changefreq_hourly' => 'Hourly',
-    'changefreq_daily' => 'Daily',
-    'changefreq_weekly' => 'Weekly',
-    'changefreq_monthly' => 'Monthly',
-    'changefreq_yearly' => 'Yearly',
-    'changefreq_never' => 'Never',
-
-    // robots.txt
-    'robots_txt_mode' => 'robots.txt Management Mode',
-    'robots_txt_mode_help' => 'Auto mode generates a standard robots.txt including the sitemap URL.',
-    'robots_txt_mode_auto' => 'Auto-generate',
-    'robots_txt_mode_auto_desc' => 'Automatically generates a standard robots.txt',
-    'robots_txt_mode_custom' => 'Custom',
-    'robots_txt_mode_custom_desc' => 'Freely edit the content',
-    'robots_txt_content' => 'robots.txt Content',
-    'robots_txt_content_help' => 'Customize the content output to robots.txt.',
-
-    // External services
-    'section_external' => 'External Services',
-    'google_analytics_id' => 'Google Analytics Measurement ID',
-    'google_analytics_id_help' => 'Enter your GA4 measurement ID to automatically embed the tracking code on your site.',
-    'google_analytics_id_placeholder' => 'G-XXXXXXXXXX',
-    'google_site_verification' => 'Google Search Console Verification Code',
-    'google_site_verification_help' => 'Enter the content attribute value from the "HTML tag" verification method in Search Console.',
-    'google_site_verification_placeholder' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-
     // Flash messages
-    'updated' => 'SEO settings have been updated.',
+    'updated' => 'Meta tags & OGP settings have been updated.',
 ];
