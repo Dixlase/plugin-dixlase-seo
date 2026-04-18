@@ -26,41 +26,26 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * SEO設定更新リクエストのバリデーション
+ * サイトマップ・robots.txt設定更新リクエストのバリデーション
  */
-class UpdateSeoSettingsRequest extends FormRequest
+class UpdateCrawlerSettingsRequest extends FormRequest
 {
-    /**
-     * リクエストの認可判定
-     */
     public function authorize(): bool
     {
         return true;
     }
 
     /**
-     * バリデーションルール
-     *
      * @return array<string, mixed>
      */
     public function rules(): array
     {
         return [
-            'title_separator' => ['required', 'string', 'max:10'],
-            'default_description' => ['nullable', 'string', 'max:300'],
-            'default_ogp_image' => ['nullable', 'integer', 'exists:media,id'],
-            'twitter_card_type' => ['required', Rule::in(['summary', 'summary_large_image'])],
-            'twitter_site' => ['nullable', 'string', 'max:100'],
-            'organization_name' => ['nullable', 'string', 'max:200'],
-            'organization_logo' => ['nullable', 'integer', 'exists:media,id'],
-            'organization_url' => ['nullable', 'url', 'max:500'],
             'sitemap_enabled' => ['nullable'],
             'sitemap_changefreq' => ['required', Rule::in(['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])],
             'sitemap_priority' => ['required', 'numeric', 'min:0', 'max:1'],
             'robots_txt_mode' => ['required', Rule::in(['auto', 'custom'])],
             'robots_txt' => ['nullable', 'string', 'max:10000'],
-            'google_analytics_id' => ['nullable', 'string', 'regex:/^(G-[A-Z0-9]+)?$/'],
-            'google_site_verification' => ['nullable', 'string', 'max:100'],
         ];
     }
 }

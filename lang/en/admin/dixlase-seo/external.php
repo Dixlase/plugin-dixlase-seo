@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * This file is part of Dixlase SEO.
+ *
+ * Copyright (C) 2026 exc-D inc.
+ * https://exc-d.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+return [
+    'heading' => 'External Services',
+    'description' => 'Integrate with external services such as Google Analytics and Google Search Console.',
+
+    // Section headings
+    'section_google' => 'Google Services',
+
+    // Google Analytics
+    'google_analytics_id' => 'Google Analytics Measurement ID',
+    'google_analytics_id_help' => 'Enter your GA4 measurement ID to automatically embed the tracking code on your site.',
+    'google_analytics_id_placeholder' => 'G-XXXXXXXXXX',
+
+    // Search Console
+    'google_site_verification' => 'Google Search Console Verification Code',
+    'google_site_verification_help' => 'Enter the content attribute value from the "HTML tag" verification method in Search Console.',
+    'google_site_verification_placeholder' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+
+    // Flash messages
+    'updated' => 'External services settings have been updated.',
+];

@@ -20,12 +20,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-return [
-    'dixlase-seo' => [
-        'text' => 'SEO Management',
-        'meta' => 'Meta Tags & OGP',
-        'crawler' => 'Sitemap & robots.txt',
-        'external' => 'External Services',
-        'integrations' => 'Plugin Integrations',
-    ],
-];
+namespace Plugins\DixlaseSEO\App\Http\Requests\Admin;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+/**
+ * 外部サービス連携設定更新リクエストのバリデーション
+ */
+class UpdateExternalSettingsRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+            'google_analytics_id' => ['nullable', 'string', 'regex:/^(G-[A-Z0-9]+)?$/'],
+            'google_site_verification' => ['nullable', 'string', 'max:100'],
+        ];
+    }
+}

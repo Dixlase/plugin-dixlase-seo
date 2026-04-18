@@ -27,17 +27,18 @@ use App\Http\Controllers\Admin\AdminLoggedInController;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateSeoSettingsRequest;
+use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateMetaSettingsRequest;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * SEO設定の管理画面コントローラー
+ * メタタグ・OGP設定の管理画面コントローラー
+ *
+ * - 基本設定（タイトル区切り・デフォルトディスクリプション）
+ * - OGP / SNS（OGP画像・X Card・X アカウント）
+ * - 組織情報（JSON-LD: 組織名・ロゴ・URL）
  */
-class DixlaseSeoAdminSettingsController extends AdminLoggedInController
+class MetaSettingsController extends AdminLoggedInController
 {
-    /**
-     * コンストラクタ
-     */
     public function __construct(
         private readonly BaseSettingRepositoryInterface $baseSettingRepository,
     ) {
@@ -45,9 +46,9 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
     }
 
     /**
-     * SEO設定画面を表示する
+     * メタタグ・OGP設定画面を表示する
      */
-    public function settings(): View
+    public function show(): View
     {
         $defaults = config('dixlase_seo', []);
         $settings = DixlaseSeoSetting::getMany($defaults);
@@ -71,50 +72,21 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
         $twitterCardOptions = [
             [
                 'value' => 'summary',
-                'label' => __('dixlase-seo::admin/dixlase-seo/settings.twitter_card_summary'),
+                'label' => __('dixlase-seo::admin/dixlase-seo/meta.twitter_card_summary'),
                 'icon' => 'far fa-square',
                 'description' => '',
             ],
             [
                 'value' => 'summary_large_image',
-                'label' => __('dixlase-seo::admin/dixlase-seo/settings.twitter_card_summary_large'),
+                'label' => __('dixlase-seo::admin/dixlase-seo/meta.twitter_card_summary_large'),
                 'icon' => 'far fa-image',
                 'description' => '',
             ],
         ];
 
-        // robots.txtモードの選択肢
-        $robotsTxtModeOptions = [
-            [
-                'value' => 'auto',
-                'label' => __('dixlase-seo::admin/dixlase-seo/settings.robots_txt_mode_auto'),
-                'icon' => 'fas fa-magic',
-                'description' => __('dixlase-seo::admin/dixlase-seo/settings.robots_txt_mode_auto_desc'),
-            ],
-            [
-                'value' => 'custom',
-                'label' => __('dixlase-seo::admin/dixlase-seo/settings.robots_txt_mode_custom'),
-                'icon' => 'fas fa-edit',
-                'description' => __('dixlase-seo::admin/dixlase-seo/settings.robots_txt_mode_custom_desc'),
-            ],
-        ];
-
-        // 更新頻度の選択肢
-        $changefreqOptions = [
-            'always' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_always'),
-            'hourly' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_hourly'),
-            'daily' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_daily'),
-            'weekly' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_weekly'),
-            'monthly' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_monthly'),
-            'yearly' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_yearly'),
-            'never' => __('dixlase-seo::admin/dixlase-seo/settings.changefreq_never'),
-        ];
-
-        return view('dixlase-seo::admin.settings.index', array_merge($this->viewParams, [
+        return view('dixlase-seo::admin.meta', array_merge($this->viewParams, [
             'settings' => $settings,
             'twitterCardOptions' => $twitterCardOptions,
-            'robotsTxtModeOptions' => $robotsTxtModeOptions,
-            'changefreqOptions' => $changefreqOptions,
             'coreSiteDescription' => $coreSiteDescription,
             'organizationLogoMedia' => $organizationLogoMedia,
             'defaultOgpImageMedia' => $defaultOgpImageMedia,
@@ -122,19 +94,14 @@ class DixlaseSeoAdminSettingsController extends AdminLoggedInController
     }
 
     /**
-     * SEO設定を更新する
+     * メタタグ・OGP設定を更新する
      */
-    public function updateSettings(UpdateSeoSettingsRequest $request): RedirectResponse
+    public function update(UpdateMetaSettingsRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
-        // チェックボックス（トグル）はチェックされていないとリクエストに含まれないため処理
-        $validated['sitemap_enabled'] = $request->has('sitemap_enabled') ? '1' : '0';
-
-        DixlaseSeoSetting::setMany($validated);
+        DixlaseSeoSetting::setMany($request->validated());
 
         return redirect()
-            ->route('dixlase-seo::admin.dixlase-seo.settings')
-            ->with('success', __('dixlase-seo::admin/dixlase-seo/settings.updated'));
+            ->route('dixlase-seo::admin.dixlase-seo.meta')
+            ->with('success', __('dixlase-seo::admin/dixlase-seo/meta.updated'));
     }
 }

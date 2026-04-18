@@ -21,11 +21,13 @@
  */
 
 return [
-    'dixlase-seo' => [
-        'text' => 'SEO Management',
-        'meta' => 'Meta Tags & OGP',
-        'crawler' => 'Sitemap & robots.txt',
-        'external' => 'External Services',
-        'integrations' => 'Plugin Integrations',
-    ],
+    'heading' => 'Plugin Integrations',
+    'description' => 'Toggle SEO meta features (meta description, OGP image) per plugin that supports them.',
+
+    // Empty state
+    'no_plugins_title' => 'No SEO-meta capable plugins found',
+    'no_plugins_description' => 'No plugin declares "capabilities": ["seo-meta"] in plugin.json. When such plugins are installed and enabled, they will appear here automatically.',
+
+    // Flash messages
+    'updated' => 'Plugin integration settings have been updated.',
 ];
