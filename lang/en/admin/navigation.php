@@ -24,7 +24,7 @@ return [
     'dixlase-seo' => [
         'text' => 'SEO Management',
         'base' => 'Base Settings',
-        'crawler' => 'Sitemap',
+        'sitemap' => 'Sitemap',
         'external' => 'External Services',
         'integrations' => 'Plugin Integrations',
     ],

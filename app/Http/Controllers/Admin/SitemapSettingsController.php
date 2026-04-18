@@ -25,13 +25,13 @@ namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\AdminLoggedInController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateCrawlerSettingsRequest;
+use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateSitemapSettingsRequest;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * クローラー向け設定（XMLサイトマップ・robots.txt）の管理画面コントローラー
+ * サイトマップ・robots.txt設定の管理画面コントローラー
  */
-class CrawlerSettingsController extends AdminLoggedInController
+class SitemapSettingsController extends AdminLoggedInController
 {
     /**
      * サイトマップ・robots.txt設定画面を表示する
@@ -45,30 +45,30 @@ class CrawlerSettingsController extends AdminLoggedInController
         $robotsTxtModeOptions = [
             [
                 'value' => 'auto',
-                'label' => __('dixlase-seo::admin/dixlase-seo/crawler.robots_txt_mode_auto'),
+                'label' => __('dixlase-seo::admin/dixlase-seo/sitemap.robots_txt_mode_auto'),
                 'icon' => 'fas fa-magic',
-                'description' => __('dixlase-seo::admin/dixlase-seo/crawler.robots_txt_mode_auto_desc'),
+                'description' => __('dixlase-seo::admin/dixlase-seo/sitemap.robots_txt_mode_auto_desc'),
             ],
             [
                 'value' => 'custom',
-                'label' => __('dixlase-seo::admin/dixlase-seo/crawler.robots_txt_mode_custom'),
+                'label' => __('dixlase-seo::admin/dixlase-seo/sitemap.robots_txt_mode_custom'),
                 'icon' => 'fas fa-edit',
-                'description' => __('dixlase-seo::admin/dixlase-seo/crawler.robots_txt_mode_custom_desc'),
+                'description' => __('dixlase-seo::admin/dixlase-seo/sitemap.robots_txt_mode_custom_desc'),
             ],
         ];
 
         // 更新頻度の選択肢
         $changefreqOptions = [
-            'always' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_always'),
-            'hourly' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_hourly'),
-            'daily' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_daily'),
-            'weekly' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_weekly'),
-            'monthly' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_monthly'),
-            'yearly' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_yearly'),
-            'never' => __('dixlase-seo::admin/dixlase-seo/crawler.changefreq_never'),
+            'always' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_always'),
+            'hourly' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_hourly'),
+            'daily' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_daily'),
+            'weekly' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_weekly'),
+            'monthly' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_monthly'),
+            'yearly' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_yearly'),
+            'never' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_never'),
         ];
 
-        return view('dixlase-seo::admin.crawler', array_merge($this->viewParams, [
+        return view('dixlase-seo::admin.sitemap', array_merge($this->viewParams, [
             'settings' => $settings,
             'robotsTxtModeOptions' => $robotsTxtModeOptions,
             'changefreqOptions' => $changefreqOptions,
@@ -78,7 +78,7 @@ class CrawlerSettingsController extends AdminLoggedInController
     /**
      * サイトマップ・robots.txt設定を更新する
      */
-    public function update(UpdateCrawlerSettingsRequest $request): RedirectResponse
+    public function update(UpdateSitemapSettingsRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -88,7 +88,7 @@ class CrawlerSettingsController extends AdminLoggedInController
         DixlaseSeoSetting::setMany($validated);
 
         return redirect()
-            ->route('dixlase-seo::admin.seo.crawler')
-            ->with('success', __('dixlase-seo::admin/dixlase-seo/crawler.updated'));
+            ->route('dixlase-seo::admin.seo.sitemap')
+            ->with('success', __('dixlase-seo::admin/dixlase-seo/sitemap.updated'));
     }
 }

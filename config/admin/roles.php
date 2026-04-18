@@ -33,7 +33,7 @@ return [
             'view_roles' => MemberRole::ADMIN->value,
         ],
         // サイトマップ・robots.txt設定（管理者のみ）
-        'settings.dixlase-seo.crawler' => [
+        'settings.dixlase-seo.sitemap' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,
         ],
