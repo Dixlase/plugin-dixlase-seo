@@ -26,9 +26,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * メタタグ・OGP設定更新リクエストのバリデーション
+ * SEO基本設定更新リクエストのバリデーション
  */
-class UpdateMetaSettingsRequest extends FormRequest
+class UpdateBaseSettingsRequest extends FormRequest
 {
     public function authorize(): bool
     {

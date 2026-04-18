@@ -23,8 +23,8 @@
 return [
     'dixlase-seo' => [
         'text' => 'SEO Management',
-        'meta' => 'Meta Tags & OGP',
-        'crawler' => 'Sitemap & robots.txt',
+        'base' => 'Base Settings',
+        'crawler' => 'Sitemap',
         'external' => 'External Services',
         'integrations' => 'Plugin Integrations',
     ],

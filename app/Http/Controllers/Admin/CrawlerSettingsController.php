@@ -88,7 +88,7 @@ class CrawlerSettingsController extends AdminLoggedInController
         DixlaseSeoSetting::setMany($validated);
 
         return redirect()
-            ->route('dixlase-seo::admin.dixlase-seo.crawler')
+            ->route('dixlase-seo::admin.seo.crawler')
             ->with('success', __('dixlase-seo::admin/dixlase-seo/crawler.updated'));
     }
 }

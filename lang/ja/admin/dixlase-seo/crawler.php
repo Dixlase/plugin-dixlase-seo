@@ -21,7 +21,7 @@
  */
 
 return [
-    'heading' => 'サイトマップ・robots.txt',
+    'heading' => 'サイトマップ',
     'description' => '検索エンジンクローラー向けのXMLサイトマップとrobots.txtを設定します。',
 
     // セクション見出し

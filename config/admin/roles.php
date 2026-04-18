@@ -27,8 +27,8 @@ use App\Enums\MemberRole;
 
 return [
     'permissions' => [
-        // メタタグ・OGP設定（管理者のみ）
-        'settings.dixlase-seo.meta' => [
+        // 基本設定（管理者のみ）
+        'settings.dixlase-seo.base' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,
         ],

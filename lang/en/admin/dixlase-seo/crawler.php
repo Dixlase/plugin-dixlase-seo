@@ -21,7 +21,7 @@
  */
 
 return [
-    'heading' => 'Sitemap & robots.txt',
+    'heading' => 'Sitemap',
     'description' => 'Configure XML sitemap and robots.txt for search engine crawlers.',
 
     // Section headings

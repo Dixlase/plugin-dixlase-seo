@@ -21,7 +21,7 @@
  */
 
 return [
-    'heading' => 'メタタグ・OGP',
+    'heading' => '基本設定',
     'description' => 'サイト全体のメタタグ、OGP（SNSシェア時の表示）、組織情報（JSON-LD）を設定します。',
 
     // セクション見出し
