@@ -22,9 +22,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\BaseSettingsController;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\CrawlerSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\SitemapSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,8 +40,8 @@ Route::prefix('seo')
         Route::patch('base', [BaseSettingsController::class, 'update'])->name('base.update');
 
         // サイトマップ・robots.txt設定
-        Route::get('crawler', [CrawlerSettingsController::class, 'show'])->name('crawler');
-        Route::patch('crawler', [CrawlerSettingsController::class, 'update'])->name('crawler.update');
+        Route::get('sitemap', [SitemapSettingsController::class, 'show'])->name('sitemap');
+        Route::patch('sitemap', [SitemapSettingsController::class, 'update'])->name('sitemap.update');
 
         // 外部サービス連携設定
         Route::get('external', [ExternalSettingsController::class, 'show'])->name('external');

@@ -29,7 +29,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\BaseSettingsController;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\CrawlerSettingsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\SitemapSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
@@ -39,7 +39,7 @@ use Tests\TestCase;
  * SEO設定管理画面（4ページ分割版）のフィーチャーテスト
  *
  * - 基本設定（base）
- * - サイトマップ（crawler）
+ * - サイトマップ（sitemap）
  * - 外部サービス連携（external）
  * - プラグイン連携（integrations）
  */
@@ -51,7 +51,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     private string $baseUrl;
 
-    private string $crawlerUrl;
+    private string $sitemapUrl;
 
     private string $externalUrl;
 
@@ -86,7 +86,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         // ルートを手動登録
         $adminUrl = config('admin.admin_url', 'admin');
         $this->baseUrl = "/{$adminUrl}/seo/base";
-        $this->crawlerUrl = "/{$adminUrl}/seo/crawler";
+        $this->sitemapUrl = "/{$adminUrl}/seo/sitemap";
         $this->externalUrl = "/{$adminUrl}/seo/external";
         $this->integrationsUrl = "/{$adminUrl}/seo/integrations";
 
@@ -99,8 +99,8 @@ class DixlaseSeoAdminSettingsTest extends TestCase
                     ->group(function () use ($router) {
                         $router->get('base', [BaseSettingsController::class, 'show'])->name('base');
                         $router->patch('base', [BaseSettingsController::class, 'update'])->name('base.update');
-                        $router->get('crawler', [CrawlerSettingsController::class, 'show'])->name('crawler');
-                        $router->patch('crawler', [CrawlerSettingsController::class, 'update'])->name('crawler.update');
+                        $router->get('sitemap', [SitemapSettingsController::class, 'show'])->name('sitemap');
+                        $router->patch('sitemap', [SitemapSettingsController::class, 'update'])->name('sitemap.update');
                         $router->get('external', [ExternalSettingsController::class, 'show'])->name('external');
                         $router->patch('external', [ExternalSettingsController::class, 'update'])->name('external.update');
                         $router->get('integrations', [IntegrationsController::class, 'show'])->name('integrations');
@@ -149,7 +149,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    private function crawlerPayload(array $overrides = []): array
+    private function sitemapPayload(array $overrides = []): array
     {
         return array_merge([
             'sitemap_enabled' => '1',
@@ -180,9 +180,9 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $this->get($this->baseUrl)->assertRedirect();
     }
 
-    public function test_guest_is_redirected_from_crawler_page(): void
+    public function test_guest_is_redirected_from_sitemap_page(): void
     {
-        $this->get($this->crawlerUrl)->assertRedirect();
+        $this->get($this->sitemapUrl)->assertRedirect();
     }
 
     public function test_guest_is_redirected_from_external_page(): void
@@ -200,9 +200,9 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $this->patch($this->baseUrl, $this->basePayload())->assertRedirect();
     }
 
-    public function test_guest_cannot_update_crawler_settings(): void
+    public function test_guest_cannot_update_sitemap_settings(): void
     {
-        $this->patch($this->crawlerUrl, $this->crawlerPayload())->assertRedirect();
+        $this->patch($this->sitemapUrl, $this->sitemapPayload())->assertRedirect();
     }
 
     public function test_guest_cannot_update_external_settings(): void
@@ -293,17 +293,17 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     // サイトマップ・robots.txt ページ
     // ========================================
 
-    public function test_admin_can_access_crawler_page(): void
+    public function test_admin_can_access_sitemap_page(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->sitemapUrl);
 
         $response->assertOk();
-        $response->assertViewIs('dixlase-seo::admin.crawler');
+        $response->assertViewIs('dixlase-seo::admin.sitemap');
     }
 
-    public function test_crawler_page_has_required_view_data(): void
+    public function test_sitemap_page_has_required_view_data(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->sitemapUrl);
 
         $response->assertViewHas('settings');
         $response->assertViewHas('robotsTxtModeOptions');
@@ -312,7 +312,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     public function test_robots_txt_mode_options_contain_expected_values(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->sitemapUrl);
 
         $values = array_column($response->viewData('robotsTxtModeOptions'), 'value');
         $this->assertContains('auto', $values);
@@ -321,7 +321,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     public function test_changefreq_options_contain_all_expected_values(): void
     {
-        $response = $this->actingAs($this->admin, 'member')->get($this->crawlerUrl);
+        $response = $this->actingAs($this->admin, 'member')->get($this->sitemapUrl);
 
         $options = $response->viewData('changefreqOptions');
         foreach (['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'] as $key) {
@@ -329,10 +329,10 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         }
     }
 
-    public function test_admin_can_save_crawler_settings(): void
+    public function test_admin_can_save_sitemap_settings(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_changefreq' => 'daily']))
+            ->patch($this->sitemapUrl, $this->sitemapPayload(['sitemap_changefreq' => 'daily']))
             ->assertRedirect()
             ->assertSessionHas('success');
 
@@ -341,10 +341,10 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     public function test_sitemap_enabled_toggle_off_saves_zero(): void
     {
-        $payload = $this->crawlerPayload();
+        $payload = $this->sitemapPayload();
         unset($payload['sitemap_enabled']);
 
-        $this->actingAs($this->admin, 'member')->patch($this->crawlerUrl, $payload);
+        $this->actingAs($this->admin, 'member')->patch($this->sitemapUrl, $payload);
 
         $this->assertSame('0', DixlaseSeoSetting::getValue('sitemap_enabled'));
     }
@@ -353,7 +353,7 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     {
         $custom = "User-agent: *\nDisallow: /admin/";
         $this->actingAs($this->admin, 'member')
-            ->patch($this->crawlerUrl, $this->crawlerPayload([
+            ->patch($this->sitemapUrl, $this->sitemapPayload([
                 'robots_txt_mode' => 'custom',
                 'robots_txt' => $custom,
             ]));
@@ -365,28 +365,28 @@ class DixlaseSeoAdminSettingsTest extends TestCase
     public function test_invalid_robots_txt_mode_fails_validation(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->crawlerUrl, $this->crawlerPayload(['robots_txt_mode' => 'invalid']))
+            ->patch($this->sitemapUrl, $this->sitemapPayload(['robots_txt_mode' => 'invalid']))
             ->assertSessionHasErrors('robots_txt_mode');
     }
 
     public function test_invalid_sitemap_changefreq_fails_validation(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_changefreq' => 'invalid']))
+            ->patch($this->sitemapUrl, $this->sitemapPayload(['sitemap_changefreq' => 'invalid']))
             ->assertSessionHasErrors('sitemap_changefreq');
     }
 
     public function test_sitemap_priority_below_zero_fails_validation(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_priority' => '-0.1']))
+            ->patch($this->sitemapUrl, $this->sitemapPayload(['sitemap_priority' => '-0.1']))
             ->assertSessionHasErrors('sitemap_priority');
     }
 
     public function test_sitemap_priority_above_one_fails_validation(): void
     {
         $this->actingAs($this->admin, 'member')
-            ->patch($this->crawlerUrl, $this->crawlerPayload(['sitemap_priority' => '1.5']))
+            ->patch($this->sitemapUrl, $this->sitemapPayload(['sitemap_priority' => '1.5']))
             ->assertSessionHasErrors('sitemap_priority');
     }
 

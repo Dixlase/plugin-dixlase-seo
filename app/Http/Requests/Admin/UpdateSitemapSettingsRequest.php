@@ -28,7 +28,7 @@ use Illuminate\Validation\Rule;
 /**
  * サイトマップ・robots.txt設定更新リクエストのバリデーション
  */
-class UpdateCrawlerSettingsRequest extends FormRequest
+class UpdateSitemapSettingsRequest extends FormRequest
 {
     public function authorize(): bool
     {

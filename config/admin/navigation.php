@@ -39,9 +39,9 @@ return [
                 'icon' => 'fas fa-fw fa-cog',
                 'can' => 'admin',
             ],
-            'crawler' => [
-                'text' => 'dixlase-seo::admin/navigation.dixlase-seo.crawler',
-                'route' => 'dixlase-seo::admin.seo.crawler',
+            'sitemap' => [
+                'text' => 'dixlase-seo::admin/navigation.dixlase-seo.sitemap',
+                'route' => 'dixlase-seo::admin.seo.sitemap',
                 'icon' => 'fas fa-fw fa-sitemap',
                 'can' => 'admin',
             ],
