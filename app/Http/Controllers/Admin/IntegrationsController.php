@@ -24,26 +24,146 @@ namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
 use App\Helpers\PluginHelper;
 use App\Http\Controllers\Admin\AdminLoggedInController;
+use App\Models\Plugin;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateIntegrationsRequest;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
  * プラグイン連携設定の管理画面コントローラー
  *
- * `seo-meta` capability を宣言したプラグインを自動検出し、それぞれの
- * 有効/無効を切り替える。実際のトグル UI と保存処理はタスクCで実装予定。
+ * `seo-meta` capability を宣言した有効化プラグインを自動検出し、
+ * プラグインごとに SEOメタ機能の ON/OFF を切り替えられる。
+ * 孤立したメタ情報（削除済みプラグイン由来）の一括削除機能も提供。
  */
 class IntegrationsController extends AdminLoggedInController
 {
+    private const ENABLED_SETTING_KEY_FORMAT = 'integration.%s.enabled';
+
+    private const REQUIRED_CAPABILITY = 'seo-meta';
+
     /**
      * プラグイン連携設定画面を表示する
      */
     public function show(): View
     {
-        // seo-meta capability を宣言している有効化プラグインのスラッグ一覧
-        $seoMetaPluginSlugs = PluginHelper::getEnabledPluginSlugsByCapability('seo-meta');
+        $plugins = $this->getSeoMetaPlugins();
+        $orphans = $this->getOrphanSummary(array_column($plugins, 'slug'));
 
         return view('dixlase-seo::admin.integrations', array_merge($this->viewParams, [
-            'seoMetaPluginSlugs' => $seoMetaPluginSlugs,
+            'plugins' => $plugins,
+            'orphans' => $orphans,
         ]));
+    }
+
+    /**
+     * プラグイン連携設定を更新する
+     */
+    public function update(UpdateIntegrationsRequest $request): RedirectResponse
+    {
+        $toggles = $request->validated()['integration'] ?? [];
+        $currentSlugs = PluginHelper::getEnabledPluginSlugsByCapability(self::REQUIRED_CAPABILITY);
+
+        foreach ($currentSlugs as $slug) {
+            $key = sprintf(self::ENABLED_SETTING_KEY_FORMAT, $slug);
+            // トグルが送信されていれば有効、未送信なら無効
+            $value = isset($toggles[$slug]) && $toggles[$slug] === '1' ? '1' : '0';
+            DixlaseSeoSetting::setValue($key, $value);
+        }
+
+        return redirect()
+            ->route('dixlase-seo::admin.seo.integrations')
+            ->with('success', __('dixlase-seo::admin/dixlase-seo/integrations.updated'));
+    }
+
+    /**
+     * 孤立メタ情報を一括削除する
+     *
+     * 現在 seo-meta capability を宣言していないプラグインのメタ情報を全削除する。
+     */
+    public function purgeOrphans(): RedirectResponse
+    {
+        $currentSlugs = PluginHelper::getEnabledPluginSlugsByCapability(self::REQUIRED_CAPABILITY);
+
+        $deleted = DixlaseSeoMeta::query()
+            ->when(
+                ! empty($currentSlugs),
+                fn ($q) => $q->whereNotIn('plugin_slug', $currentSlugs),
+            )
+            ->delete();
+
+        return redirect()
+            ->route('dixlase-seo::admin.seo.integrations')
+            ->with('success', __('dixlase-seo::admin/dixlase-seo/integrations.orphans_purged', ['count' => $deleted]));
+    }
+
+    /**
+     * seo-meta capability を宣言した有効化プラグインの一覧を取得
+     *
+     * @return array<int, array{slug:string, name:string, description:string, enabled:bool}>
+     */
+    private function getSeoMetaPlugins(): array
+    {
+        $slugs = PluginHelper::getEnabledPluginSlugsByCapability(self::REQUIRED_CAPABILITY);
+        if (empty($slugs)) {
+            return [];
+        }
+
+        $plugins = Plugin::whereIn('slug', $slugs)->get();
+
+        return $plugins->map(function (Plugin $plugin) {
+            $key = sprintf(self::ENABLED_SETTING_KEY_FORMAT, $plugin->slug);
+            $value = DixlaseSeoSetting::getValue($key, '1');
+
+            return [
+                'slug' => $plugin->slug,
+                'name' => $plugin->name,
+                'description' => (string) ($plugin->description ?? ''),
+                'enabled' => $value !== '0' && $value !== false,
+            ];
+        })->values()->toArray();
+    }
+
+    /**
+     * 孤立メタ情報の概要を取得
+     *
+     * @param  array<int, string>  $currentSlugs  現在の seo-meta 対応プラグインスラッグ
+     * @return array{count:int, byPlugin: array<int, array{plugin_slug:string, count:int}>}
+     */
+    private function getOrphanSummary(array $currentSlugs): array
+    {
+        $query = DixlaseSeoMeta::query();
+
+        if (! empty($currentSlugs)) {
+            $query->whereNotIn('plugin_slug', $currentSlugs);
+        }
+
+        $count = $query->count();
+
+        if ($count === 0) {
+            return ['count' => 0, 'byPlugin' => []];
+        }
+
+        $byPlugin = DixlaseSeoMeta::query()
+            ->when(
+                ! empty($currentSlugs),
+                fn ($q) => $q->whereNotIn('plugin_slug', $currentSlugs),
+            )
+            ->selectRaw('plugin_slug, COUNT(*) as count')
+            ->groupBy('plugin_slug')
+            ->orderBy('plugin_slug')
+            ->get()
+            ->map(fn ($row) => [
+                'plugin_slug' => $row->plugin_slug,
+                'count' => (int) $row->count,
+            ])
+            ->toArray();
+
+        return [
+            'count' => $count,
+            'byPlugin' => $byPlugin,
+        ];
     }
 }
