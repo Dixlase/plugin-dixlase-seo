@@ -49,4 +49,7 @@ Route::prefix('seo')
 
         // プラグイン連携設定
         Route::get('integrations', [IntegrationsController::class, 'show'])->name('integrations');
+        Route::patch('integrations', [IntegrationsController::class, 'update'])->name('integrations.update');
+        Route::post('integrations/purge-orphans', [IntegrationsController::class, 'purgeOrphans'])
+            ->name('integrations.purge-orphans');
     });

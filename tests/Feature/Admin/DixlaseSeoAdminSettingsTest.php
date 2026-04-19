@@ -29,9 +29,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\BaseSettingsController;
-use Plugins\DixlaseSEO\App\Http\Controllers\Admin\SitemapSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\ExternalSettingsController;
 use Plugins\DixlaseSEO\App\Http\Controllers\Admin\IntegrationsController;
+use Plugins\DixlaseSEO\App\Http\Controllers\Admin\SitemapSettingsController;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Tests\TestCase;
 
@@ -104,6 +105,9 @@ class DixlaseSeoAdminSettingsTest extends TestCase
                         $router->get('external', [ExternalSettingsController::class, 'show'])->name('external');
                         $router->patch('external', [ExternalSettingsController::class, 'update'])->name('external.update');
                         $router->get('integrations', [IntegrationsController::class, 'show'])->name('integrations');
+                        $router->patch('integrations', [IntegrationsController::class, 'update'])->name('integrations.update');
+                        $router->post('integrations/purge-orphans', [IntegrationsController::class, 'purgeOrphans'])
+                            ->name('integrations.purge-orphans');
                     });
             });
 
@@ -435,11 +439,52 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $response->assertViewIs('dixlase-seo::admin.integrations');
     }
 
-    public function test_integrations_page_has_seo_meta_plugin_slugs(): void
+    public function test_integrations_page_has_plugins_and_orphans_view_data(): void
     {
         $response = $this->actingAs($this->admin, 'member')->get($this->integrationsUrl);
 
-        $response->assertViewHas('seoMetaPluginSlugs');
-        $this->assertIsArray($response->viewData('seoMetaPluginSlugs'));
+        $response->assertViewHas('plugins');
+        $response->assertViewHas('orphans');
+        $this->assertIsArray($response->viewData('plugins'));
+        $this->assertIsArray($response->viewData('orphans'));
+        $this->assertArrayHasKey('count', $response->viewData('orphans'));
+        $this->assertArrayHasKey('byPlugin', $response->viewData('orphans'));
+    }
+
+    public function test_update_integrations_saves_enabled_toggle(): void
+    {
+        // seo-metaプラグインが存在しない環境では toggles は空でも200応答
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->integrationsUrl, ['integration' => []])
+            ->assertRedirect()
+            ->assertSessionHas('success');
+    }
+
+    public function test_guest_cannot_update_integrations(): void
+    {
+        $this->patch($this->integrationsUrl, ['integration' => []])->assertRedirect();
+    }
+
+    public function test_purge_orphans_removes_only_unsupported_plugin_records(): void
+    {
+        // 孤立（非対応プラグイン）のレコードを作成
+        DixlaseSeoMeta::create([
+            'plugin_slug' => 'nonexistent-plugin',
+            'entity_id' => '1',
+            'description' => 'orphan desc',
+        ]);
+
+        $purgeUrl = $this->integrationsUrl.'/purge-orphans';
+        $this->actingAs($this->admin, 'member')
+            ->post($purgeUrl)
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertSame(0, DixlaseSeoMeta::where('plugin_slug', 'nonexistent-plugin')->count());
+    }
+
+    public function test_guest_cannot_purge_orphans(): void
+    {
+        $this->post($this->integrationsUrl.'/purge-orphans')->assertRedirect();
     }
 }

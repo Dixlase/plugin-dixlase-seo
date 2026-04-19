@@ -24,10 +24,24 @@ return [
     'heading' => 'Plugin Integrations',
     'description' => 'Toggle SEO meta features (meta description, OGP image) per plugin that supports them.',
 
+    // Plugin list
+    'section_plugins' => 'Integrated Plugins',
+    'enable_for_plugin' => 'Enable SEO meta for :name',
+
     // Empty state
     'no_plugins_title' => 'No SEO-meta capable plugins found',
     'no_plugins_description' => 'No plugin declares "capabilities": ["seo-meta"] in plugin.json. When such plugins are installed and enabled, they will appear here automatically.',
 
+    // Orphan cleanup
+    'section_cleanup' => 'Maintenance',
+    'orphans_title' => 'Orphan Meta Cleanup',
+    'orphans_none' => 'No orphan meta records found.',
+    'orphans_description' => 'There are :count orphan meta records from plugins that no longer support SEO meta (uninstalled, disabled, or capability no longer declared). Deleting them will not affect the plugins\' actual content.',
+    'orphans_by_plugin' => ':slug: :count records',
+    'purge_orphans_button' => 'Delete Orphan Meta',
+    'purge_orphans_confirm' => 'This will permanently delete :count orphan meta records. This operation cannot be undone. Continue?',
+
     // Flash messages
     'updated' => 'Plugin integration settings have been updated.',
+    'orphans_purged' => 'Deleted :count orphan meta records.',
 ];
