@@ -28,7 +28,7 @@
         "seo"
     ],
     "requires": {
-        "dixlase": ">=1.0.0",
+        "dixlase": "^0.1.0",
         "php": ">=8.2"
     },
     "provides": {
