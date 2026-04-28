@@ -1,23 +1,31 @@
 {{--
-  This file is part of Dixlase SEO.
+This file is part of Dixlase SEO.
 
-  Copyright (C) 2026 exc-D inc.
-  https://exc-d.com
+Copyright (C) 2026 exc-D inc.
+https://exc-d.com
 
-  @api Available for plugins/themes as <x-dixlase-seo::meta-fields />
+Dixlase SEO is dual-licensed. You may use this file under either:
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+  (a) the GNU General Public License version 3 or later, as published
+      by the Free Software Foundation; or
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
+  (b) a commercial license agreement obtained from exc-D inc.
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <https://www.gnu.org/licenses/>.
+Unless you have entered into a commercial license agreement, this
+file is governed by the GPL terms below.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 --}}
 
 {{--
@@ -44,42 +52,40 @@
     'sectionTitle' => null,
 ])
 
-<section class="mb-6">
-    <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-3">
-        <i class="fas fa-search mr-2"></i>{{ $sectionTitle ?? __('dixlase-seo::components/meta-fields.section_title') }}
+<div class="space-y-4">
+    <h3 class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <i class="fas fa-search mr-1"></i>{{ $sectionTitle ?? __('dixlase-seo::components/meta-fields.section_title') }}
     </h3>
 
-    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4">
-        <div>
-            <x-form-label
-                for="{{ $fieldPrefix }}_description"
-                :text="__('dixlase-seo::components/meta-fields.description')"
-                class="mb-1"
-            />
-            <x-form-textarea
-                :id="$fieldPrefix.'_description'"
-                :name="$fieldPrefix.'[description]'"
-                :value="old($fieldPrefix.'.description', $description ?? '')"
-                rows="3"
-                maxlength="200"
-            />
-            <x-form-help-text :text="__('dixlase-seo::components/meta-fields.description_help')" />
-        </div>
-
-        <div>
-            <x-form-label
-                for="{{ $fieldPrefix }}_ogp_media_id"
-                :text="__('dixlase-seo::components/meta-fields.ogp_media')"
-                class="mb-1"
-            />
-            <x-media.picker
-                :id="$fieldPrefix.'_ogp_media_id'"
-                :name="$fieldPrefix.'[ogp_media_id]'"
-                :value="old($fieldPrefix.'.ogp_media_id', $ogpMediaId ?? '')"
-                :media="$ogpMedia"
-                aspectRatio="ogp"
-            />
-            <x-form-help-text :text="__('dixlase-seo::components/meta-fields.ogp_media_help')" />
-        </div>
+    <div>
+        <x-form-label
+            for="{{ $fieldPrefix }}_description"
+            :text="__('dixlase-seo::components/meta-fields.description')"
+            class="mb-1"
+        />
+        <x-form-textarea
+            :id="$fieldPrefix.'_description'"
+            :name="$fieldPrefix.'[description]'"
+            :value="old($fieldPrefix.'.description', $description ?? '')"
+            rows="3"
+            maxlength="200"
+        />
+        <x-form-help-text :text="__('dixlase-seo::components/meta-fields.description_help')" />
     </div>
-</section>
+
+    <div>
+        <x-form-label
+            for="{{ $fieldPrefix }}_ogp_media_id"
+            :text="__('dixlase-seo::components/meta-fields.ogp_media')"
+            class="mb-1"
+        />
+        <x-media.picker
+            :id="$fieldPrefix.'_ogp_media_id'"
+            :name="$fieldPrefix.'[ogp_media_id]'"
+            :value="old($fieldPrefix.'.ogp_media_id', $ogpMediaId ?? '')"
+            :media="$ogpMedia"
+            aspectRatio="ogp"
+        />
+        <x-form-help-text :text="__('dixlase-seo::components/meta-fields.ogp_media_help')" />
+    </div>
+</div>
