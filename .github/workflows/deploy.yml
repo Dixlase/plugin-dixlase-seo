@@ -57,7 +57,7 @@ jobs:
       - name: Setup test environment
         working-directory: core
         env:
-          APP_KEY: base64:dGVzdGtleWZvcmRpeGxhc2VzZW9jaXRlc3RzMTIzNDU2Nzg5MDEyMz0=
+          APP_KEY: base64:INAsYduzvVFuYXTFeMS0EkLXHynFalWYt/O9hUlTdfg=
         run: |
           if [ -f .env.example ]; then
             cp .env.example .env
@@ -69,7 +69,7 @@ jobs:
       - name: Run PHPUnit tests
         working-directory: core/plugins/DixlaseSEO
         env:
-          APP_KEY: base64:dGVzdGtleWZvcmRpeGxhc2VzZW9jaXRlc3RzMTIzNDU2Nzg5MDEyMz0=
+          APP_KEY: base64:INAsYduzvVFuYXTFeMS0EkLXHynFalWYt/O9hUlTdfg=
         run: ../../vendor/bin/phpunit
 
   deploy:
