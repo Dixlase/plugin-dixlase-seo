@@ -52,6 +52,7 @@
     "permissions": {
         "database": {
             "own_tables": true,
+            "core_tables": [],
             "core_tables_read": [
                 "media"
             ],
@@ -99,7 +100,7 @@
     "declares": {
         "configs": {
             "roles": true,
-            "database_cleanup": false,
+            "database_cleanup": true,
             "navigation": true
         },
         "contracts": [
