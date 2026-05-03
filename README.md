@@ -14,7 +14,14 @@ DixlaseSEO is a plugin for Dixlase (and also composer-ready for future distribut
 
 ## License
 
-GPL
+Dixlase SEO is distributed under a **dual license**:
+
+- **Open Source License**: [GNU General Public License v3](./LICENSE)
+- **Commercial License**: For use cases where GPL v3 compliance is not feasible, a separate commercial license is available — see [LICENSE.commercial](./LICENSE.commercial) (currently a draft) or contact **office@exc-d.com**.
+
+A short overview of how these files fit together is in [NOTICE](./NOTICE) ([日本語](./NOTICE.ja)).
+
+Contributions to this plugin repository are governed by the [Dixlase Copyright Policy](https://github.com/Dixlase/dixlase-core/blob/main/COPYRIGHT-POLICY.md) and the Dixlase Contributor License Agreement (see CONTRIBUTING.md).
 
 ---
-(C)  - 2026
+(C) exc-D inc. - 2026
