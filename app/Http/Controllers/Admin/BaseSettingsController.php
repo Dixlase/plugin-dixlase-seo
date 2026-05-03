@@ -32,7 +32,7 @@
 
 namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
-use App\Contracts\Repositories\BaseSettingRepositoryInterface;
+use App\Contracts\Repositories\SiteSettingRepositoryInterface;
 use App\Http\Controllers\Admin\AdminLoggedInController;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
@@ -50,7 +50,7 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 class BaseSettingsController extends AdminLoggedInController
 {
     public function __construct(
-        private readonly BaseSettingRepositoryInterface $baseSettingRepository,
+        private readonly SiteSettingRepositoryInterface $baseSettingRepository,
     ) {
         parent::__construct();
     }

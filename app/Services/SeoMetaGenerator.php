@@ -32,7 +32,7 @@
 
 namespace Plugins\DixlaseSEO\App\Services;
 
-use App\Contracts\Repositories\BaseSettingRepositoryInterface;
+use App\Contracts\Repositories\SiteSettingRepositoryInterface;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
@@ -48,7 +48,7 @@ class SeoMetaGenerator
     private ?array $settings = null;
 
     public function __construct(
-        private readonly ?BaseSettingRepositoryInterface $baseSettingRepository = null,
+        private readonly ?SiteSettingRepositoryInterface $baseSettingRepository = null,
     ) {}
 
     /**
