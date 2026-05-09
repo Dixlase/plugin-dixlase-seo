@@ -34,7 +34,7 @@ return [
     'heading' => '外部サービス連携',
     'description' => 'Google Analytics や Google Search Console などの外部サービスと連携します。',
 
-    // セクション見出し
+    // Section heading
     'section_google' => 'Google サービス',
 
     // Google Analytics
@@ -47,6 +47,6 @@ return [
     'google_site_verification_help' => 'Search Consoleの「HTMLタグ」確認方法で表示されるcontent属性の値を入力してください。',
     'google_site_verification_placeholder' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 
-    // フラッシュメッセージ
+    // Flash message
     'updated' => '外部サービス連携設定を更新しました。',
 ];

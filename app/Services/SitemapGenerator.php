@@ -36,7 +36,7 @@ use App\Contracts\PluginIntegration\LinkableProviderInterface;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * XMLサイトマップの生成サービス
+ * XML sitemap generation service
  */
 class SitemapGenerator
 {
@@ -48,7 +48,7 @@ class SitemapGenerator
     ) {}
 
     /**
-     * XMLサイトマップを生成する
+     * Generate XML sitemap
      */
     public function generate(): string
     {
@@ -61,10 +61,10 @@ class SitemapGenerator
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
-        // トップページ
+        // Top page
         $xml .= $this->buildUrlEntry(url('/'), $changefreq, '1.0');
 
-        // LinkableProviderから収集したURL
+        // URLs collected from LinkableProvider
         foreach ($urls as $urlData) {
             $xml .= $this->buildUrlEntry(
                 $urlData['url'],
@@ -80,10 +80,10 @@ class SitemapGenerator
     }
 
     /**
-     * LinkableProviderからURLを収集する
+     * Collect URLs from LinkableProvider
      *
-     * - 相対パスの場合は絶対URLに変換
-     * - 同一URLが複数プロバイダーから提供された場合は重複を除去
+     * - Convert relative paths to absolute URLs
+     * - Remove duplicates when the same URL is provided by multiple providers
      *
      * @return array<int, array{url: string, lastmod: string|null}>
      */
@@ -115,7 +115,7 @@ class SitemapGenerator
     }
 
     /**
-     * 相対パスを絶対URLに変換する
+     * Convert relative path to absolute URL
      */
     private function toAbsoluteUrl(string $url): string
     {
@@ -131,7 +131,7 @@ class SitemapGenerator
     }
 
     /**
-     * URLエントリのXMLを構築する
+     * Build XML for URL entry
      */
     private function buildUrlEntry(
         string $url,

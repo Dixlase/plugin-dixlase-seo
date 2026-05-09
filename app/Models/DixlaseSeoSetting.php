@@ -35,26 +35,26 @@ namespace Plugins\DixlaseSEO\App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * SEO設定のキーバリュー型モデル
+ * Key-value model for SEO settings
  */
 class DixlaseSeoSetting extends Model
 {
     /**
-     * テーブル名
+     * Table name
      *
      * @var string
      */
     protected $table = 'dls_plg_dixlase_seo_settings';
 
     /**
-     * 一括代入可能な属性
+     * Mass assignable attributes
      *
      * @var array<int, string>
      */
     protected $fillable = ['name', 'value'];
 
     /**
-     * 設定値を取得する
+     * Retrieve a settings value
      */
     public static function getValue(string $name, mixed $default = null): mixed
     {
@@ -64,7 +64,7 @@ class DixlaseSeoSetting extends Model
     }
 
     /**
-     * 設定値を保存する
+     * Save a settings value
      */
     public static function setValue(string $name, mixed $value): void
     {
@@ -75,7 +75,7 @@ class DixlaseSeoSetting extends Model
     }
 
     /**
-     * 複数の設定値を一括保存する
+     * Bulk save multiple settings values
      *
      * @param array<string, mixed> $settings
      */
@@ -87,9 +87,9 @@ class DixlaseSeoSetting extends Model
     }
 
     /**
-     * 複数の設定値を一括取得する
+     * Bulk retrieve multiple settings values
      *
-     * @param array<string, mixed> $defaults キーとデフォルト値のペア
+     * @param array<string, mixed> $defaults Key-value pairs of defaults
      * @return array<string, mixed>
      */
     public static function getMany(array $defaults): array

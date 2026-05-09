@@ -34,18 +34,18 @@ return [
     'heading' => '基本設定',
     'description' => 'サイト全体のメタタグ、OGP（SNSシェア時の表示）、組織情報（JSON-LD）を設定します。',
 
-    // セクション見出し
+    // Section headings
     'section_general' => '基本設定',
     'section_ogp' => 'OGP / SNS設定',
     'section_organization' => '組織情報（JSON-LD）',
 
-    // 基本設定
+    // Basic settings
     'title_separator' => 'タイトル区切り文字',
     'title_separator_help' => 'ページタイトルとサイト名の間に表示される区切り文字です。例: ページ名 | サイト名',
     'default_description' => 'デフォルトのメタディスクリプション',
     'default_description_help' => '個別にディスクリプションが設定されていないページで使用されるデフォルトの説明文です。',
 
-    // OGP設定
+    // OGP settings
     'default_ogp_image' => 'デフォルトOGP画像',
     'default_ogp_image_help' => 'SNSでシェアされたときに表示されるデフォルト画像です。推奨サイズ: 1200x630px',
     'twitter_card_type' => 'X Cardタイプ',
@@ -55,7 +55,7 @@ return [
     'twitter_site' => 'X アカウント',
     'twitter_site_help' => 'サイトに関連付けるX（旧Twitter）のアカウント名です（@なし）。',
 
-    // 組織情報
+    // Organization information
     'organization_name' => '組織名',
     'organization_name_help' => '検索結果に表示される組織名です。',
     'organization_logo' => '組織ロゴ',
@@ -63,6 +63,6 @@ return [
     'organization_url' => '組織URL',
     'organization_url_help' => '組織の公式WebサイトURLです。',
 
-    // フラッシュメッセージ
+    // Flash messages
     'updated' => 'メタタグ・OGP設定を更新しました。',
 ];

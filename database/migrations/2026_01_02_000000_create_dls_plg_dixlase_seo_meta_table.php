@@ -37,11 +37,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * マイグレーション実行
+     * Run the migration
      *
-     * プラグイン生成コンテンツ（固定ページ、リーガルページ、ブログ記事など）の
-     * SEOメタ情報を格納するテーブル。
-     * (plugin_slug, entity_id) のペアで一意に識別される。
+     * Table for storing SEO meta information for plugin-generated content
+     * (static pages, legal pages, blog posts, etc.).
+     * Uniquely identified by the (plugin_slug, entity_id) pair.
      */
     public function up(): void
     {
@@ -59,7 +59,7 @@ return new class extends Migration
     }
 
     /**
-     * ロールバック
+     * Rollback
      */
     public function down(): void
     {

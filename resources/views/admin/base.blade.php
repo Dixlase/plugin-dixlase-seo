@@ -35,7 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     @csrf
     @method('PATCH')
 
-    {{-- 基本設定 --}}
+    {{-- Basic settings --}}
     <section class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             <i class="fas fa-cog mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/base.section_general') }}
@@ -64,7 +64,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
         </div>
     </section>
 
-    {{-- OGP / SNS設定 --}}
+    {{-- OGP / SNS settings --}}
     <section class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             <i class="fas fa-share-alt mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/base.section_ogp') }}
@@ -104,7 +104,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
         </div>
     </section>
 
-    {{-- 組織情報（JSON-LD） --}}
+    {{-- Organization info (JSON-LD) --}}
     <section class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             <i class="fas fa-building mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/base.section_organization') }}

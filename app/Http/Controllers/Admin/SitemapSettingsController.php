@@ -39,19 +39,19 @@ use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateSitemapSettingsRequest;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * サイトマップ・robots.txt設定の管理画面コントローラー
+ * Admin panel controller for sitemap and robots.txt settings
  */
 class SitemapSettingsController extends AdminLoggedInController
 {
     /**
-     * サイトマップ・robots.txt設定画面を表示する
+     * Display the sitemap and robots.txt settings screen
      */
     public function show(): View
     {
         $defaults = config('dixlase_seo', []);
         $settings = DixlaseSeoSetting::getMany($defaults);
 
-        // robots.txtモードの選択肢
+        // Options for robots.txt mode
         $robotsTxtModeOptions = [
             [
                 'value' => 'auto',
@@ -67,7 +67,7 @@ class SitemapSettingsController extends AdminLoggedInController
             ],
         ];
 
-        // 更新頻度の選択肢
+        // Options for update frequency
         $changefreqOptions = [
             'always' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_always'),
             'hourly' => __('dixlase-seo::admin/dixlase-seo/sitemap.changefreq_hourly'),
@@ -86,13 +86,13 @@ class SitemapSettingsController extends AdminLoggedInController
     }
 
     /**
-     * サイトマップ・robots.txt設定を更新する
+     * Update sitemap and robots.txt settings
      */
     public function update(UpdateSitemapSettingsRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
-        // チェックボックス（トグル）はチェックされていないとリクエストに含まれないため処理
+        // Process checkboxes (toggles) since unchecked ones are not included in the request
         $validated['sitemap_enabled'] = $request->has('sitemap_enabled') ? '1' : '0';
 
         DixlaseSeoSetting::setMany($validated);

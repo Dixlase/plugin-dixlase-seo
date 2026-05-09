@@ -41,7 +41,7 @@ use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * フロントページにSEOメタタグを注入するミドルウェア
+ * Middleware to inject SEO meta tags into front pages
  */
 class InjectSeoMetaTags
 {
@@ -51,13 +51,13 @@ class InjectSeoMetaTags
     ) {}
 
     /**
-     * リクエストを処理する
+     * Handle the request
      */
     public function handle(Request $request, Closure $next): Response
     {
         $url = $request->url();
 
-        // メタタグとJSON-LDを生成
+        // Generate meta tags and JSON-LD
         $metaHtml = $this->metaGenerator->generate($url);
         $jsonLdHtml = $this->jsonLdGenerator->generate($url);
 

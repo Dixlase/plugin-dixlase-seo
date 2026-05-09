@@ -36,7 +36,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * サイトマップ・robots.txt設定更新リクエストのバリデーション
+ * Validation for sitemap and robots.txt settings update request
  */
 class UpdateSitemapSettingsRequest extends FormRequest
 {

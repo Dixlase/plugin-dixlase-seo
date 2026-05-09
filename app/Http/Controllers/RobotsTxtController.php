@@ -37,12 +37,12 @@ use Illuminate\Http\Response;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * robots.txtのコントローラー
+ * Controller for robots.txt
  */
 class RobotsTxtController extends Controller
 {
     /**
-     * robots.txtを出力する
+     * Output robots.txt
      */
     public function index(): Response
     {
@@ -63,7 +63,7 @@ class RobotsTxtController extends Controller
     }
 
     /**
-     * 自動生成モードのrobots.txtを構築する
+     * Build robots.txt in auto-generation mode
      *
      * @param array<string, mixed> $settings
      */
@@ -75,7 +75,7 @@ class RobotsTxtController extends Controller
             '',
         ];
 
-        // サイトマップが有効な場合はURLを追加
+        // Add URL if sitemap is enabled
         $sitemapEnabled = $settings['sitemap_enabled'] ?? '1';
         if ($sitemapEnabled === '1' || $sitemapEnabled === true) {
             $lines[] = 'Sitemap: ' . url('/sitemap.xml');

@@ -36,12 +36,12 @@ use App\Contracts\Repositories\SiteSettingRepositoryInterface;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * メタタグ・OGPタグのHTML生成サービス
+ * Service for generating meta tags and OGP tags HTML
  */
 class SeoMetaGenerator
 {
     /**
-     * 設定値のキャッシュ
+     * Cache of settings values
      *
      * @var array<string, mixed>|null
      */
@@ -52,7 +52,7 @@ class SeoMetaGenerator
     ) {}
 
     /**
-     * 設定値を取得する（遅延読み込み）
+     * Retrieve settings values (lazy loading)
      *
      * @return array<string, mixed>
      */
@@ -68,14 +68,14 @@ class SeoMetaGenerator
     }
 
     /**
-     * フロントページ用のメタタグHTMLを生成する
+     * Generate meta tags HTML for the front page
      */
     public function generate(string $url): string
     {
         $settings = $this->getSettings();
         $lines = [];
 
-        // 基本メタタグ（プラグイン設定が空ならコアの site_description にフォールバック）
+        // Basic meta tags (fall back to Core's site_description if plugin settings are empty)
         $description = $settings['default_description'] ?? '';
         if (! $description && $this->baseSettingRepository) {
             $description = (string) $this->baseSettingRepository->get('site_description', '');
@@ -87,7 +87,7 @@ class SeoMetaGenerator
         // canonical URL
         $lines[] = '<link rel="canonical" href="'.e($url).'">';
 
-        // OGPタグ
+        // OGP tags
         $lines[] = '<meta property="og:type" content="'.e($settings['ogp_type'] ?? 'website').'">';
         $lines[] = '<meta property="og:url" content="'.e($url).'">';
         $lines[] = '<meta property="og:title" content="'.e($this->buildTitle()).'">';
@@ -102,7 +102,7 @@ class SeoMetaGenerator
 
         $lines[] = '<meta property="og:site_name" content="'.e(config('app.name', '')).'">';
 
-        // Twitter Cardタグ
+        // Twitter Card tags
         $twitterCardType = $settings['twitter_card_type'] ?? 'summary_large_image';
         $lines[] = '<meta name="twitter:card" content="'.e($twitterCardType).'">';
 
@@ -121,7 +121,7 @@ class SeoMetaGenerator
     }
 
     /**
-     * サイトタイトルを組み立てる
+     * Build the site title
      */
     private function buildTitle(): string
     {
@@ -129,7 +129,7 @@ class SeoMetaGenerator
     }
 
     /**
-     * 画像パスを絶対URLに変換する
+     * Convert image path to absolute URL
      */
     private function resolveImageUrl(string $path): string
     {
@@ -141,7 +141,7 @@ class SeoMetaGenerator
     }
 
     /**
-     * メディアID・URL・パスのいずれかを絶対URLに解決する
+     * Resolve media ID, URL, or path to absolute URL
      */
     private function resolveMediaUrl(mixed $value): string
     {
@@ -149,7 +149,7 @@ class SeoMetaGenerator
             return '';
         }
 
-        // 数値IDならMediaモデルから解決
+        // If numeric ID, resolve from Media model
         if (is_numeric($value)) {
             $media = \App\Models\Media::find((int) $value);
             if ($media && $media->path) {
@@ -159,7 +159,7 @@ class SeoMetaGenerator
             return '';
         }
 
-        // 文字列ならURLまたはパスとして扱う
+        // If string, treat as URL or path
         return $this->resolveImageUrl((string) $value);
     }
 }

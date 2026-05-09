@@ -32,7 +32,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| プラグインのデフォルト権限設定
+| Plugin Default Permission Settings
 |--------------------------------------------------------------------------
 */
 
@@ -40,22 +40,22 @@ use App\Enums\MemberRole;
 
 return [
     'permissions' => [
-        // 基本設定（管理者のみ）
+        // Basic settings (administrator only)
         'settings.dixlase-seo.base' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,
         ],
-        // サイトマップ・robots.txt設定（管理者のみ）
+        // Sitemap and robots.txt settings (administrator only)
         'settings.dixlase-seo.sitemap' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,
         ],
-        // 外部サービス連携設定（管理者のみ）
+        // External service integration settings (administrator only)
         'settings.dixlase-seo.external' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,
         ],
-        // プラグイン連携設定（管理者のみ）
+        // Plugin integration settings (administrator only)
         'settings.dixlase-seo.integrations' => [
             'access_roles' => MemberRole::ADMIN->value,
             'view_roles' => MemberRole::ADMIN->value,

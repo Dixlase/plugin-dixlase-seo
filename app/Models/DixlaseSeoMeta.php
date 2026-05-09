@@ -35,21 +35,21 @@ namespace Plugins\DixlaseSEO\App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * プラグイン生成コンテンツ単位のSEOメタ情報モデル
+ * SEO meta information model for plugin-generated content units
  *
- * (plugin_slug, entity_id) のペアで一意に識別される。
+ * Uniquely identified by the pair (plugin_slug, entity_id).
  */
 class DixlaseSeoMeta extends Model
 {
     /**
-     * テーブル名
+     * Table name
      *
      * @var string
      */
     protected $table = 'dls_plg_dixlase_seo_meta';
 
     /**
-     * 一括代入可能な属性
+     * Mass assignable attributes
      *
      * @var array<int, string>
      */
@@ -61,7 +61,7 @@ class DixlaseSeoMeta extends Model
     ];
 
     /**
-     * キャストする属性
+     * Attributes to cast
      *
      * @return array<string, string>
      */

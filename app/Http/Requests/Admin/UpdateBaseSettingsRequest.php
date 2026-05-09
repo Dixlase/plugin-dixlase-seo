@@ -36,7 +36,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * SEO基本設定更新リクエストのバリデーション
+ * Validation for SEO base settings update request
  */
 class UpdateBaseSettingsRequest extends FormRequest
 {
