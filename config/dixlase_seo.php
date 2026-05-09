@@ -32,60 +32,60 @@
 
 /*
 |--------------------------------------------------------------------------
-| DixlaseSEO デフォルト設定
+| DixlaseSEO Default Settings
 |--------------------------------------------------------------------------
 |
-| SEOプラグインのデフォルト設定値を定義します。
-| これらの値はデータベースに保存された設定で上書きされます。
+| Defines default settings values for the SEO plugin.
+| These values are overridden by settings saved in the database.
 |
 */
 
 return [
-    // タイトル区切り文字
+    // Title separator
     'title_separator' => '|',
 
-    // デフォルトのメタディスクリプション
+    // Default meta description
     'default_description' => '',
 
-    // デフォルトのOGP画像パス（メディアライブラリのパス）
+    // Default OGP image path (media library path)
     'default_ogp_image' => '',
 
-    // OGPタイプ（サイト全体）
+    // OGP type (site-wide)
     'ogp_type' => 'website',
 
-    // Twitter Cardタイプ
+    // Twitter Card type
     'twitter_card_type' => 'summary_large_image',
 
-    // Twitter ユーザー名（@なし）
+    // Twitter username (without @)
     'twitter_site' => '',
 
-    // 組織名
+    // Organization name
     'organization_name' => '',
 
-    // 組織ロゴURL
+    // Organization logo URL
     'organization_logo' => '',
 
-    // 組織URL
+    // Organization URL
     'organization_url' => '',
 
-    // robots.txtカスタム内容
+    // robots.txt custom content
     'robots_txt' => '',
 
-    // robots.txt管理モード（'auto' または 'custom'）
+    // robots.txt management mode ('auto' or 'custom')
     'robots_txt_mode' => 'auto',
 
-    // サイトマップ有効化
+    // Sitemap enabled
     'sitemap_enabled' => true,
 
-    // サイトマップの変更頻度
+    // Sitemap change frequency
     'sitemap_changefreq' => 'weekly',
 
-    // サイトマップの優先度
+    // Sitemap priority
     'sitemap_priority' => '0.5',
 
-    // Google Analytics 測定ID（GA4）
+    // Google Analytics measurement ID (GA4)
     'google_analytics_id' => '',
 
-    // Google Search Console サイト確認コード
+    // Google Search Console site verification code
     'google_site_verification' => '',
 ];

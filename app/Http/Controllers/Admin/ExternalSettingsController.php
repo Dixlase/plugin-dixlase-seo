@@ -39,14 +39,14 @@ use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateExternalSettingsRequest;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * 外部サービス連携設定の管理画面コントローラー
+ * Admin panel controller for external service integration settings
  *
- * Google Analytics、Google Search Console等の外部サービスとの連携情報を管理。
+ * Manages integration information with external services such as Google Analytics, Google Search Console, etc.
  */
 class ExternalSettingsController extends AdminLoggedInController
 {
     /**
-     * 外部サービス連携設定画面を表示する
+     * Display the external service integration settings screen
      */
     public function show(): View
     {
@@ -59,7 +59,7 @@ class ExternalSettingsController extends AdminLoggedInController
     }
 
     /**
-     * 外部サービス連携設定を更新する
+     * Update the external service integration settings
      */
     public function update(UpdateExternalSettingsRequest $request): RedirectResponse
     {

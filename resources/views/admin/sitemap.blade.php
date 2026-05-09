@@ -35,7 +35,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     @csrf
     @method('PATCH')
 
-    {{-- サイトマップ --}}
+    {{-- Sitemap --}}
     <section class="mb-8">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             <i class="fas fa-sitemap mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/sitemap.section_sitemap') }}

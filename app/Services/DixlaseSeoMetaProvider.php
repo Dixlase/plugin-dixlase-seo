@@ -38,22 +38,22 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * SeoMetaProviderInterface の DixlaseSEO による実装
+ * DixlaseSEO implementation of SeoMetaProviderInterface
  *
- * dls_plg_dixlase_seo_meta テーブルを読み書きして
- * プラグイン生成コンテンツ単位のSEOメタ情報を管理します。
+ * Reads and writes the dls_plg_dixlase_seo_meta table to manage
+ * SEO meta information for plugin-generated content entities.
  */
 class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
 {
     /**
-     * プラグイン別SEO有効化設定のキー形式
+     * Key format for per-plugin SEO enablement settings
      *
-     * 例: integration.dixlase-pages.enabled
+     * Example: integration.dixlase-pages.enabled
      */
     private const ENABLED_SETTING_KEY_FORMAT = 'integration.%s.enabled';
 
     /**
-     * 指定プラグインの指定エンティティのメタ情報を取得
+     * Get meta information for a specified entity of a specified plugin
      */
     public function getMeta(string $pluginSlug, string $entityId): ?SeoMetaDTO
     {
@@ -73,9 +73,9 @@ class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
     }
 
     /**
-     * メタ情報を保存（upsert）
+     * Save (upsert) meta information
      *
-     * 全フィールドが null の DTO が渡された場合はレコードを削除します。
+     * If a DTO with all fields null is passed, the record will be deleted.
      */
     public function saveMeta(string $pluginSlug, string $entityId, SeoMetaDTO $meta): void
     {
@@ -98,7 +98,7 @@ class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
     }
 
     /**
-     * 単一のメタ情報を削除
+     * Delete a single meta information record
      */
     public function deleteMeta(string $pluginSlug, string $entityId): void
     {
@@ -109,7 +109,7 @@ class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
     }
 
     /**
-     * 指定プラグインの全メタ情報を一括削除
+     * Bulk delete all meta information for a specified plugin
      */
     public function purgeByPlugin(string $pluginSlug): int
     {
@@ -119,21 +119,21 @@ class DixlaseSeoMetaProvider implements SeoMetaProviderInterface
     }
 
     /**
-     * SEOメタ対応を宣言するために必要なプラグイン capability
+     * Plugin capability required to declare SEO meta support
      */
     private const SEO_META_CAPABILITY = 'seo-meta';
 
     /**
-     * 指定プラグインのSEOメタ機能が有効化されているかを確認
+     * Check if SEO meta functionality is enabled for a specified plugin
      *
-     * 2段階のチェックで判定：
-     * 1. 対象プラグインが plugin.json に `"capabilities": ["seo-meta"]` を宣言しているか
-     * 2. SEOプラグインの設定で integration.{plugin_slug}.enabled が無効化されていないか
-     *    （未設定時はデフォルト有効）
+     * Determined by a two-step check:
+     * 1. Does the target plugin declare `"capabilities": ["seo-meta"]` in plugin.json?
+     * 2. Is integration.{plugin_slug}.enabled not disabled in SEO plugin settings?
+     *    (defaults to enabled if not configured)
      *
-     * capability を宣言していないプラグインは admin 設定に関係なく無効。
-     * これにより「意図せずSEOメタを使ってしまう」事故を防ぎ、
-     * 新規プラグインが seo-meta を宣言するだけで自動的に対応可能になる。
+     * Plugins that do not declare the capability are disabled regardless of admin settings.
+     * This prevents accidental use of SEO meta and allows new plugins to automatically
+     * gain support simply by declaring seo-meta.
      */
     public function isEnabledForPlugin(string $pluginSlug): bool
     {

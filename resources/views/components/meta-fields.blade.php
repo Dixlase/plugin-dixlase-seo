@@ -29,19 +29,19 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 --}}
 
 {{--
-  コンテンツ単位SEOメタ情報入力コンポーネント
+  Per-content SEO meta information input component
 
-  プラグイン生成コンテンツ（固定ページ、リーガルページ、ブログ記事など）の
-  編集画面で使用される。送信時のフィールド名は `seo_meta[description]` と
-  `seo_meta[ogp_media_id]` でネストされる（呼び出し側のコントローラーで
-  まとめて受け取り SeoMetaProviderInterface::saveMeta() に渡す前提）。
+  Used in the edit screen for plugin-generated content (static pages, legal pages,
+  blog posts, etc.). Field names on submit are nested as `seo_meta[description]` and
+  `seo_meta[ogp_media_id]` (assumes the calling controller receives them together
+  and passes to SeoMetaProviderInterface::saveMeta()).
 
   Props:
-    - description (?string): 既存のメタディスクリプション
-    - ogpMediaId (?int): 既存のOGP画像メディアID
-    - ogpMedia (?Media): プレビュー表示用のMediaモデル
-    - fieldPrefix (string, default 'seo_meta'): フォームフィールド名のプレフィックス
-    - sectionTitle (?string): セクション見出しテキスト（指定なしならデフォルト翻訳キー）
+    - description (?string): Existing meta description
+    - ogpMediaId (?int): Existing OGP image media ID
+    - ogpMedia (?Media): Media model for preview display
+    - fieldPrefix (string, default 'seo_meta'): Prefix for form field names
+    - sectionTitle (?string): Section heading text (if not specified, uses default translation key)
 --}}
 
 @props([

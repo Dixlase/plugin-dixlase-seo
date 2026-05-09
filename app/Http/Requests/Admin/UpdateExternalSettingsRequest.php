@@ -35,7 +35,7 @@ namespace Plugins\DixlaseSEO\App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * 外部サービス連携設定更新リクエストのバリデーション
+ * Validation for external service integration settings update request
  */
 class UpdateExternalSettingsRequest extends FormRequest
 {

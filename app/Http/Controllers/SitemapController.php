@@ -38,7 +38,7 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Services\SitemapGenerator;
 
 /**
- * XMLサイトマップのコントローラー
+ * XML sitemap controller
  */
 class SitemapController extends Controller
 {
@@ -47,7 +47,7 @@ class SitemapController extends Controller
     ) {}
 
     /**
-     * XMLサイトマップを出力する
+     * Output XML sitemap
      */
     public function index(): Response
     {

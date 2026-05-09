@@ -31,7 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 @extends('layouts.admin')
 
 @section('content')
-{{-- プラグイン一覧 + トグル --}}
+{{-- Plugin list + toggle --}}
 <section class="mb-8">
     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
         <i class="fas fa-puzzle-piece mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/integrations.section_plugins') }}
@@ -82,7 +82,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
     @endif
 </section>
 
-{{-- 孤立メタのクリーンアップ (danger zone) --}}
+{{-- Orphaned meta cleanup (danger zone) --}}
 <section class="mb-8">
     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
         <i class="fas fa-broom mr-2"></i>{{ __('dixlase-seo::admin/dixlase-seo/integrations.section_cleanup') }}

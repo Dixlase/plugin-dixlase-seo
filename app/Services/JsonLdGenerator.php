@@ -35,19 +35,19 @@ namespace Plugins\DixlaseSEO\App\Services;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * JSON-LD構造化データの生成サービス（WebSite + Organization）
+ * JSON-LD structured data generation service (WebSite + Organization)
  */
 class JsonLdGenerator
 {
     /**
-     * 設定値のキャッシュ
+     * Settings value cache
      *
      * @var array<string, mixed>|null
      */
     private ?array $settings = null;
 
     /**
-     * 設定値を取得する
+     * Retrieve settings values
      *
      * @return array<string, mixed>
      */
@@ -63,7 +63,7 @@ class JsonLdGenerator
     }
 
     /**
-     * JSON-LDスクリプトタグを生成する
+     * Generate JSON-LD script tag
      */
     public function generate(string $url): string
     {
@@ -93,7 +93,7 @@ class JsonLdGenerator
     }
 
     /**
-     * WebSiteスキーマを構築する
+     * Build WebSite schema
      *
      * @return array<string, mixed>|null
      */
@@ -113,7 +113,7 @@ class JsonLdGenerator
     }
 
     /**
-     * Organizationスキーマを構築する
+     * Build Organization schema
      *
      * @return array<string, mixed>|null
      */
@@ -149,7 +149,7 @@ class JsonLdGenerator
     }
 
     /**
-     * 組織ロゴの値（メディアID・URL・パス）を絶対URLに解決する
+     * Resolve organization logo value (media ID, URL, or path) to absolute URL
      */
     private function resolveLogoUrl(mixed $value): string
     {

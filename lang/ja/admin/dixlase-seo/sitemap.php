@@ -34,11 +34,11 @@ return [
     'heading' => 'サイトマップ',
     'description' => '検索エンジンクローラー向けのXMLサイトマップとrobots.txtを設定します。',
 
-    // セクション見出し
+    // Section headings
     'section_sitemap' => 'サイトマップ',
     'section_robots' => 'robots.txt',
 
-    // サイトマップ
+    // Sitemap
     'sitemap_enabled' => 'XMLサイトマップ',
     'sitemap_enabled_help' => '有効にすると /sitemap.xml でXMLサイトマップが生成されます。',
     'sitemap_changefreq' => '更新頻度',
@@ -46,7 +46,7 @@ return [
     'sitemap_priority' => '優先度',
     'sitemap_priority_help' => 'サイトマップに記載されるページの優先度です（0.0〜1.0）。',
 
-    // 更新頻度の選択肢
+    // Update frequency options
     'changefreq_always' => '常に',
     'changefreq_hourly' => '毎時',
     'changefreq_daily' => '毎日',
@@ -65,6 +65,6 @@ return [
     'robots_txt_content' => 'robots.txt内容',
     'robots_txt_content_help' => 'robots.txtに出力する内容をカスタマイズできます。',
 
-    // フラッシュメッセージ
+    // Flash messages
     'updated' => 'サイトマップ・robots.txt設定を更新しました。',
 ];

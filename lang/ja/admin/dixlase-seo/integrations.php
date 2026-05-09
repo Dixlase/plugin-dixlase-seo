@@ -34,15 +34,15 @@ return [
     'heading' => 'プラグイン連携',
     'description' => 'SEOメタ機能（メタディスクリプション・OGP画像）に対応したプラグインの有効/無効を切り替えます。',
 
-    // プラグインリスト
+    // Plugin list
     'section_plugins' => '連携プラグイン',
     'enable_for_plugin' => ':name で SEOメタ機能を有効にする',
 
-    // 未対応時の案内
+    // Notice when unsupported
     'no_plugins_title' => 'SEOメタ対応プラグインが見つかりません',
     'no_plugins_description' => 'plugin.json で "capabilities": ["seo-meta"] を宣言しているプラグインがありません。対応プラグインがインストール・有効化されると、ここに自動的に表示されます。',
 
-    // 孤立メタ情報のクリーンアップ
+    // Cleanup of orphaned meta information
     'section_cleanup' => 'メンテナンス',
     'orphans_title' => '孤立メタ情報のクリーンアップ',
     'orphans_none' => '孤立メタ情報はありません。',
@@ -51,7 +51,7 @@ return [
     'purge_orphans_button' => '孤立メタ情報を削除',
     'purge_orphans_confirm' => ':count 件の孤立メタ情報を削除します。この操作は取り消せません。本当に実行しますか？',
 
-    // フラッシュメッセージ
+    // Flash message
     'updated' => 'プラグイン連携設定を更新しました。',
     'orphans_purged' => ':count 件の孤立メタ情報を削除しました。',
 ];

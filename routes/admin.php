@@ -45,19 +45,19 @@ use Plugins\DixlaseSEO\App\Http\Controllers\Admin\SitemapSettingsController;
 Route::prefix('seo')
     ->name('dixlase-seo::admin.seo.')
     ->group(function () {
-        // 基本設定（メタタグ・OGP・組織情報）
+        // Basic settings (meta tags, OGP, organization info)
         Route::get('base', [BaseSettingsController::class, 'show'])->name('base');
         Route::patch('base', [BaseSettingsController::class, 'update'])->name('base.update');
 
-        // サイトマップ・robots.txt設定
+        // Sitemap and robots.txt settings
         Route::get('sitemap', [SitemapSettingsController::class, 'show'])->name('sitemap');
         Route::patch('sitemap', [SitemapSettingsController::class, 'update'])->name('sitemap.update');
 
-        // 外部サービス連携設定
+        // External service integration settings
         Route::get('external', [ExternalSettingsController::class, 'show'])->name('external');
         Route::patch('external', [ExternalSettingsController::class, 'update'])->name('external.update');
 
-        // プラグイン連携設定
+        // Plugin integration settings
         Route::get('integrations', [IntegrationsController::class, 'show'])->name('integrations');
         Route::patch('integrations', [IntegrationsController::class, 'update'])->name('integrations.update');
         Route::post('integrations/purge-orphans', [IntegrationsController::class, 'purgeOrphans'])

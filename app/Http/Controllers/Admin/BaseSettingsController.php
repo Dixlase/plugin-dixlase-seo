@@ -41,11 +41,11 @@ use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateBaseSettingsRequest;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * SEO基本設定の管理画面コントローラー
+ * Admin panel controller for SEO basic settings
  *
- * - タイトル区切り・デフォルトディスクリプション
- * - OGP / SNS（OGP画像・X Card・X アカウント）
- * - 組織情報（JSON-LD: 組織名・ロゴ・URL）
+ * - Title separator, default description
+ * - OGP / SNS (OGP image, X Card, X account)
+ * - Organization info (JSON-LD: organization name, logo, URL)
  */
 class BaseSettingsController extends AdminLoggedInController
 {
@@ -56,29 +56,29 @@ class BaseSettingsController extends AdminLoggedInController
     }
 
     /**
-     * SEO基本設定画面を表示する
+     * Display SEO basic settings screen
      */
     public function show(): View
     {
         $defaults = config('dixlase_seo', []);
         $settings = DixlaseSeoSetting::getMany($defaults);
 
-        // コアのサイト説明をフォールバックとして提供
+        // Provide Core site description as fallback
         $coreSiteDescription = (string) $this->baseSettingRepository->get('site_description', '');
 
-        // 組織ロゴ: メディアIDからMediaモデルを解決
+        // Organization logo: resolve Media model from media ID
         $organizationLogoMedia = null;
         if (! empty($settings['organization_logo'])) {
             $organizationLogoMedia = Media::find($settings['organization_logo']);
         }
 
-        // デフォルトOGP画像: メディアIDからMediaモデルを解決
+        // Default OGP image: resolve Media model from media ID
         $defaultOgpImageMedia = null;
         if (! empty($settings['default_ogp_image'])) {
             $defaultOgpImageMedia = Media::find($settings['default_ogp_image']);
         }
 
-        // X（旧Twitter）Cardタイプの選択肢
+        // X (formerly Twitter) Card type options
         $twitterCardOptions = [
             [
                 'value' => 'summary',
@@ -104,7 +104,7 @@ class BaseSettingsController extends AdminLoggedInController
     }
 
     /**
-     * SEO基本設定を更新する
+     * Update SEO basic settings
      */
     public function update(UpdateBaseSettingsRequest $request): RedirectResponse
     {

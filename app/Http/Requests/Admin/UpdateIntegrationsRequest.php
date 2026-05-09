@@ -35,9 +35,9 @@ namespace Plugins\DixlaseSEO\App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * プラグイン連携設定更新リクエストのバリデーション
+ * Validation for plugin integration settings update request
  *
- * 入力形式: integration[{plugin_slug}] = "1" / absent (=disabled)
+ * Input format: integration[{plugin_slug}] = "1" / absent (=disabled)
  */
 class UpdateIntegrationsRequest extends FormRequest
 {

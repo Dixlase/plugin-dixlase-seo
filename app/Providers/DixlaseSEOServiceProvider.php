@@ -45,32 +45,32 @@ use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Plugins\DixlaseSEO\App\Services\SitemapGenerator;
 
 /**
- * DixlaseSEOプラグインのServiceProvider
+ * ServiceProvider for DixlaseSEO plugin
  */
 class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProvider
 {
     /**
-     * サービスを登録する
+     * Register services
      */
     public function register(): void
     {
-        // 設定ファイルをマージ
+        // Merge settings file
         $this->mergeConfigFrom(
             __DIR__.'/../../config/dixlase_seo.php',
             'dixlase_seo'
         );
 
-        // サービスをシングルトンで登録
+        // Register service as singleton
         $this->app->singleton(SeoMetaGenerator::class);
         $this->app->singleton(JsonLdGenerator::class);
 
-        // コンテンツ単位SEOメタ情報のContract実装を登録
-        // 他プラグインは app(SeoMetaProviderInterface::class) で解決可能
+        // Register Contract implementation for per-content SEO meta information
+        // Other plugins can resolve via app(SeoMetaProviderInterface::class)
         $this->app->singleton(SeoMetaProviderInterface::class, DixlaseSeoMetaProvider::class);
 
-        // SitemapGeneratorにLinkableProviderを注入
-        // Note: $app->tagged() はタグ登録の有無にかかわらず iterator を返すため、
-        // bound() チェックは不要（bound() はタグではなくバインディングを見るため常にfalse）
+        // Inject LinkableProvider into SitemapGenerator
+        // Note: $app->tagged() returns an iterator regardless of whether tags are registered,
+        // bound() check is unnecessary (bound() always returns false as it checks bindings, not tags)
         $this->app->singleton(SitemapGenerator::class, function ($app) {
             $providers = iterator_to_array($app->tagged('linkable.providers'));
 
@@ -79,31 +79,31 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     }
 
     /**
-     * サービスを起動する
+     * Bootstrap services
      */
     public function boot(): void
     {
-        // CSPポリシーの登録
+        // Register CSP policy
         $this->registerCspPolicy();
 
-        // ビューの登録
+        // Register views
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'dixlase-seo');
 
-        // 匿名Bladeコンポーネントの登録（他プラグインから <x-dixlase-seo::name /> で利用可能）
+        // Register anonymous Blade components (available from other plugins as <x-dixlase-seo::name />)
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/components', 'dixlase-seo');
 
-        // 翻訳ファイルの登録
+        // Register translation files
         $this->loadTranslationsFrom(__DIR__.'/../../lang', 'dixlase-seo');
 
-        // マイグレーションの登録
+        // Register migrations
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
-        // ミドルウェアの登録
+        // Register middleware
         $this->registerMiddleware();
 
         // Note: routes (routes/web.php, routes/admin.php) are auto-loaded by PluginServiceProvider
 
-        // 公開可能なアセット
+        // Public assets
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../../config/dixlase_seo.php' => config_path('dixlase_seo.php'),
@@ -116,7 +116,7 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     }
 
     /**
-     * CSPポリシーを登録する
+     * Register CSP policy
      */
     protected function registerCspPolicy(): void
     {
@@ -127,7 +127,7 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     }
 
     /**
-     * CSPディレクティブを取得する
+     * Retrieve CSP directives
      *
      * @return array<string, array<string>>
      */
@@ -157,14 +157,14 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
     }
 
     /**
-     * ミドルウェアを登録する
+     * Register middleware
      */
     protected function registerMiddleware(): void
     {
         /** @var Router $router */
         $router = $this->app->make(Router::class);
 
-        // SEOメタタグ注入ミドルウェアをwebグループに追加（全フロントページで動作）
+        // Add SEO meta tag injection middleware to web group (runs on all front pages)
         $router->pushMiddlewareToGroup('web', InjectSeoMetaTags::class);
     }
 }

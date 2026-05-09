@@ -32,36 +32,36 @@
 
 /*
 |--------------------------------------------------------------------------
-| データベースクリーンアップ設定
+| Database Cleanup Settings
 |--------------------------------------------------------------------------
 |
-| プラグインのデータベーステーブルのクリーンアップ設定を定義します。
-| 管理画面からクリーンアップ対象テーブルと保持期間を管理できます。
-| このファイルが不要な場合は削除してください。
+| Define the database table cleanup settings for the plugin.
+| You can manage cleanup target tables and retention periods from the admin panel.
+| Delete this file if it is not needed.
 |
 */
 
 return [
     // 'example_logs' => [
-    //     // 必須: データベーステーブル名
+    //     // Required: Database table name
     //     'table' => 'dixlase-seo_logs',
     //
-    //     // 必須: 日付比較に使用するカラム
+    //     // Required: Column to use for date comparison
     //     'date_column' => 'created_at',
     //
-    //     // 必須: デフォルトの保持期間（日数、nullの場合は期限切れのみ）
+    //     // Required: Default retention period (days, null for expired only)
     //     'default_days' => 30,
     //
-    //     // 必須: 説明（翻訳キーまたはロケールキー配列）
+    //     // Required: Description (translation key or locale key array)
     //     'description' => [
-    //         'ja' => 'プラグインのログ記録',
+    //         'ja' => 'Plugin log records',
     //         'en' => 'Plugin log records',
     //     ],
     //
-    //     // オプション: このクリーンアップタイプの有効/無効
+    //     // Optional: Enable/disable this cleanup type
     //     'enabled' => true,
     //
-    //     // オプション: 日付カラムの型 ('datetime' or 'timestamp')
+    //     // Optional: Date column type ('datetime' or 'timestamp')
     //     'date_column_type' => 'datetime',
     // ],
 
@@ -70,7 +70,7 @@ return [
     //     'date_column' => 'expires_at',
     //     'default_days' => null,
     //     'description' => [
-    //         'ja' => 'プラグインのキャッシュデータ',
+    //         'ja' => 'Plugin cache data',
     //         'en' => 'Plugin cache data',
     //     ],
     //     'enabled' => true,

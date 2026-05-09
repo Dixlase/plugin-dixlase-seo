@@ -42,11 +42,11 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
- * プラグイン連携設定の管理画面コントローラー
+ * Admin panel controller for plugin integration settings
  *
- * `seo-meta` capability を宣言した有効化プラグインを自動検出し、
- * プラグインごとに SEOメタ機能の ON/OFF を切り替えられる。
- * 孤立したメタ情報（削除済みプラグイン由来）の一括削除機能も提供。
+ * Auto-detects active plugins that declare the `seo-meta` capability,
+ * and allows toggling SEO meta functionality ON/OFF per plugin.
+ * Also provides bulk deletion of orphaned meta information (from deleted plugins).
  */
 class IntegrationsController extends AdminLoggedInController
 {
@@ -55,7 +55,7 @@ class IntegrationsController extends AdminLoggedInController
     private const REQUIRED_CAPABILITY = 'seo-meta';
 
     /**
-     * プラグイン連携設定画面を表示する
+     * Display the plugin integration settings screen
      */
     public function show(): View
     {
@@ -69,7 +69,7 @@ class IntegrationsController extends AdminLoggedInController
     }
 
     /**
-     * プラグイン連携設定を更新する
+     * Update plugin integration settings
      */
     public function update(UpdateIntegrationsRequest $request): RedirectResponse
     {
@@ -78,7 +78,7 @@ class IntegrationsController extends AdminLoggedInController
 
         foreach ($currentSlugs as $slug) {
             $key = sprintf(self::ENABLED_SETTING_KEY_FORMAT, $slug);
-            // トグルが送信されていれば有効、未送信なら無効
+            // Enabled if toggle is submitted, disabled if not submitted
             $value = isset($toggles[$slug]) && $toggles[$slug] === '1' ? '1' : '0';
             DixlaseSeoSetting::setValue($key, $value);
         }
@@ -89,9 +89,9 @@ class IntegrationsController extends AdminLoggedInController
     }
 
     /**
-     * 孤立メタ情報を一括削除する
+     * Bulk delete orphaned meta information
      *
-     * 現在 seo-meta capability を宣言していないプラグインのメタ情報を全削除する。
+     * Deletes all meta information from plugins that do not currently declare the seo-meta capability.
      */
     public function purgeOrphans(): RedirectResponse
     {
@@ -110,7 +110,7 @@ class IntegrationsController extends AdminLoggedInController
     }
 
     /**
-     * seo-meta capability を宣言した有効化プラグインの一覧を取得
+     * Get list of active plugins that declare the seo-meta capability
      *
      * @return array<int, array{slug:string, name:string, description:string, enabled:bool}>
      */
@@ -137,9 +137,9 @@ class IntegrationsController extends AdminLoggedInController
     }
 
     /**
-     * 孤立メタ情報の概要を取得
+     * Get summary of orphaned meta information
      *
-     * @param  array<int, string>  $currentSlugs  現在の seo-meta 対応プラグインスラッグ
+     * @param  array<int, string>  $currentSlugs  Current seo-meta compatible plugin slugs
      * @return array{count:int, byPlugin: array<int, array{plugin_slug:string, count:int}>}
      */
     private function getOrphanSummary(array $currentSlugs): array

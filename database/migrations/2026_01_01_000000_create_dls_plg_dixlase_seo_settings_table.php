@@ -37,7 +37,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * マイグレーション実行
+     * Run the migration
      */
     public function up(): void
     {
@@ -50,7 +50,7 @@ return new class extends Migration
     }
 
     /**
-     * ロールバック
+     * Rollback
      */
     public function down(): void
     {
