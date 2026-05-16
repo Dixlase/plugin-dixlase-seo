@@ -32,6 +32,7 @@
 
 namespace Plugins\DixlaseSEO\App\Services;
 
+use App\Contracts\Repositories\MediaRepositoryInterface;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
@@ -45,6 +46,10 @@ class JsonLdGenerator
      * @var array<string, mixed>|null
      */
     private ?array $settings = null;
+
+    public function __construct(
+        private readonly ?MediaRepositoryInterface $mediaRepository = null,
+    ) {}
 
     /**
      * Retrieve settings values
@@ -158,7 +163,8 @@ class JsonLdGenerator
         }
 
         if (is_numeric($value)) {
-            $media = \App\Models\Media::find((int) $value);
+            $repository = $this->mediaRepository ?? app(MediaRepositoryInterface::class);
+            $media = $repository->find((int) $value);
             if ($media && $media->path) {
                 return asset('storage/media/'.$media->path);
             }

@@ -32,9 +32,9 @@
 
 namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
+use App\Contracts\Repositories\MediaRepositoryInterface;
 use App\Contracts\Repositories\SiteSettingRepositoryInterface;
 use App\Http\Controllers\Admin\AdminLoggedInController;
-use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateBaseSettingsRequest;
@@ -51,6 +51,7 @@ class BaseSettingsController extends AdminLoggedInController
 {
     public function __construct(
         private readonly SiteSettingRepositoryInterface $baseSettingRepository,
+        private readonly MediaRepositoryInterface $mediaRepository,
     ) {
         parent::__construct();
     }
@@ -66,16 +67,16 @@ class BaseSettingsController extends AdminLoggedInController
         // Provide Core site description as fallback
         $coreSiteDescription = (string) $this->baseSettingRepository->get('site_description', '');
 
-        // Organization logo: resolve Media model from media ID
+        // Organization logo: resolve Media via core repository contract
         $organizationLogoMedia = null;
         if (! empty($settings['organization_logo'])) {
-            $organizationLogoMedia = Media::find($settings['organization_logo']);
+            $organizationLogoMedia = $this->mediaRepository->find((int) $settings['organization_logo']);
         }
 
-        // Default OGP image: resolve Media model from media ID
+        // Default OGP image: resolve Media via core repository contract
         $defaultOgpImageMedia = null;
         if (! empty($settings['default_ogp_image'])) {
-            $defaultOgpImageMedia = Media::find($settings['default_ogp_image']);
+            $defaultOgpImageMedia = $this->mediaRepository->find((int) $settings['default_ogp_image']);
         }
 
         // X (formerly Twitter) Card type options

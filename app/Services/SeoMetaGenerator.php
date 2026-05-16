@@ -32,6 +32,7 @@
 
 namespace Plugins\DixlaseSEO\App\Services;
 
+use App\Contracts\Repositories\MediaRepositoryInterface;
 use App\Contracts\Repositories\SiteSettingRepositoryInterface;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
@@ -49,6 +50,7 @@ class SeoMetaGenerator
 
     public function __construct(
         private readonly ?SiteSettingRepositoryInterface $baseSettingRepository = null,
+        private readonly ?MediaRepositoryInterface $mediaRepository = null,
     ) {}
 
     /**
@@ -149,9 +151,10 @@ class SeoMetaGenerator
             return '';
         }
 
-        // If numeric ID, resolve from Media model
+        // If numeric ID, resolve from Media repository
         if (is_numeric($value)) {
-            $media = \App\Models\Media::find((int) $value);
+            $repository = $this->mediaRepository ?? app(MediaRepositoryInterface::class);
+            $media = $repository->find((int) $value);
             if ($media && $media->path) {
                 return asset('storage/media/'.$media->path);
             }
