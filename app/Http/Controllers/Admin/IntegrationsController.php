@@ -32,9 +32,9 @@
 
 namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
+use App\DTO\Plugin\EnabledPluginRecord;
 use App\Helpers\PluginHelper;
 use App\Http\Controllers\Admin\AdminLoggedInController;
-use App\Models\Plugin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Plugins\DixlaseSEO\App\Http\Requests\Admin\UpdateIntegrationsRequest;
@@ -116,24 +116,22 @@ class IntegrationsController extends AdminLoggedInController
      */
     private function getSeoMetaPlugins(): array
     {
-        $slugs = PluginHelper::getEnabledPluginSlugsByCapability(self::REQUIRED_CAPABILITY);
-        if (empty($slugs)) {
+        $infos = PluginHelper::getEnabledPluginInfosByCapability(self::REQUIRED_CAPABILITY);
+        if (empty($infos)) {
             return [];
         }
 
-        $plugins = Plugin::whereIn('slug', $slugs)->get();
-
-        return $plugins->map(function (Plugin $plugin) {
-            $key = sprintf(self::ENABLED_SETTING_KEY_FORMAT, $plugin->slug);
+        return array_map(function (EnabledPluginRecord $info) {
+            $key = sprintf(self::ENABLED_SETTING_KEY_FORMAT, $info->slug);
             $value = DixlaseSeoSetting::getValue($key, '1');
 
             return [
-                'slug' => $plugin->slug,
-                'name' => $plugin->name,
-                'description' => (string) ($plugin->description ?? ''),
+                'slug' => $info->slug,
+                'name' => $info->name,
+                'description' => $info->description,
                 'enabled' => $value !== '0' && $value !== false,
             ];
-        })->values()->toArray();
+        }, $infos);
     }
 
     /**
