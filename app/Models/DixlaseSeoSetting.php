@@ -44,7 +44,7 @@ class DixlaseSeoSetting extends Model
      *
      * @var string
      */
-    protected $table = 'dls_plg_dixlase_seo_settings';
+    protected $table = 'plg_dixlase_seo_settings';
 
     /**
      * Mass assignable attributes
