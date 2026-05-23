@@ -46,7 +46,7 @@ class DixlaseSeoMeta extends Model
      *
      * @var string
      */
-    protected $table = 'dls_plg_dixlase_seo_meta';
+    protected $table = 'plg_dixlase_seo_meta';
 
     /**
      * Mass assignable attributes
