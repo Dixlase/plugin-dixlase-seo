@@ -45,7 +45,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dls_plg_dixlase_seo_meta', function (Blueprint $table) {
+        Schema::create('plg_dixlase_seo_meta', function (Blueprint $table) {
             $table->id();
             $table->string('plugin_slug', 100);
             $table->string('entity_id', 100);
@@ -63,6 +63,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dls_plg_dixlase_seo_meta');
+        Schema::dropIfExists('plg_dixlase_seo_meta');
     }
 };
