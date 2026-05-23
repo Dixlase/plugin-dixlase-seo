@@ -81,7 +81,7 @@ class DixlaseSeoSettingTest extends TestCase
     {
         DixlaseSeoSetting::setValue('test_key', 'test_value');
 
-        $this->assertDatabaseHas('dls_plg_dixlase_seo_settings', [
+        $this->assertDatabaseHas('plg_dixlase_seo_settings', [
             'name' => 'test_key',
             'value' => 'test_value',
         ]);
@@ -226,7 +226,7 @@ class DixlaseSeoSettingTest extends TestCase
     {
         $model = new DixlaseSeoSetting();
 
-        $this->assertSame('dls_plg_dixlase_seo_settings', $model->getTable());
+        $this->assertSame('plg_dixlase_seo_settings', $model->getTable());
     }
 
     /**
