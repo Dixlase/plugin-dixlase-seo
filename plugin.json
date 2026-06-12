@@ -147,7 +147,6 @@
         "config/dixlase_seo.php": "sha256:0409aee72346fbd4012bfb2698e0b3880b6f5f99ea6c42cee063229c4a766eed",
         "database/migrations/0001_01_01_000001_create_dls_plg_dixlase_seo_settings_table.php": "sha256:ddc41cabd006b36d99fe7fabd89157ecd0e2b426896696b779d5f32a3b60d686",
         "database/migrations/0001_01_01_000002_create_dls_plg_dixlase_seo_meta_table.php": "sha256:49a988fcc94ce3969d245b8687d0cdbf801f2d8e6a5e51d162a8297289cd7182",
-        "database/migrations/0001_01_01_000003_rename_seo_tables_drop_double_prefix.php": "sha256:0c0085b72a164a98aefcab389cfd46ca40d4dfc02f34b56043112aef8909c3cc",
         "database/seeders/DatabaseSeeder.php": "sha256:fd9834eb66fed0d92ed6db6d1224923edbff6bf215af591607cbc6d24c6e3a59",
         "lang/en/admin.php": "sha256:51e8a49505cecf32bed8caf8b5b124b3bafaa3d3b8ca0031ca20366f2e3b0fe8",
         "lang/en/admin/dixlase-seo/base.php": "sha256:861522a3958e300dec9718275112298592bb86e1eb4ce70762a463c03e0791e9",
