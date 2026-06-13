@@ -34,4 +34,21 @@ return [
     'plugin' => [
         'description' => 'SEO optimization plugin. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.',
     ],
+
+    // Admin page headings, resolved from the route name
+    // (dixlase-seo::admin.seo.<section> → seo.<section>.heading).
+    'seo' => [
+        'base' => [
+            'heading' => 'Base Settings',
+        ],
+        'sitemap' => [
+            'heading' => 'Sitemap',
+        ],
+        'external' => [
+            'heading' => 'External Services',
+        ],
+        'integrations' => [
+            'heading' => 'Plugin Integrations',
+        ],
+    ],
 ];

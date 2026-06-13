@@ -34,4 +34,21 @@ return [
     'plugin' => [
         'description' => 'SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txt管理機能を提供します。',
     ],
+
+    // Admin page headings, resolved from the route name
+    // (dixlase-seo::admin.seo.<section> → seo.<section>.heading).
+    'seo' => [
+        'base' => [
+            'heading' => '基本設定',
+        ],
+        'sitemap' => [
+            'heading' => 'サイトマップ',
+        ],
+        'external' => [
+            'heading' => '外部サービス連携',
+        ],
+        'integrations' => [
+            'heading' => 'プラグイン連携',
+        ],
+    ],
 ];
