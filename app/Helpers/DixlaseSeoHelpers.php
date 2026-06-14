@@ -32,6 +32,27 @@
 
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Multilingual\SeoSettingsProvider;
+use Plugins\DixlaseSEO\App\Services\SeoContext;
+
+if (! function_exists('dls_seo_set_entity')) {
+    /**
+     * Declare the content entity the current front-end response represents,
+     * so SeoMetaGenerator can emit that entity's own (locale-aware) meta
+     * description instead of only the site-wide default.
+     *
+     * Called from a front view (e.g. `front/page.blade.php`) before the
+     * layout's `<head>` is rendered. No-op and never throws on sites where
+     * the SEO context is unavailable.
+     */
+    function dls_seo_set_entity(string $pluginSlug, string|int $entityId): void
+    {
+        try {
+            app(SeoContext::class)->setEntity($pluginSlug, (string) $entityId);
+        } catch (\Throwable) {
+            // SEO context not bound (plugin disabled / console) — ignore.
+        }
+    }
+}
 
 if (! function_exists('dls_seo_localized_setting')) {
     /**

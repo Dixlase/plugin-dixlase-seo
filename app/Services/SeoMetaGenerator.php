@@ -34,6 +34,7 @@ namespace Plugins\DixlaseSEO\App\Services;
 
 use App\Contracts\Repositories\MediaRepositoryInterface;
 use App\Contracts\Repositories\SiteSettingRepositoryInterface;
+use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
@@ -70,6 +71,49 @@ class SeoMetaGenerator
     }
 
     /**
+     * Resolve the meta description for the current request locale.
+     *
+     * Precedence:
+     *   1. The current entity's own meta description, when a front view
+     *      declared its entity via dls_seo_set_entity() and a
+     *      plg_dixlase_seo_meta row exists. Resolved per locale through
+     *      DixlaseSeoMeta's TranslatableTrait (falls back to the primary
+     *      column value when no translation exists for the locale).
+     *   2. The site-wide default description (also locale-aware).
+     *
+     * Returns '' when neither yields a value; the caller then applies the
+     * Core site_description fallback.
+     */
+    private function resolveDescription(): string
+    {
+        try {
+            $entity = app(SeoContext::class)->getEntity();
+        } catch (\Throwable) {
+            $entity = null;
+        }
+
+        if ($entity !== null) {
+            try {
+                $meta = DixlaseSeoMeta::query()
+                    ->where('plugin_slug', $entity['plugin_slug'])
+                    ->where('entity_id', $entity['entity_id'])
+                    ->first();
+
+                if ($meta !== null) {
+                    $value = (string) ($meta->getTranslation('description', app()->getLocale()) ?? '');
+                    if ($value !== '') {
+                        return $value;
+                    }
+                }
+            } catch (\Throwable) {
+                // Fall through to the site-wide default.
+            }
+        }
+
+        return (string) (dls_seo_localized_setting('default_description') ?? '');
+    }
+
+    /**
      * Generate meta tags HTML for the front page
      */
     public function generate(string $url): string
@@ -77,11 +121,12 @@ class SeoMetaGenerator
         $settings = $this->getSettings();
         $lines = [];
 
-        // Basic meta tags. The default description is resolved per request
-        // locale via DixlaseMultilingual (falls back to the primary-locale
-        // value, then to Core's site_description, when no translation or
-        // multilingual plugin is present).
-        $description = (string) (dls_seo_localized_setting('default_description') ?? '');
+        // Basic meta tags. The description is resolved per request locale:
+        // the current entity's own meta description (when a front view
+        // declared one) takes precedence, otherwise the site-wide default.
+        // Both fall back to the primary-locale value, then to Core's
+        // site_description, when no translation/entity is present.
+        $description = $this->resolveDescription();
         if (! $description && $this->baseSettingRepository) {
             $description = (string) $this->baseSettingRepository->get('site_description', '');
         }
