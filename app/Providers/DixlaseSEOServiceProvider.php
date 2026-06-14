@@ -95,6 +95,9 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         // Register translation files
         $this->loadTranslationsFrom(__DIR__.'/../../lang', 'dixlase-seo');
 
+        // Register helper functions (e.g. dls_seo_localized_setting)
+        require_once __DIR__.'/../Helpers/DixlaseSeoHelpers.php';
+
         // Register migrations
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
