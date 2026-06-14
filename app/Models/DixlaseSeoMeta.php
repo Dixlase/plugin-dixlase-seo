@@ -32,6 +32,7 @@
 
 namespace Plugins\DixlaseSEO\App\Models;
 
+use App\Helpers\LocaleHelper;
 use App\Traits\TranslatableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -107,5 +108,25 @@ class DixlaseSeoMeta extends Model
         return $description !== ''
             ? $base.' — '.Str::limit($description, 40)
             : $base;
+    }
+
+    /**
+     * Authoring locale of the primary `description` value.
+     *
+     * SEO meta has no per-content language of its own — its baseline is the
+     * site's primary locale (the language set in the site base settings).
+     * Exposing it as the `lang` attribute makes the DixlaseMultilingual
+     * central translation manager exclude that locale from the locale
+     * selector, so operators only translate INTO other languages — matching
+     * the per-content `lang` column that collection types like Pages/Menus
+     * carry. This is read by the manager only; it never persists.
+     */
+    public function getLangAttribute(): string
+    {
+        try {
+            return LocaleHelper::getSiteDefaultLocale();
+        } catch (\Throwable) {
+            return (string) config('app.fallback_locale', 'en');
+        }
     }
 }
