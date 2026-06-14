@@ -57,32 +57,57 @@ class InjectSeoMetaTags
     {
         $url = $request->url();
 
-        // Generate meta tags and JSON-LD
-        $metaHtml = $this->metaGenerator->generate($url);
-        $jsonLdHtml = $this->jsonLdGenerator->generate($url);
+        // Share the head content as a deferred Stringable instead of a
+        // pre-rendered string. The meta description is locale-aware, but
+        // the request locale is only finalised by the multilingual
+        // locale-resolver middleware — which, for `/{locale}/` prefixed
+        // routes, runs in the route group *after* this web-group
+        // middleware's before-phase. Building the string here would
+        // therefore capture the default locale. Deferring evaluation to
+        // the blade `{!! $seoHeadMeta !!}` render (which happens after all
+        // middleware have set the locale) yields the correct translation,
+        // and skips the work entirely for non-HTML responses.
+        $metaGenerator = $this->metaGenerator;
+        $jsonLdGenerator = $this->jsonLdGenerator;
 
-        // Google Analytics script
-        $gaId = DixlaseSeoSetting::getValue('google_analytics_id', config('dixlase_seo.google_analytics_id', ''));
-        $gaHtml = '';
-        if ($gaId) {
-            $escapedId = e($gaId);
-            $gaHtml = <<<GA
-            <script async src="https://www.googletagmanager.com/gtag/js?id={$escapedId}"></script>
-            <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '{$escapedId}');
-            </script>
-            GA;
-        }
+        View::share('seoHeadMeta', new class($metaGenerator, $jsonLdGenerator, $url) implements \Stringable
+        {
+            public function __construct(
+                private readonly SeoMetaGenerator $metaGenerator,
+                private readonly JsonLdGenerator $jsonLdGenerator,
+                private readonly string $url,
+            ) {}
 
-        // Combine all head content
-        $headMeta = trim($metaHtml . "\n    " . $jsonLdHtml);
-        if ($gaHtml) {
-            $headMeta = $gaHtml . "\n    " . $headMeta;
-        }
-        View::share('seoHeadMeta', $headMeta);
+            public function __toString(): string
+            {
+                $metaHtml = $this->metaGenerator->generate($this->url);
+                $jsonLdHtml = $this->jsonLdGenerator->generate($this->url);
+
+                // Google Analytics script
+                $gaId = DixlaseSeoSetting::getValue('google_analytics_id', config('dixlase_seo.google_analytics_id', ''));
+                $gaHtml = '';
+                if ($gaId) {
+                    $escapedId = e($gaId);
+                    $gaHtml = <<<GA
+                    <script async src="https://www.googletagmanager.com/gtag/js?id={$escapedId}"></script>
+                    <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '{$escapedId}');
+                    </script>
+                    GA;
+                }
+
+                // Combine all head content
+                $headMeta = trim($metaHtml . "\n    " . $jsonLdHtml);
+                if ($gaHtml) {
+                    $headMeta = $gaHtml . "\n    " . $headMeta;
+                }
+
+                return $headMeta;
+            }
+        });
 
         return $next($request);
     }
