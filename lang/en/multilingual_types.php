@@ -35,6 +35,4 @@ return [
     // manager UI for the `dixlase-seo:settings` type (see plugin.json
     // `multilingual_content.types[0].label_key`).
     'settings' => 'SEO Settings',
-    // Per-content SEO meta (description) of pages, legal documents, etc.
-    'meta' => 'SEO meta (content)',
 ];
