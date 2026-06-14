@@ -35,4 +35,6 @@ return [
     // manager UI for the `dixlase-seo:settings` type (see plugin.json
     // `multilingual_content.types[0].label_key`).
     'settings' => 'SEO 設定',
+    // 固定ページ・リーガル文書などのコンテンツ個別 SEO メタ(description)
+    'meta' => 'SEO メタ(コンテンツ)',
 ];

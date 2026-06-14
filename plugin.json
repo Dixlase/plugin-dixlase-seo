@@ -52,6 +52,19 @@
                         "rules": "nullable|string|max:300"
                     }
                 ]
+            },
+            {
+                "key": "dixlase-seo:meta",
+                "model": "Plugins\\DixlaseSEO\\App\\Models\\DixlaseSeoMeta",
+                "label_field": "label",
+                "label_key": "dixlase-seo::multilingual_types.meta",
+                "fields": [
+                    {
+                        "name": "description",
+                        "type": "textarea",
+                        "rules": "nullable|string|max:300"
+                    }
+                ]
             }
         ]
     },

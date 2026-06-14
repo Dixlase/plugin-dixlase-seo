@@ -32,21 +32,41 @@
 
 namespace Plugins\DixlaseSEO\App\Models;
 
+use App\Traits\TranslatableTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 /**
  * SEO meta information model for plugin-generated content units
  *
  * Uniquely identified by the pair (plugin_slug, entity_id).
+ *
+ * The `description` is translatable: the primary-locale value lives in the
+ * `description` column, and per-locale overrides are stored in the central
+ * DixlaseMultilingual translations table (declared as the
+ * `dixlase-seo:meta` collection type in plugin.json). When the
+ * multilingual plugin is absent, TranslatableTrait transparently returns
+ * the column value.
  */
 class DixlaseSeoMeta extends Model
 {
+    use TranslatableTrait;
+
     /**
      * Table name
      *
      * @var string
      */
     protected $table = 'plg_dixlase_seo_meta';
+
+    /**
+     * Translatable fields (resolved per locale via TranslatableTrait).
+     *
+     * @var array<int, string>
+     */
+    protected array $translatable = [
+        'description',
+    ];
 
     /**
      * Mass assignable attributes
@@ -70,5 +90,22 @@ class DixlaseSeoMeta extends Model
         return [
             'ogp_media_id' => 'integer',
         ];
+    }
+
+    /**
+     * Human-readable row label for the DixlaseMultilingual central
+     * translation manager (declared as `label_field` in plugin.json).
+     *
+     * SEO meta rows have no title of their own, so the label combines the
+     * owning entity reference with an excerpt of the primary description.
+     */
+    public function getLabelAttribute(): string
+    {
+        $base = $this->plugin_slug.' #'.$this->entity_id;
+        $description = (string) ($this->getRawOriginal('description') ?? '');
+
+        return $description !== ''
+            ? $base.' — '.Str::limit($description, 40)
+            : $base;
     }
 }

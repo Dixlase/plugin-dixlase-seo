@@ -64,6 +64,10 @@ class DixlaseSEOServiceProvider extends ServiceProvider implements CspPolicyProv
         $this->app->singleton(SeoMetaGenerator::class);
         $this->app->singleton(JsonLdGenerator::class);
 
+        // Request-scoped holder for the entity currently being rendered
+        // (set by front views via dls_seo_set_entity()).
+        $this->app->singleton(\Plugins\DixlaseSEO\App\Services\SeoContext::class);
+
         // Register Contract implementation for per-content SEO meta information
         // Other plugins can resolve via app(SeoMetaProviderInterface::class)
         $this->app->singleton(SeoMetaProviderInterface::class, DixlaseSeoMetaProvider::class);
