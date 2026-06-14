@@ -35,8 +35,26 @@
         "custom"
     ],
     "capabilities": [
-        "seo"
+        "seo",
+        "multilingual-content"
     ],
+    "multilingual_content": {
+        "types": [
+            {
+                "key": "dixlase-seo:settings",
+                "cardinality": "singleton",
+                "provider": "Plugins\\DixlaseSEO\\App\\Multilingual\\SeoSettingsProvider",
+                "label_key": "dixlase-seo::multilingual_types.settings",
+                "fields": [
+                    {
+                        "name": "default_description",
+                        "type": "textarea",
+                        "rules": "nullable|string|max:300"
+                    }
+                ]
+            }
+        ]
+    },
     "requires": {
         "dixlase": "^0.1.0",
         "dixlase_api": "^0.1",

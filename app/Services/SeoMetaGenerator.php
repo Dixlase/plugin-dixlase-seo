@@ -77,8 +77,11 @@ class SeoMetaGenerator
         $settings = $this->getSettings();
         $lines = [];
 
-        // Basic meta tags (fall back to Core's site_description if plugin settings are empty)
-        $description = $settings['default_description'] ?? '';
+        // Basic meta tags. The default description is resolved per request
+        // locale via DixlaseMultilingual (falls back to the primary-locale
+        // value, then to Core's site_description, when no translation or
+        // multilingual plugin is present).
+        $description = (string) (dls_seo_localized_setting('default_description') ?? '');
         if (! $description && $this->baseSettingRepository) {
             $description = (string) $this->baseSettingRepository->get('site_description', '');
         }
