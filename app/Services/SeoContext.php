@@ -33,37 +33,29 @@
 namespace Plugins\DixlaseSEO\App\Services;
 
 /**
- * Request-scoped holder for the content entity currently being rendered.
+ * Request-scoped holder for the meta description of the content currently
+ * being rendered.
  *
  * A front-end view (e.g. DixlasePages / DixlaseLegal `front/page.blade.php`)
- * declares which `(plugin_slug, entity_id)` it represents via the
- * `dls_seo_set_entity()` helper. SeoMetaGenerator then reads that entity
- * when building the `<head>` so it can emit the entity's own (locale-aware)
- * meta description instead of only the site-wide default.
+ * resolves its own meta description for the current locale and hands the
+ * final string to SEO via the `dls_seo_set_page_meta()` helper.
+ * SeoMetaGenerator then emits it when building the `<head>` instead of the
+ * site-wide default.
  *
  * Registered as a container singleton, so it lives for the duration of one
  * request and is empty by default (site-wide default description applies).
  */
 class SeoContext
 {
-    /**
-     * @var array{plugin_slug: string, entity_id: string}|null
-     */
-    private ?array $entity = null;
+    private ?string $description = null;
 
-    public function setEntity(string $pluginSlug, string $entityId): void
+    public function setDescription(?string $description): void
     {
-        $this->entity = [
-            'plugin_slug' => $pluginSlug,
-            'entity_id' => $entityId,
-        ];
+        $this->description = $description;
     }
 
-    /**
-     * @return array{plugin_slug: string, entity_id: string}|null
-     */
-    public function getEntity(): ?array
+    public function getDescription(): ?string
     {
-        return $this->entity;
+        return $this->description;
     }
 }

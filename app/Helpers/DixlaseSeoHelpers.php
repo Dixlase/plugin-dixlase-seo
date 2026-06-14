@@ -30,24 +30,56 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use App\Contracts\PluginIntegration\SeoMetaProviderInterface;
+use Illuminate\Database\Eloquent\Model;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Multilingual\SeoSettingsProvider;
 use Plugins\DixlaseSEO\App\Services\SeoContext;
 
-if (! function_exists('dls_seo_set_entity')) {
+if (! function_exists('dls_seo_set_page_meta')) {
     /**
-     * Declare the content entity the current front-end response represents,
-     * so SeoMetaGenerator can emit that entity's own (locale-aware) meta
-     * description instead of only the site-wide default.
+     * Resolve a content page's meta description for the current locale and
+     * hand it to SEO so SeoMetaGenerator emits it in the `<head>` instead
+     * of the site-wide default.
+     *
+     * Resolution: the page's `seo_description` translation for the current
+     * locale (stored under the page's own translation morph and edited in
+     * the central translation manager alongside title/content), falling
+     * back to the primary value stored in the SEO meta table (authored in
+     * the page editor). Empty results leave the site-wide default to apply.
      *
      * Called from a front view (e.g. `front/page.blade.php`) before the
-     * layout's `<head>` is rendered. No-op and never throws on sites where
-     * the SEO context is unavailable.
+     * layout's `<head>` is rendered. No-op and never throws when the SEO
+     * plugin or its context is unavailable.
+     *
+     * @param  Model  $page  A TranslatableTrait model (DixlasePagesPage / DixlaseLegalPage)
      */
-    function dls_seo_set_entity(string $pluginSlug, string|int $entityId): void
+    function dls_seo_set_page_meta(Model $page, string $pluginSlug): void
     {
         try {
-            app(SeoContext::class)->setEntity($pluginSlug, (string) $entityId);
+            $locale = app()->getLocale();
+
+            // Per-locale translation (no column fallback — primary lives in
+            // the SEO meta table, not on the page).
+            $description = null;
+            if (method_exists($page, 'getTranslation')) {
+                $translated = $page->getTranslation('seo_description', $locale, false);
+                if (is_string($translated) && $translated !== '') {
+                    $description = $translated;
+                }
+            }
+
+            // Fall back to the primary-locale value from the SEO meta table.
+            if ($description === null && app()->bound(SeoMetaProviderInterface::class)) {
+                $meta = app(SeoMetaProviderInterface::class)->getMeta($pluginSlug, (string) $page->getKey());
+                if ($meta !== null && is_string($meta->description) && $meta->description !== '') {
+                    $description = $meta->description;
+                }
+            }
+
+            if ($description !== null) {
+                app(SeoContext::class)->setDescription($description);
+            }
         } catch (\Throwable) {
             // SEO context not bound (plugin disabled / console) — ignore.
         }

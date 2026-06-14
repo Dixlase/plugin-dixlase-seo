@@ -34,7 +34,6 @@ namespace Plugins\DixlaseSEO\App\Services;
 
 use App\Contracts\Repositories\MediaRepositoryInterface;
 use App\Contracts\Repositories\SiteSettingRepositoryInterface;
-use Plugins\DixlaseSEO\App\Models\DixlaseSeoMeta;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
@@ -74,11 +73,9 @@ class SeoMetaGenerator
      * Resolve the meta description for the current request locale.
      *
      * Precedence:
-     *   1. The current entity's own meta description, when a front view
-     *      declared its entity via dls_seo_set_entity() and a
-     *      plg_dixlase_seo_meta row exists. Resolved per locale through
-     *      DixlaseSeoMeta's TranslatableTrait (falls back to the primary
-     *      column value when no translation exists for the locale).
+     *   1. The description a front view resolved for the current content
+     *      and handed over via dls_seo_set_page_meta() (its own per-locale
+     *      translation, falling back to its primary SEO meta value).
      *   2. The site-wide default description (also locale-aware).
      *
      * Returns '' when neither yields a value; the caller then applies the
@@ -87,27 +84,13 @@ class SeoMetaGenerator
     private function resolveDescription(): string
     {
         try {
-            $entity = app(SeoContext::class)->getEntity();
+            $explicit = app(SeoContext::class)->getDescription();
         } catch (\Throwable) {
-            $entity = null;
+            $explicit = null;
         }
 
-        if ($entity !== null) {
-            try {
-                $meta = DixlaseSeoMeta::query()
-                    ->where('plugin_slug', $entity['plugin_slug'])
-                    ->where('entity_id', $entity['entity_id'])
-                    ->first();
-
-                if ($meta !== null) {
-                    $value = (string) ($meta->getTranslation('description', app()->getLocale()) ?? '');
-                    if ($value !== '') {
-                        return $value;
-                    }
-                }
-            } catch (\Throwable) {
-                // Fall through to the site-wide default.
-            }
+        if (is_string($explicit) && $explicit !== '') {
+            return $explicit;
         }
 
         return (string) (dls_seo_localized_setting('default_description') ?? '');
