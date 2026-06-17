@@ -46,7 +46,7 @@ Dixlase SEO は **デュアルライセンス** で配布されています。
 - **商用ライセンス**: GPL v3 の遵守が現実的でないユースケース向けに、別途商用ライセンスの提供を予定しています。
 
 **現時点では商用ライセンスはまだ提供しておりません。**  
-(雛形のみ [LICENSE.commercial](./LICENSE.commercial) に Draft として置いています)。  
+(雛形のみ [LICENSE-COMMERCIAL](./LICENSE-COMMERCIAL) に Draft として置いています)。  
 提供開始時期や条件に関するお問い合わせは **info@dixlase.org** までご連絡ください。
 
 各ファイルの関係概要は [NOTICE.ja](./NOTICE.ja)([English](./NOTICE))にあります。

@@ -36,7 +36,7 @@ This plugin declares the following capability in `plugin.json`:
 Dixlase SEO is distributed under a **dual license**:
 
 - **Open Source License**: [GNU General Public License v3](./LICENSE)
-- **Commercial License**: A separate commercial license is planned for use cases where GPL v3 compliance is not feasible. **It is not yet available** — only a draft of the eventual terms is present in [LICENSE.commercial](./LICENSE.commercial). For availability timing or other questions, contact **info@dixlase.org**.
+- **Commercial License**: A separate commercial license is planned for use cases where GPL v3 compliance is not feasible. **It is not yet available** — only a placeholder of the eventual terms is present in [LICENSE-COMMERCIAL](./LICENSE-COMMERCIAL). For availability timing or other questions, contact **info@dixlase.org**.
 
 A short overview of how these files fit together is in [NOTICE](./NOTICE) ([日本語](./NOTICE.ja)).
 
