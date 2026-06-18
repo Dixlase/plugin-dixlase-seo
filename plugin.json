@@ -195,6 +195,7 @@
         "phpunit.xml": "sha256:5af224233d2b1a5dd0fb482b2b0ef525a5a821044a0c25e8eff2f8f3a52190d7",
         "resources/ai/custom-rules-en.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "resources/ai/custom-rules-ja.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "resources/assets/thumbnail.png": "sha256:df83aef5d2456dbec9b1f129d8750963c6cb6bd2e92691b9be904cb6e2468953",
         "resources/comment-translations/ja/app/Http/Controllers/Admin/BaseSettingsController.php": "sha256:7c76f60096fb04fb5417a2830aab2405da11b0d2241ef13e6fa440a03a1abb8a",
         "resources/comment-translations/ja/app/Http/Controllers/Admin/ExternalSettingsController.php": "sha256:0ede3dc948c0e61b4bbc70d4ac64962819d09ffdcb316974571dc279756eb484",
         "resources/comment-translations/ja/app/Http/Controllers/Admin/IntegrationsController.php": "sha256:d81f44a2b84f55d53a4cbbd2c19829de8a3e4a495421b5a3bf1aa66dc2cebe85",
@@ -250,6 +251,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-06-18T14:49:51+00:00"
+        "signed_at": "2026-06-18T16:21:40+00:00"
     }
 }
