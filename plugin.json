@@ -245,12 +245,11 @@
         "tests/Feature/Services/JsonLdGeneratorTest.php": "sha256:b99dec836921ea6ff7c227662accd80a97a5b78142351f6c3cfe3f443f912299",
         "tests/Feature/Services/SeoMetaGeneratorTest.php": "sha256:40ee4abbfdb1202030164b102360f434c68e075b45032098c1fc50938ec27633",
         "tests/Unit/ExampleTest.php": "sha256:b0caad206707f9652bc19044ef99f1c221eb61e13f88d55e79f8258f5f33c7a8",
-        "thumbnail.png": "sha256:d068911e72af18a3dce895acfa057d4b3f18822e105767def3a61ac826b0fd49",
         "vite.config.mjs": "sha256:6a0a529de32bcadd0a36f293b37be38a8954feed60172ad8e5e6af450af69f29"
     },
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-06-18T09:14:42+00:00"
+        "signed_at": "2026-06-18T14:49:51+00:00"
     }
 }
