@@ -40,6 +40,10 @@ jobs:
 
       - name: Place plugin into core directory
         run: |
+          # Core no longer tracks plugins/ (it is gitignored), so a fresh
+          # core checkout has no plugins/ directory. Create it before moving
+          # the plugin in, otherwise `mv` fails with "No such file or directory".
+          mkdir -p core/plugins
           rm -rf core/plugins/DixlaseSEO
           mv plugin core/plugins/DixlaseSEO
 
