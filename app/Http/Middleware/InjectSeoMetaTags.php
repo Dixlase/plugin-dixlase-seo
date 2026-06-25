@@ -83,10 +83,15 @@ class InjectSeoMetaTags
                 $metaHtml = $this->metaGenerator->generate($this->url);
                 $jsonLdHtml = $this->jsonLdGenerator->generate($this->url);
 
-                // Google Analytics script
+                // Google Analytics script — gated by visitor cookie consent
+                // when a consent provider (typically DixlaseCookie) is actively
+                // collecting consent. When none is installed, or its banner is
+                // switched off, we fall through to the historic always-emit
+                // behaviour so the plugin stays usable on sites without consent
+                // collection.
                 $gaId = DixlaseSeoSetting::getValue('google_analytics_id', config('dixlase_seo.google_analytics_id', ''));
                 $gaHtml = '';
-                if ($gaId) {
+                if ($gaId && $this->analyticsConsentGranted()) {
                     $escapedId = e($gaId);
                     $gaHtml = <<<GA
                     <script async src="https://www.googletagmanager.com/gtag/js?id={$escapedId}"></script>
@@ -106,6 +111,38 @@ class InjectSeoMetaTags
                 }
 
                 return $headMeta;
+            }
+
+            /**
+             * Decide whether the analytics tag may be emitted on this request.
+             *
+             * Soft dependency on the cross-plugin
+             * App\Contracts\Cookie\ConsentStateProviderInterface:
+             *   - No provider bound (no consent plugin) → emit (legacy behaviour).
+             *   - Provider bound but not actively collecting consent (its banner
+             *     is switched off, surfaced via the optional isBannerEnabled()
+             *     probe) → emit; the operator is not gating, so do not suppress
+             *     forever.
+             *   - Provider bound and collecting → defer to has('analytics').
+             */
+            private function analyticsConsentGranted(): bool
+            {
+                // Operator opted out of consent gating → always emit.
+                if (! (bool) DixlaseSeoSetting::getValue('respect_cookie_consent', config('dixlase_seo.respect_cookie_consent', true))) {
+                    return true;
+                }
+
+                if (! app()->bound(\App\Contracts\Cookie\ConsentStateProviderInterface::class)) {
+                    return true;
+                }
+
+                $provider = app(\App\Contracts\Cookie\ConsentStateProviderInterface::class);
+
+                if (method_exists($provider, 'isBannerEnabled') && ! $provider->isBannerEnabled()) {
+                    return true;
+                }
+
+                return $provider->has(\App\Enums\ConsentCategory::Analytics->value);
             }
         });
 

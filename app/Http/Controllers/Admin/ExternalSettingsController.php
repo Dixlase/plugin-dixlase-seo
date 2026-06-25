@@ -32,6 +32,7 @@
 
 namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
+use App\Contracts\Cookie\ConsentStateProviderInterface;
 use App\Http\Controllers\Admin\AdminLoggedInController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -55,7 +56,35 @@ class ExternalSettingsController extends AdminLoggedInController
 
         return view('dixlase-seo::admin.external', array_merge($this->viewParams, [
             'settings' => $settings,
+            'consentStatus' => $this->consentStatus(),
         ]));
+    }
+
+    /**
+     * Report the cookie-consent banner status for the analytics notice.
+     *
+     * Detection is fully generic: ANY plugin (official or third-party) that
+     * binds the core App\Contracts\Cookie\ConsentStateProviderInterface is
+     * recognised as a consent system. Whether its banner is actively shown is
+     * read from the optional isBannerEnabled() probe (duck-typed, so a
+     * provider that does not expose it is assumed active).
+     *
+     *   - 'active'        — a consent banner is up; GA is gated on consent.
+     *   - 'banner_off'    — a consent provider exists but its banner is off.
+     *   - 'not_installed' — no consent provider at all.
+     */
+    private function consentStatus(): string
+    {
+        if (! app()->bound(ConsentStateProviderInterface::class)) {
+            return 'not_installed';
+        }
+
+        $provider = app(ConsentStateProviderInterface::class);
+
+        $bannerActive = ! method_exists($provider, 'isBannerEnabled')
+            || $provider->isBannerEnabled();
+
+        return $bannerActive ? 'active' : 'banner_off';
     }
 
     /**
@@ -63,6 +92,10 @@ class ExternalSettingsController extends AdminLoggedInController
      */
     public function update(UpdateExternalSettingsRequest $request): RedirectResponse
     {
+        // The form-toggle component ships a hidden "0" field alongside the
+        // checkbox "1", so the request already carries the correct boolean
+        // value — no $request->has() normalisation (which only checks
+        // presence, not value, and would always resolve to "1").
         DixlaseSeoSetting::setMany($request->validated());
 
         return redirect()

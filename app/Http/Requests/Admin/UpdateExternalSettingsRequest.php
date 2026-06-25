@@ -51,6 +51,7 @@ class UpdateExternalSettingsRequest extends FormRequest
     {
         return [
             'google_analytics_id' => ['nullable', 'string', 'regex:/^(G-[A-Z0-9]+)?$/'],
+            'respect_cookie_consent' => ['nullable'],
             'google_site_verification' => ['nullable', 'string', 'max:100'],
         ];
     }

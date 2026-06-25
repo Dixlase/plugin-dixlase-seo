@@ -86,6 +86,12 @@ return [
     // Google Analytics measurement ID (GA4)
     'google_analytics_id' => '',
 
+    // Whether to gate the Google Analytics tag on visitor cookie consent
+    // (the "analytics" category) when a consent banner is active. When off,
+    // the tag is emitted even if the visitor declined — the operator takes
+    // responsibility for compliance.
+    'respect_cookie_consent' => true,
+
     // Google Search Console site verification code
     'google_site_verification' => '',
 ];
