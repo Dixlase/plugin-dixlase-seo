@@ -2,6 +2,7 @@
   "name": "plugins/dixlase-seo",
   "version": "1.0.0",
   "description": "DixlaseSEO - A custom plugin for Dixlase",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "vite",
