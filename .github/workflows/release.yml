@@ -51,7 +51,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          # No `cache: npm`: that requires a lockfile (package-lock.json),
+          # which this repo intentionally does not ship (hence npm install,
+          # not npm ci). Enabling it fails setup-node before the build runs.
 
       - name: Build front-end assets
         # Populates the gitignored resources/assets/ (vite outDir) so the
