@@ -128,8 +128,8 @@ jobs:
       - name: Build frontend assets (skipped when no package.json)
         run: |
           if [ -f package.json ] && jq -e '.scripts.build' package.json > /dev/null 2>&1; then
-            # npm install (not npm ci): this repo ships no package-lock.json.
-            npm install --no-audit --no-fund
+            # npm ci: reproducible install pinned to the committed lockfile.
+            npm ci --no-audit --no-fund
             NODE_ENV=production npx vite build --outDir dist
           else
             echo "No package.json with a build script — skipping frontend build."
