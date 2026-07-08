@@ -51,16 +51,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # No `cache: npm`: that requires a lockfile (package-lock.json),
-          # which this repo intentionally does not ship (hence npm install,
-          # not npm ci). Enabling it fails setup-node before the build runs.
+          cache: 'npm' # package-lock.json is committed, so setup-node can cache
 
       - name: Build front-end assets
         # Populates the gitignored resources/assets/ (vite outDir) so the
         # ZIP can ship prebuilt output. Production hosts never run npm.
         run: |
-          # npm install (not npm ci): this repo ships no package-lock.json.
-          npm install --no-audit --no-fund
+          # npm ci: reproducible install pinned to the committed lockfile.
+          npm ci --no-audit --no-fund
           npm run build
 
       - name: Stage distribution tree
