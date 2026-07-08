@@ -10,6 +10,7 @@
     "watch": "vite build --watch"
   },
   "devDependencies": {
+    "sass-embedded": "^1.99.0",
     "vite": "^5.0.0"
   },
   "author": "",
