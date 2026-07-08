@@ -39,26 +39,38 @@
 use App\Enums\MemberRole;
 
 return [
+    // Keys mirror the nav tree in config/admin/navigation.php so the
+    // resolver (PermissionRegistry::getDefaultFromNestedArray) can walk them:
+    // top key `dixlase-seo` with a `children` map. Flat dotted keys never
+    // match the walker and silently fall back to ADMIN/ADMIN.
     'permissions' => [
-        // Basic settings (administrator only)
-        'settings.dixlase-seo.base' => [
-            'access_roles' => MemberRole::ADMIN->value,
-            'view_roles' => MemberRole::ADMIN->value,
-        ],
-        // Sitemap and robots.txt settings (administrator only)
-        'settings.dixlase-seo.sitemap' => [
-            'access_roles' => MemberRole::ADMIN->value,
-            'view_roles' => MemberRole::ADMIN->value,
-        ],
-        // External service integration settings (administrator only)
-        'settings.dixlase-seo.external' => [
-            'access_roles' => MemberRole::ADMIN->value,
-            'view_roles' => MemberRole::ADMIN->value,
-        ],
-        // Plugin integration settings (administrator only)
-        'settings.dixlase-seo.integrations' => [
-            'access_roles' => MemberRole::ADMIN->value,
-            'view_roles' => MemberRole::ADMIN->value,
+        'dixlase-seo' => [
+            'children' => [
+                // Basic settings (administrator only)
+                'base' => [
+                    'access_roles' => MemberRole::ADMIN->value,
+                    'view_roles' => MemberRole::ADMIN->value,
+                ],
+                // Sitemap and robots.txt settings (administrator only)
+                'sitemap' => [
+                    'access_roles' => MemberRole::ADMIN->value,
+                    'view_roles' => MemberRole::ADMIN->value,
+                ],
+                // External service integration (site-verification token +
+                // analytics ID are emitted into public HTML). Admins may VIEW
+                // the settings, but only SUPER_ADMIN may EDIT them, so a
+                // delegated admin cannot hijack Search Console verification or
+                // repoint analytics.
+                'external' => [
+                    'access_roles' => MemberRole::SUPER_ADMIN->value,
+                    'view_roles' => MemberRole::ADMIN->value,
+                ],
+                // Plugin integration settings (administrator only)
+                'integrations' => [
+                    'access_roles' => MemberRole::ADMIN->value,
+                    'view_roles' => MemberRole::ADMIN->value,
+                ],
+            ],
         ],
     ],
 ];
