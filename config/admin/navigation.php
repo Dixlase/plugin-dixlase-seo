@@ -41,6 +41,11 @@ return [
         '_insert_after' => 'media',
         'text' => 'dixlase-seo::admin/navigation.dixlase-seo.text',
         'icon' => 'fas fa-fw fa-search',
+        // Route the sidebar permission check through this plugin's
+        // config/admin/roles.php. Without it the check falls back to core's
+        // PermissionRegistry (no `dixlase-seo` entry) and the menu is hidden
+        // for everyone below SUPER_ADMIN. Value is the plugin directory basename.
+        'plugin_slug' => 'DixlaseSEO',
         'can' => 'admin',
         'children' => [
             'base' => [
