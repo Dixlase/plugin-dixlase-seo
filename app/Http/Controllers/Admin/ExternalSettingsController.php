@@ -33,6 +33,7 @@
 namespace Plugins\DixlaseSEO\App\Http\Controllers\Admin;
 
 use App\Contracts\Cookie\ConsentStateProviderInterface;
+use App\Helpers\AdminHelper;
 use App\Http\Controllers\Admin\AdminLoggedInController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -47,10 +48,18 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 class ExternalSettingsController extends AdminLoggedInController
 {
     /**
+     * PermissionRegistry resolves plugin roles.php via the PascalCase
+     * directory basename, so this must be the directory name.
+     */
+    private const PLUGIN_SLUG = 'DixlaseSEO';
+
+    /**
      * Display the external service integration settings screen
      */
     public function show(): View
     {
+        $this->authorizeView('dixlase-seo.external');
+
         $defaults = config('dixlase_seo', []);
         $settings = DixlaseSeoSetting::getMany($defaults);
 
@@ -92,6 +101,8 @@ class ExternalSettingsController extends AdminLoggedInController
      */
     public function update(UpdateExternalSettingsRequest $request): RedirectResponse
     {
+        $this->authorizeEdit('dixlase-seo.external');
+
         // The form-toggle component ships a hidden "0" field alongside the
         // checkbox "1", so the request already carries the correct boolean
         // value — no $request->has() normalisation (which only checks
@@ -101,5 +112,27 @@ class ExternalSettingsController extends AdminLoggedInController
         return redirect()
             ->route('dixlase-seo::admin.seo.external')
             ->with('success', __('dixlase-seo::admin/dixlase-seo/external.updated'));
+    }
+
+    /**
+     * Abort with 403 unless the current member can VIEW the given menu.
+     * SUPER_ADMIN bypasses; core role_permission_overrides and the plugin
+     * defaults in config/admin/roles.php are honoured via AdminHelper.
+     */
+    private function authorizeView(string $menuKey): void
+    {
+        if (! AdminHelper::canViewPluginMenu(self::PLUGIN_SLUG, $menuKey)) {
+            abort(403, __('http/middleware/check_menu_access.no_access_permission'));
+        }
+    }
+
+    /**
+     * Abort with 403 unless the current member can EDIT the given menu.
+     */
+    private function authorizeEdit(string $menuKey): void
+    {
+        if (! AdminHelper::canEditPluginMenu(self::PLUGIN_SLUG, $menuKey)) {
+            abort(403, __('http/middleware/check_menu_edit.no_edit_permission'));
+        }
     }
 }
