@@ -60,6 +60,8 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     private Member $admin;
 
+    private Member $superAdmin;
+
     private string $baseUrl;
 
     private string $sitemapUrl;
@@ -124,7 +126,9 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $router->getRoutes()->refreshNameLookups();
         $router->getRoutes()->refreshActionLookups();
 
-        // 管理者ユーザーを作成
+        // Admin user — allowed to view external/base/sitemap/integrations
+        // pages, but NOT allowed to save the external-settings form (edit
+        // is restricted to SUPER_ADMIN — see c66dd2f).
         $this->admin = Member::create([
             'account_name' => 'testadmin',
             'display_name' => 'Test Admin',
@@ -132,6 +136,20 @@ class DixlaseSeoAdminSettingsTest extends TestCase
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
             'role' => MemberRole::ADMIN,
+            'status' => MemberStatus::Active,
+        ]);
+
+        // Super-admin user — required for editing external settings (Google
+        // Analytics ID + Search Console verification token, both emitted
+        // into public HTML). Used only by the tests that exercise the
+        // super-admin-only save path.
+        $this->superAdmin = Member::create([
+            'account_name' => 'testsuperadmin',
+            'display_name' => 'Test Super Admin',
+            'email' => 'superadmin@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'role' => MemberRole::SUPER_ADMIN,
             'status' => MemberStatus::Active,
         ]);
     }
@@ -416,9 +434,14 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $response->assertViewIs('dixlase-seo::admin.external');
     }
 
-    public function test_admin_can_save_external_settings(): void
+    public function test_super_admin_can_save_external_settings(): void
     {
-        $this->actingAs($this->admin, 'member')
+        // External settings edit is restricted to SUPER_ADMIN by
+        // ExternalSettingsController::authorizeEdit — the values here
+        // (Google Analytics ID + Search Console verification token) are
+        // emitted into public HTML, so we deliberately raise the bar.
+        // See c66dd2f for the enforcement change.
+        $this->actingAs($this->superAdmin, 'member')
             ->patch($this->externalUrl, $this->externalPayload([
                 'google_analytics_id' => 'G-ABC123',
                 'google_site_verification' => 'verifycode',
@@ -430,8 +453,34 @@ class DixlaseSeoAdminSettingsTest extends TestCase
         $this->assertSame('verifycode', DixlaseSeoSetting::getValue('google_site_verification'));
     }
 
+    public function test_admin_cannot_save_external_settings(): void
+    {
+        // Regression guard for c66dd2f: an ADMIN role must NOT be able to
+        // save the external-settings form, even though they can still
+        // view the page. ExternalSettingsController::authorizeEdit is the
+        // enforcement point — this test would 302-redirect (assertRedirect)
+        // if the controller regressed to the old admin-can-edit behaviour.
+        // The declared setting must also stay at the pre-request default
+        // (empty string), proving nothing was written to the DB.
+        $this->actingAs($this->admin, 'member')
+            ->patch($this->externalUrl, $this->externalPayload([
+                'google_analytics_id' => 'G-SHOULDNOTPERSIST',
+                'google_site_verification' => 'nope',
+            ]))
+            ->assertForbidden();
+
+        $this->assertSame('', DixlaseSeoSetting::getValue('google_analytics_id', ''));
+        $this->assertSame('', DixlaseSeoSetting::getValue('google_site_verification', ''));
+    }
+
     public function test_invalid_google_analytics_id_fails_validation(): void
     {
+        // Validation runs before ExternalSettingsController::authorizeEdit
+        // (FormRequest validation happens during resolution, before the
+        // controller method body executes), so an admin submitting invalid
+        // input still gets a validation redirect — not a 403. This test
+        // pins that ordering so a controller-level pre-validation authz
+        // check does not silently hide validation errors from operators.
         $this->actingAs($this->admin, 'member')
             ->patch($this->externalUrl, $this->externalPayload(['google_analytics_id' => 'invalid-id']))
             ->assertSessionHasErrors('google_analytics_id');
