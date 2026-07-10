@@ -19,6 +19,15 @@
         </include>
     </source>
     <php>
+        <!-- This suite exercises an already-installed site. Core's global
+             CheckInstallationReady middleware reads INSTALLED (falling back to
+             config('app.installed'), which defaults to false) and redirects
+             every route to the installer when it is not "true". CI copies
+             core's .env.example, which sets INSTALLED=false, so without this
+             line every feature test gets a 302 instead of a 200.
+             force="true" makes phpunit overwrite a value already present in
+             the process env. -->
+        <env name="INSTALLED" value="true" force="true"/>
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
