@@ -24,4 +24,4 @@ This policy covers code in the [`plugin-dixlase-seo`](https://github.com/Dixlase
 
 ---
 
-**Contact:** info@dixlase.org
+**Contact:** security@dixlase.org
