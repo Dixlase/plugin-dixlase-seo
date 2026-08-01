@@ -93,9 +93,17 @@ class InjectSeoMetaTags
                 $gaHtml = '';
                 if ($gaId && $this->analyticsConsentGranted()) {
                     $escapedId = e($gaId);
+                    // The inline gtag bootstrap must carry the request's CSP
+                    // nonce, otherwise the site's strict script-src (no
+                    // 'unsafe-inline') blocks it and GA never initialises even
+                    // though the external loader is allow-listed. csp_nonce_attr()
+                    // is the same helper @cspNonce expands to; guard with
+                    // function_exists so the plugin still renders standalone
+                    // (no CSP layer) where the helper is absent.
+                    $nonceAttr = function_exists('csp_nonce_attr') ? csp_nonce_attr() : '';
                     $gaHtml = <<<GA
                     <script async src="https://www.googletagmanager.com/gtag/js?id={$escapedId}"></script>
-                    <script>
+                    <script {$nonceAttr}>
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}
                     gtag('js', new Date());
