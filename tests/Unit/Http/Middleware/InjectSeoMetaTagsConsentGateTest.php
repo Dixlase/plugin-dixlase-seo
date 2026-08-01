@@ -122,6 +122,23 @@ class InjectSeoMetaTagsConsentGateTest extends TestCase
         $this->assertStringContainsString('googletagmanager.com/gtag/js?id=G-TEST', $html);
     }
 
+    public function test_inline_ga_bootstrap_carries_a_csp_nonce(): void
+    {
+        // The external loader is allow-listed, but the inline gtag() bootstrap
+        // needs the request CSP nonce or a strict script-src (no
+        // 'unsafe-inline') blocks it and GA never initialises.
+        $this->bindConsentProvider(analyticsGranted: true, bannerEnabled: true);
+
+        $html = $this->renderHeadMeta();
+
+        // The inline <script> that defines window.dataLayer must carry a nonce.
+        $this->assertMatchesRegularExpression(
+            '/<script nonce="[^"]+">\s*window\.dataLayer/',
+            $html,
+            'The inline GA bootstrap script is missing its CSP nonce.'
+        );
+    }
+
     /**
      * Bind a stand-in consent provider. The anonymous class adds the optional
      * isBannerEnabled() probe the gate duck-types for, without coupling the
