@@ -4,8 +4,8 @@
     "slug": "dixlase-seo",
     "version": "0.1.0",
     "description": {
-        "en": "SEO optimization plugin for Dixlase CMS. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
-        "ja": "Dixlase CMS用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
+        "en": "SEO optimization plugin for Dixlase. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
+        "ja": "Dixlase用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
     },
     "author": "exc-D inc.",
     "author_id": "exc-d-inc",
