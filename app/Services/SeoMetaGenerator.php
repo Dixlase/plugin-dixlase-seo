@@ -144,6 +144,11 @@ class SeoMetaGenerator
             $lines[] = '<meta name="twitter:site" content="@'.e($twitterSite).'">';
         }
 
+        // Emit twitter:image explicitly (reusing the resolved OGP image) rather
+        // than relying on X's og:image fallback, so the card image is
+        // deterministic regardless of how the crawler resolves tags.
+        $lines[] = '<meta name="twitter:image" content="'.e($ogpImageUrl).'">';
+
         // Google Search Console verification
         $googleVerification = $settings['google_site_verification'] ?? '';
         if ($googleVerification) {

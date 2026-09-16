@@ -207,6 +207,20 @@ class SeoMetaGeneratorTest extends TestCase
     }
 
     /**
+     * twitter:image タグが og:image と同じ画像URLで生成されること
+     * (X が og:image にフォールバックする挙動に依存せず明示出力する)
+     */
+    public function test_generate_includes_twitter_image_matching_og_image(): void
+    {
+        DixlaseSeoSetting::setValue('default_ogp_image', 'https://example.com/ogp.jpg');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/');
+
+        $this->assertStringContainsString('<meta name="twitter:image" content="https://example.com/ogp.jpg">', $output);
+    }
+
+    /**
      * OGP画像が相対パスの場合に絶対URLに変換されること
      */
     public function test_generate_resolves_relative_ogp_image_to_absolute_url(): void
