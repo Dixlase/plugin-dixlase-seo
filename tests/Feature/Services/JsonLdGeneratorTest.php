@@ -267,6 +267,56 @@ class JsonLdGeneratorTest extends TestCase
     }
 
     /**
+     * A value must not be able to close the <script> block it sits inside.
+     *
+     * json_encode() escapes `/` as `\/` by default, which alone would stop
+     * `</script>`. JSON_UNESCAPED_SLASHES turns that off for readability, so
+     * the tag escaping has to be requested explicitly with JSON_HEX_TAG --
+     * without it, `organization_name` (validated only as
+     * nullable|string|max:200) reached the page head through
+     * {!! $seoHeadMeta !!} and ran.
+     */
+    public function test_organization_name_cannot_close_the_script_block(): void
+    {
+        config(['app.name' => 'Test Site']);
+        DixlaseSeoSetting::setValue('organization_name', '</script><script>alert(1)</script>');
+
+        $output = (new JsonLdGenerator())->generate('https://example.com/');
+
+        $this->assertStringNotContainsString(
+            '</script><script>',
+            $output,
+            'A stored value must not be able to break out of the JSON-LD block.'
+        );
+
+        // Exactly the two script tags the generator itself emits.
+        $this->assertSame(
+            2,
+            substr_count($output, '<script type="application/ld+json">'),
+            'No additional script tag may appear.'
+        );
+    }
+
+    /**
+     * The escaping must not cost the schema its meaning: Google reads this
+     * block, so it still has to be valid JSON with the values intact.
+     */
+    public function test_escaping_keeps_the_schema_valid_and_readable(): void
+    {
+        config(['app.name' => 'Test Site']);
+        DixlaseSeoSetting::setValue('organization_name', '株式会社テスト & Co.');
+
+        $output = (new JsonLdGenerator())->generate('https://example.com/');
+        $schema = $this->extractOrganizationSchema($output);
+
+        $this->assertSame(
+            '株式会社テスト & Co.',
+            $schema['name'] ?? null,
+            'The value must survive escaping unchanged once decoded -- ampersands and non-ASCII included.'
+        );
+    }
+
+    /**
      * Organizationスキーマを抽出するヘルパーメソッド
      *
      * @return array<string, mixed>

@@ -90,7 +90,25 @@ class JsonLdGenerator
 
         $lines = [];
         foreach ($schemas as $schema) {
-            $json = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            // JSON_HEX_TAG is what keeps a value from closing the <script>
+            // block it is embedded in. json_encode() escapes `/` as `\/` by
+            // default, which alone would stop `</script>`; JSON_UNESCAPED_SLASHES
+            // turns that off for readability, so the tag escaping has to be
+            // asked for explicitly. Measured:
+            //
+            //   default                     {"name":"<\/script>..."}
+            //   + JSON_UNESCAPED_SLASHES    {"name":"</script>..."}     <- escapes
+            //   + JSON_HEX_TAG              {"name":"</script..."}
+            //
+            // The values here come from SEO settings (organization_name is
+            // validated only as nullable|string|max:200) and the result is
+            // rendered into the page head through {!! $seoHeadMeta !!}, so a
+            // stored `</script><script>...` ran on every front-end page.
+            $json = json_encode(
+                $schema,
+                JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
+                | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+            );
             $lines[] = '<script type="application/ld+json">'."\n".$json."\n".'</script>';
         }
 
