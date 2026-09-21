@@ -1,6 +1,6 @@
 {
     "name": "Dixlase SEO",
-    "package_name": "plugins/dixlase-seo",
+    "package_name": "dixlase/dixlase-seo",
     "slug": "dixlase-seo",
     "version": "0.1.0",
     "description": {
@@ -162,7 +162,7 @@
         "app/Services/DixlaseSeoMetaProvider.php": "sha256:f58c39b5c6c169500707acca0c754320af26619ea4f334c8d6781b9a103b5c08",
         "app/Services/JsonLdGenerator.php": "sha256:af66f8724c0dea203598682997aacc17ea2c13751dedba16a2b80b7254792543",
         "app/Services/SeoContext.php": "sha256:1852d12f199cf0abfac7316c969b007f7395d9087ca9ac8fd5c6094921af3a85",
-        "app/Services/SeoMetaGenerator.php": "sha256:53702109ae431eae7e29e2643541af902160965dc884b03951b44ac42b0ff4bb",
+        "app/Services/SeoMetaGenerator.php": "sha256:decbfa6faeeb978df78d553e603cd0ce8df84d7aab2685fee7bfbef04ccaed5e",
         "app/Services/SitemapGenerator.php": "sha256:bed14a49b9b71254f02d4fbad072d7c6b5c92b86b567eb9376557c24a01be25d",
         "composer.json": "sha256:424228de8284db372511d2e4fdd81d03d47cc0203458b8d34ede12cb3a13a619",
         "config/admin/database-cleanup.php": "sha256:a9fa65ba14aaff1096172d9807f90dbde4f7262d4e6ccc95669963b156e48fd9",
@@ -172,6 +172,7 @@
         "database/migrations/0001_01_01_000001_create_dls_plg_dixlase_seo_settings_table.php": "sha256:d5a223fab7d82eaa2b4b6332a93b6318ccf66e088fbf85c40143f401b9f83920",
         "database/migrations/0001_01_01_000002_create_dls_plg_dixlase_seo_meta_table.php": "sha256:bd67555a11d56b2c1f5e9d2a0b048b22368a82617d172e5e98e0a4ee4320ab14",
         "database/seeders/DatabaseSeeder.php": "sha256:7051faedc7ce8068ccccdc464a4783f3ddb777b7c332553e585ab6f3627744f4",
+        "docs/admin-config.md": "sha256:7104fd355683d519e004a41d3e1cf0eca758416337c46b7071886cb167fc6694",
         "lang/en/admin.php": "sha256:69e33928e2a43d7149ac8fa32f397475ae274fff59c29a8ac8ae71ade82dcb01",
         "lang/en/admin/dixlase-seo/base.php": "sha256:e4322ebb7276e78050a224a60413cc13d312bdc033e9b0c4454c0f70aab6424d",
         "lang/en/admin/dixlase-seo/external.php": "sha256:b5d836fe349ad8c2bad00762b81aab7ac9d817dd0bf7d8ac2d695ee8b1d6a6fa",
@@ -246,16 +247,16 @@
         "tests/Feature/Models/DixlaseSeoSettingMissingTableTest.php": "sha256:db088813c47fd310ef893f3dd3619937a813cf326d28c5725c4906414573967a",
         "tests/Feature/Models/DixlaseSeoSettingTest.php": "sha256:e1e8a31f87318e4b3b8598ff4c255e0ca6d61c2d3eeab19a29a34b23c207a929",
         "tests/Feature/Services/JsonLdGeneratorTest.php": "sha256:ea405d2a635a1e0ceaf7122336808713303df40cf0073b7f93ca5f373ea3e982",
-        "tests/Feature/Services/SeoMetaGeneratorTest.php": "sha256:bff2ef82eeaece6d558f7a416f65c0abf9cf0f9ec82771becba3a91b0da2274a",
+        "tests/Feature/Services/SeoMetaGeneratorTest.php": "sha256:ddb2c02f869526451cbd5fe46b1cc0b0fdc557033b8db0f7d9bdaf6ae026375f",
         "tests/Unit/ExampleTest.php": "sha256:a0d50ee6db9939de9674ccc64d4bd0c0f8030c3e271217dfcee22e76502ff69f",
         "tests/Unit/Http/Middleware/InjectSeoMetaTagsConsentGateTest.php": "sha256:81f82df34ade9c66a1db8f9c5fb421ac07c89180acd53e6630d30e05bbea026d",
         "tests/Unit/VersionManifestConsistencyTest.php": "sha256:85e01423ae78557d0d2b89ab8026c162570ff7be1fdc6a22f53454b52e9a9b59",
-        "thumbnail.png": "sha256:75656bb6adf36980995eacdc1512312b132ab4a2c6215b0d5220d33144669d79",
-        "vite.config.js": "sha256:6a0a529de32bcadd0a36f293b37be38a8954feed60172ad8e5e6af450af69f29"
+        "thumbnail.png": "sha256:ac4c62eaee228bd6e8c71c9e6d0f9057d911482fed2f05c559ce24cccb3a6995",
+        "vite.config.js": "sha256:5eb083264340887cb432f40b9c519e2806a989ef82e288781ccdbb4789e9a335"
     },
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-09-15T13:06:52+00:00"
+        "signed_at": "2026-09-21T05:04:40+00:00"
     }
 }
