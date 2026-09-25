@@ -3,12 +3,12 @@
     "description": "This is the DixlaseSEO plugin.",
     "type": "dixlase-plugin",
     "version": "0.1.0",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
-            "name": "",
-            "email": "your-email@example.com",
-            "homepage": "https://example.com"
+            "name": "exc-D inc.",
+            "email": "info@dixlase.org",
+            "homepage": "https://exc-d.com"
         }
     ],
     "require": {
