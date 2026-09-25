@@ -130,6 +130,8 @@
         "middleware": true
     },
     "files": {
+        "CHANGELOG.ja.md": "sha256:4ed3fddf6d4e5c34588cd322c9090671f43d9fd4a0dc7ebd5cc392175ec5a315",
+        "CHANGELOG.md": "sha256:f9a7f10b8a87c648e0171ab8556b9ecdadc650ebd2be75b3aadb3cc722031abd",
         "CONTRIBUTING.ja.md": "sha256:297d5f19f3528582cdb0ee99b1c348d1f807e6d06a3ea0d87c4f1264ec66e0ad",
         "CONTRIBUTING.md": "sha256:fd9be2d72d198be166c576322002cf5d898a4ec82486e0e2e4496a78c9a6caee",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -164,7 +166,7 @@
         "app/Services/SeoContext.php": "sha256:1852d12f199cf0abfac7316c969b007f7395d9087ca9ac8fd5c6094921af3a85",
         "app/Services/SeoMetaGenerator.php": "sha256:decbfa6faeeb978df78d553e603cd0ce8df84d7aab2685fee7bfbef04ccaed5e",
         "app/Services/SitemapGenerator.php": "sha256:bed14a49b9b71254f02d4fbad072d7c6b5c92b86b567eb9376557c24a01be25d",
-        "composer.json": "sha256:424228de8284db372511d2e4fdd81d03d47cc0203458b8d34ede12cb3a13a619",
+        "composer.json": "sha256:570730a814c3248f4c75061093de7224183a342a08c8c3882ed5550cde5d3b85",
         "config/admin/database-cleanup.php": "sha256:a9fa65ba14aaff1096172d9807f90dbde4f7262d4e6ccc95669963b156e48fd9",
         "config/admin/navigation.php": "sha256:ee1974bc2ea0ecafad4d8a5bd379d52a7f77369cd0aaa465fa29eaee42885afd",
         "config/admin/roles.php": "sha256:2118d4f145d0aea9379af310c5534e6a98bc4af1fe69237dc47e8a294c7a75a5",
@@ -251,12 +253,12 @@
         "tests/Unit/ExampleTest.php": "sha256:a0d50ee6db9939de9674ccc64d4bd0c0f8030c3e271217dfcee22e76502ff69f",
         "tests/Unit/Http/Middleware/InjectSeoMetaTagsConsentGateTest.php": "sha256:81f82df34ade9c66a1db8f9c5fb421ac07c89180acd53e6630d30e05bbea026d",
         "tests/Unit/VersionManifestConsistencyTest.php": "sha256:85e01423ae78557d0d2b89ab8026c162570ff7be1fdc6a22f53454b52e9a9b59",
-        "thumbnail.png": "sha256:ac4c62eaee228bd6e8c71c9e6d0f9057d911482fed2f05c559ce24cccb3a6995",
+        "thumbnail.png": "sha256:f6d78ab790eb951ce2fef4598419e79f8a414d01513c79a285247901534c832c",
         "vite.config.js": "sha256:5eb083264340887cb432f40b9c519e2806a989ef82e288781ccdbb4789e9a335"
     },
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-09-21T05:04:40+00:00"
+        "signed_at": "2026-09-25T16:24:45+00:00"
     }
 }
