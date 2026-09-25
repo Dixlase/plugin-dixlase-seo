@@ -130,8 +130,8 @@
         "middleware": true
     },
     "files": {
-        "CHANGELOG.ja.md": "sha256:4ed3fddf6d4e5c34588cd322c9090671f43d9fd4a0dc7ebd5cc392175ec5a315",
-        "CHANGELOG.md": "sha256:f9a7f10b8a87c648e0171ab8556b9ecdadc650ebd2be75b3aadb3cc722031abd",
+        "CHANGELOG.ja.md": "sha256:e77a1cc98b4ea60519c2ab16fd45142559d53375dc62f37917900fe52bc4b93b",
+        "CHANGELOG.md": "sha256:170e9a4c4d674dd046aab8ce8e95b9407f965a175abb79e1fe5fe98112ac4dc9",
         "CONTRIBUTING.ja.md": "sha256:297d5f19f3528582cdb0ee99b1c348d1f807e6d06a3ea0d87c4f1264ec66e0ad",
         "CONTRIBUTING.md": "sha256:fd9be2d72d198be166c576322002cf5d898a4ec82486e0e2e4496a78c9a6caee",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -259,6 +259,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-09-25T16:56:11+00:00"
+        "signed_at": "2026-09-25T18:20:33+00:00"
     }
 }
