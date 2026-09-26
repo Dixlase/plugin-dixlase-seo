@@ -12,14 +12,12 @@ Dixlase SEO プラグインの主要な変更はすべてこのファイルに�
 
 - `web` ミドルウェアグループを介した、フロントエンド応答へのメタタグ・OGP・
   JSON-LD の注入。
-- `sitemap.xml`（hreflang alternate 付き）と `robots.txt` のフロントルート。
+- `sitemap.xml` と `robots.txt` のフロントルート。
 - 管理設定 — 基本 SEO、外部連携（Google Analytics **GA4** 測定 ID、Google
   Search Console 確認）、サイトマップオプション。
 - Cookie 同意（`analytics` カテゴリ）を条件とする Google Analytics（GA4）タグ
   出力: コアの `ConsentStateProviderInterface` を介し、同意が得られるまでタグを
   出力しません。
-- コアの多言語コンテンツ capability を通じた多言語 SEO 設定
-  （`dixlase-seo:settings`、シングルトン）。
 - `App\Contracts\CspPolicyProvider` を実装し、GA 有効時に `googletagmanager.com`
   / `google-analytics.com` を CSP に動的に追加。
-- `seo` および `multilingual-content` の各 capability を提供。
+- `seo` capability を提供。
