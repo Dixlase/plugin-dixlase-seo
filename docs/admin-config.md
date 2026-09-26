@@ -112,7 +112,6 @@ Pages / ブログ等のプラグインごとに、**個別のコンテンツで 
 
 - **DixlaseCookie**: 分析トラッカーの同意ベース制御。Cookie 導入時、GA は同意後のみ動作
 - **DixlasePages**: プラグイン連携タブで有効化すると、各ページに SEO メタ入力欄が追加
-- **DixlaseMultilingual**: 多言語ページごとに `title` / `description` を言語別指定可能
 
 ## トラブルシューティング
 
