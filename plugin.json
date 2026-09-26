@@ -130,8 +130,8 @@
         "middleware": true
     },
     "files": {
-        "CHANGELOG.ja.md": "sha256:e77a1cc98b4ea60519c2ab16fd45142559d53375dc62f37917900fe52bc4b93b",
-        "CHANGELOG.md": "sha256:170e9a4c4d674dd046aab8ce8e95b9407f965a175abb79e1fe5fe98112ac4dc9",
+        "CHANGELOG.ja.md": "sha256:b49fabf82e9193f0a79710098d0b2fab0e48a7bfd73c8ed3dd7db95c59d4c979",
+        "CHANGELOG.md": "sha256:426284fa74b3da87c4ec388c46832bf4f13440b8d7083490f71aa8744ea6dea5",
         "CONTRIBUTING.ja.md": "sha256:9f42b9eb016487f6df95953ac3ebf7da1661f0f8e5c52f537d7e56c7e54373b9",
         "CONTRIBUTING.md": "sha256:ed2ed0e9f3945bc73649e0e860a68ff5a8770e64e07f902b16ddd11b767e8ef3",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -174,7 +174,7 @@
         "database/migrations/0001_01_01_000001_create_dls_plg_dixlase_seo_settings_table.php": "sha256:d5a223fab7d82eaa2b4b6332a93b6318ccf66e088fbf85c40143f401b9f83920",
         "database/migrations/0001_01_01_000002_create_dls_plg_dixlase_seo_meta_table.php": "sha256:bd67555a11d56b2c1f5e9d2a0b048b22368a82617d172e5e98e0a4ee4320ab14",
         "database/seeders/DatabaseSeeder.php": "sha256:7051faedc7ce8068ccccdc464a4783f3ddb777b7c332553e585ab6f3627744f4",
-        "docs/admin-config.md": "sha256:7104fd355683d519e004a41d3e1cf0eca758416337c46b7071886cb167fc6694",
+        "docs/admin-config.md": "sha256:58eb525884cd915d9d1aaf12efc0b7b8c11a5e6e9a7efd33421e04506f828840",
         "lang/en/admin.php": "sha256:69e33928e2a43d7149ac8fa32f397475ae274fff59c29a8ac8ae71ade82dcb01",
         "lang/en/admin/dixlase-seo/base.php": "sha256:e4322ebb7276e78050a224a60413cc13d312bdc033e9b0c4454c0f70aab6424d",
         "lang/en/admin/dixlase-seo/external.php": "sha256:b5d836fe349ad8c2bad00762b81aab7ac9d817dd0bf7d8ac2d695ee8b1d6a6fa",
@@ -259,6 +259,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-09-26T03:03:51+00:00"
+        "signed_at": "2026-09-26T07:26:45+00:00"
     }
 }
