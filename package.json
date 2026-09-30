@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "sass-embedded": "^1.99.0",
-    "vite": "^5.0.0"
+    "vite": "^6.4.3"
   },
   "author": "",
   "license": "GPL-3.0"
