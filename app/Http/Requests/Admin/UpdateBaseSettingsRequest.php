@@ -52,6 +52,7 @@ class UpdateBaseSettingsRequest extends FormRequest
     {
         return [
             'title_separator' => ['required', 'string', 'max:10'],
+            'default_title' => ['nullable', 'string', 'max:100'],
             'default_description' => ['nullable', 'string', 'max:300'],
             'default_ogp_image' => ['nullable', 'integer', 'exists:media,id'],
             'twitter_card_type' => ['required', Rule::in(['summary', 'summary_large_image'])],

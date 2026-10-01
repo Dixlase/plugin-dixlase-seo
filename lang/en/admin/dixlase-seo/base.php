@@ -42,6 +42,8 @@ return [
     // General settings
     'title_separator' => 'Title Separator',
     'title_separator_help' => 'Character displayed between page title and site name. Example: Page Name | Site Name',
+    'default_title' => 'Default Social Title',
+    'default_title_help' => 'Headline used for share cards (og:title and X). Falls back to the site name when empty. Keep it under about 60 characters so it is not truncated.',
     'default_description' => 'Default Meta Description',
     'default_description_help' => 'Default description used for pages without an individual description set.',
 

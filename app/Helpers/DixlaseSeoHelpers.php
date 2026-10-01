@@ -102,8 +102,8 @@ if (! function_exists('dls_seo_localized_setting')) {
      * 1 and 2 are skipped because no resolver is bound, and the helper
      * returns the primary value directly.
      *
-     * Intended field: default_description. Callers outside this set get
-     * the primary value via the same path.
+     * Intended fields: default_title and default_description. Callers
+     * outside this set get the primary value via the same path.
      */
     function dls_seo_localized_setting(string $key): ?string
     {

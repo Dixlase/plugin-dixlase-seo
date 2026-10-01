@@ -294,4 +294,69 @@ class SeoMetaGeneratorTest extends TestCase
 
         $this->assertNotEmpty($output);
     }
+
+    /**
+     * og:title uses the default social title when one is set, instead of
+     * repeating the application name that og:site_name already carries.
+     */
+    public function test_generate_uses_default_title_for_og_title_when_set(): void
+    {
+        config(['app.name' => 'Dixlase']);
+        DixlaseSeoSetting::setValue('default_title', 'A CMS you can actually read');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/');
+
+        $this->assertStringContainsString(
+            '<meta property="og:title" content="A CMS you can actually read">',
+            $output
+        );
+    }
+
+    /**
+     * og:title falls back to the application name when the social title is
+     * empty, so installs that never touch the new field keep today's output.
+     */
+    public function test_generate_falls_back_to_app_name_for_og_title_when_default_title_empty(): void
+    {
+        config(['app.name' => 'Fallback Site']);
+        DixlaseSeoSetting::setValue('default_title', '');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/');
+
+        $this->assertStringContainsString('<meta property="og:title" content="Fallback Site">', $output);
+    }
+
+    /**
+     * twitter:title is emitted explicitly and matches og:title, rather than
+     * being left to X's og:title fallback.
+     */
+    public function test_generate_includes_twitter_title_matching_og_title(): void
+    {
+        config(['app.name' => 'Dixlase']);
+        DixlaseSeoSetting::setValue('default_title', 'Share card headline');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/');
+
+        $this->assertStringContainsString('<meta property="og:title" content="Share card headline">', $output);
+        $this->assertStringContainsString('<meta name="twitter:title" content="Share card headline">', $output);
+    }
+
+    /**
+     * og:title and og:site_name are no longer the same string once a social
+     * title is set — the regression this release exists to fix.
+     */
+    public function test_generate_og_title_differs_from_site_name_when_default_title_set(): void
+    {
+        config(['app.name' => 'Dixlase']);
+        DixlaseSeoSetting::setValue('default_title', 'Distinct headline');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/');
+
+        $this->assertStringContainsString('<meta property="og:site_name" content="Dixlase">', $output);
+        $this->assertStringContainsString('<meta property="og:title" content="Distinct headline">', $output);
+    }
 }

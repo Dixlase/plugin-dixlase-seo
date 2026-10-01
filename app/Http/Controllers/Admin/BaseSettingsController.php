@@ -67,6 +67,10 @@ class BaseSettingsController extends AdminLoggedInController
         // Provide Core site description as fallback
         $coreSiteDescription = (string) $this->baseSettingRepository->get('site_description', '');
 
+        // Application name, shown as the placeholder for the social title so
+        // the operator can see what an empty field will fall back to
+        $coreSiteName = (string) config('app.name', '');
+
         // Organization logo: resolve Media via core repository contract
         $organizationLogoMedia = null;
         if (! empty($settings['organization_logo'])) {
@@ -99,6 +103,7 @@ class BaseSettingsController extends AdminLoggedInController
             'settings' => $settings,
             'twitterCardOptions' => $twitterCardOptions,
             'coreSiteDescription' => $coreSiteDescription,
+            'coreSiteName' => $coreSiteName,
             'organizationLogoMedia' => $organizationLogoMedia,
             'defaultOgpImageMedia' => $defaultOgpImageMedia,
         ]));
