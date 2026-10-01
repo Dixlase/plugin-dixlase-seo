@@ -123,7 +123,8 @@ class SeoMetaGenerator
         // OGP tags
         $lines[] = '<meta property="og:type" content="'.e($settings['ogp_type'] ?? 'website').'">';
         $lines[] = '<meta property="og:url" content="'.e($url).'">';
-        $lines[] = '<meta property="og:title" content="'.e($this->buildTitle()).'">';
+        $title = $this->buildTitle();
+        $lines[] = '<meta property="og:title" content="'.e($title).'">';
 
         if ($description) {
             $lines[] = '<meta property="og:description" content="'.e($description).'">';
@@ -144,6 +145,11 @@ class SeoMetaGenerator
             $lines[] = '<meta name="twitter:site" content="@'.e($twitterSite).'">';
         }
 
+        // Emit twitter:title explicitly for the same reason as twitter:image
+        // below: X does fall back to og:title, but relying on that fallback
+        // leaves the card at the mercy of how the crawler resolves tags.
+        $lines[] = '<meta name="twitter:title" content="'.e($title).'">';
+
         // Emit twitter:image explicitly (reusing the resolved OGP image) rather
         // than relying on X's og:image fallback, so the card image is
         // deterministic regardless of how the crawler resolves tags.
@@ -159,10 +165,27 @@ class SeoMetaGenerator
     }
 
     /**
-     * Build the site title
+     * Resolve the OGP / social title for the current request locale.
+     *
+     * Precedence:
+     *   1. The site-wide default social title, resolved through
+     *      dls_seo_localized_setting() so the multilingual overlay for the
+     *      request locale wins over the primary-locale value.
+     *   2. The application name, which is what every install emitted before
+     *      this setting existed, so an empty field changes nothing.
+     *
+     * Deliberately distinct from og:site_name: the site name answers "which
+     * site is this", the title answers "what is this page about", and a share
+     * card that repeats one string twice answers neither.
      */
     private function buildTitle(): string
     {
+        $title = (string) (dls_seo_localized_setting('default_title') ?? '');
+
+        if ($title !== '') {
+            return $title;
+        }
+
         return config('app.name', '');
     }
 

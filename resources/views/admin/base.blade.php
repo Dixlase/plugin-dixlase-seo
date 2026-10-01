@@ -52,6 +52,16 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
             </div>
 
             <div>
+                <x-form-label for="default_title" :text="__('dixlase-seo::admin/dixlase-seo/base.default_title')" class="mb-1" />
+                <x-form-text
+                    name="default_title"
+                    :value="old('default_title', $settings['default_title'] ?? '')"
+                    :placeholder="$coreSiteName"
+                />
+                <x-form-help-text :text="__('dixlase-seo::admin/dixlase-seo/base.default_title_help')" />
+            </div>
+
+            <div>
                 <x-form-label for="default_description" :text="__('dixlase-seo::admin/dixlase-seo/base.default_description')" class="mb-1" />
                 <x-form-textarea
                     name="default_description"

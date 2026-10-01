@@ -38,7 +38,7 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 
 /**
  * Primary-locale value source for the DixlaseSEO plugin's translatable
- * site-wide settings (currently `default_description`).
+ * site-wide settings (currently `default_title` and `default_description`).
  *
  * Registered in plugin.json as the `provider` for the
  * `dixlase-seo:settings` singleton type. DixlaseMultilingual calls this

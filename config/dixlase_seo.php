@@ -44,6 +44,9 @@ return [
     // Title separator
     'title_separator' => '|',
 
+    // Default OGP / social title. Falls back to the application name when empty.
+    'default_title' => '',
+
     // Default meta description
     'default_description' => '',
 

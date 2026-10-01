@@ -42,6 +42,8 @@ return [
     // Basic settings
     'title_separator' => 'タイトル区切り文字',
     'title_separator_help' => 'ページタイトルとサイト名の間に表示される区切り文字です。例: ページ名 | サイト名',
+    'default_title' => 'デフォルトのSNSタイトル',
+    'default_title_help' => 'シェアカード（og:title および X）で使用される見出しです。空の場合はサイト名が使用されます。省略されないよう全角30文字程度までを目安にしてください。',
     'default_description' => 'デフォルトのメタディスクリプション',
     'default_description_help' => '個別にディスクリプションが設定されていないページで使用されるデフォルトの説明文です。',
 

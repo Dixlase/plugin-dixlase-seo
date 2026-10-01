@@ -2,7 +2,7 @@
     "name": "Dixlase SEO",
     "package_name": "dixlase/dixlase-seo",
     "slug": "dixlase-seo",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": {
         "en": "SEO optimization plugin for Dixlase. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
         "ja": "Dixlase用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
@@ -46,6 +46,11 @@
                 "provider": "Plugins\\DixlaseSEO\\App\\Multilingual\\SeoSettingsProvider",
                 "label_key": "dixlase-seo::multilingual_types.settings",
                 "fields": [
+                    {
+                        "name": "default_title",
+                        "type": "text",
+                        "rules": "nullable|string|max:100"
+                    },
                     {
                         "name": "default_description",
                         "type": "textarea",
