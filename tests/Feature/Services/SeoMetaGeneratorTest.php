@@ -32,8 +32,11 @@
 
 namespace Plugins\DixlaseSEO\Tests\Feature\Services;
 
+use App\Contracts\Repositories\MediaRepositoryInterface;
+use App\Models\Media;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
+use Plugins\DixlaseSEO\App\Services\SeoContext;
 use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
 use Tests\TestCase;
 
@@ -358,5 +361,187 @@ class SeoMetaGeneratorTest extends TestCase
 
         $this->assertStringContainsString('<meta property="og:site_name" content="Dixlase">', $output);
         $this->assertStringContainsString('<meta property="og:title" content="Distinct headline">', $output);
+    }
+
+    /**
+     * Build a media repository that resolves only the given id => path pairs
+     * and returns null for anything else, so a candidate whose media row is
+     * missing falls through to the next step of the chain.
+     *
+     * @param  array<int, string>  $paths
+     */
+    private function mediaRepositoryFor(array $paths): MediaRepositoryInterface
+    {
+        $repository = $this->createMock(MediaRepositoryInterface::class);
+        $repository->method('find')->willReturnCallback(
+            function (int $id) use ($paths): ?Media {
+                if (! isset($paths[$id])) {
+                    return null;
+                }
+
+                $media = new Media;
+                $media->path = $paths[$id];
+
+                return $media;
+            }
+        );
+
+        return $repository;
+    }
+
+    /**
+     * The image the editor picked for the entity wins over every other
+     * source, and twitter:image matches it.
+     */
+    public function test_generate_uses_entity_ogp_media_for_image(): void
+    {
+        DixlaseSeoSetting::setValue('default_ogp_image', 'https://example.com/site-wide.jpg');
+
+        app(SeoContext::class)->setOgpMediaId(11);
+
+        $generator = new SeoMetaGenerator(null, $this->mediaRepositoryFor([11 => 'entity.jpg']));
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:image" content="'.asset('storage/media/entity.jpg').'">', $output);
+        $this->assertStringContainsString('<meta name="twitter:image" content="'.asset('storage/media/entity.jpg').'">', $output);
+        $this->assertStringNotContainsString('site-wide.jpg', $output);
+    }
+
+    /**
+     * With no image on the entity, the caller-supplied fallback is used —
+     * the step a blog post's featured image occupies.
+     */
+    public function test_generate_uses_fallback_ogp_media_when_entity_has_none(): void
+    {
+        DixlaseSeoSetting::setValue('default_ogp_image', 'https://example.com/site-wide.jpg');
+
+        app(SeoContext::class)->setFallbackOgpMediaId(22);
+
+        $generator = new SeoMetaGenerator(null, $this->mediaRepositoryFor([22 => 'featured.jpg']));
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:image" content="'.asset('storage/media/featured.jpg').'">', $output);
+        $this->assertStringNotContainsString('site-wide.jpg', $output);
+    }
+
+    /**
+     * The entity's image still wins when a fallback is also present.
+     */
+    public function test_generate_prefers_entity_ogp_media_over_fallback(): void
+    {
+        $context = app(SeoContext::class);
+        $context->setOgpMediaId(11);
+        $context->setFallbackOgpMediaId(22);
+
+        $generator = new SeoMetaGenerator(null, $this->mediaRepositoryFor([
+            11 => 'entity.jpg',
+            22 => 'featured.jpg',
+        ]));
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString(asset('storage/media/entity.jpg'), $output);
+        $this->assertStringNotContainsString('featured.jpg', $output);
+    }
+
+    /**
+     * With neither an entity image nor a fallback, the site-wide setting
+     * applies — the behaviour every page had before this change.
+     */
+    public function test_generate_falls_back_to_site_wide_ogp_image(): void
+    {
+        DixlaseSeoSetting::setValue('default_ogp_image', 'https://example.com/site-wide.jpg');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:image" content="https://example.com/site-wide.jpg">', $output);
+    }
+
+    /**
+     * A candidate whose media row no longer exists does not produce an empty
+     * og:image — the chain continues to the next source.
+     */
+    public function test_generate_skips_unresolvable_media_and_continues_the_chain(): void
+    {
+        DixlaseSeoSetting::setValue('default_ogp_image', 'https://example.com/site-wide.jpg');
+
+        app(SeoContext::class)->setOgpMediaId(999);
+
+        // The repository resolves nothing, so id 999 yields no URL.
+        $generator = new SeoMetaGenerator(null, $this->mediaRepositoryFor([]));
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:image" content="https://example.com/site-wide.jpg">', $output);
+    }
+
+    /**
+     * With no image anywhere, the bundled default keeps the tag non-empty.
+     */
+    public function test_generate_falls_back_to_bundled_image_when_nothing_is_set(): void
+    {
+        DixlaseSeoSetting::setValue('default_ogp_image', '');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('assets/images/default-ogp.png', $output);
+    }
+
+    /**
+     * The page's own title wins over the site-wide social title, for both
+     * og:title and twitter:title.
+     */
+    public function test_generate_uses_entity_title_for_og_title(): void
+    {
+        config(['app.name' => 'Dixlase']);
+        DixlaseSeoSetting::setValue('default_title', 'Site-wide social title');
+
+        app(SeoContext::class)->setTitle('This page only');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:title" content="This page only">', $output);
+        $this->assertStringContainsString('<meta name="twitter:title" content="This page only">', $output);
+        $this->assertStringNotContainsString('Site-wide social title', $output);
+    }
+
+    /**
+     * Without a page title the site-wide chain still applies.
+     */
+    public function test_generate_falls_back_to_site_wide_title_without_entity_title(): void
+    {
+        DixlaseSeoSetting::setValue('default_title', 'Site-wide social title');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:title" content="Site-wide social title">', $output);
+    }
+
+    /**
+     * The page's own OGP type wins over the ogp_type setting.
+     */
+    public function test_generate_uses_entity_og_type(): void
+    {
+        DixlaseSeoSetting::setValue('ogp_type', 'website');
+
+        app(SeoContext::class)->setOgType('article');
+
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:type" content="article">', $output);
+    }
+
+    /**
+     * Without a page type the setting applies.
+     */
+    public function test_generate_falls_back_to_site_wide_og_type(): void
+    {
+        $generator = new SeoMetaGenerator;
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:type" content="website">', $output);
     }
 }

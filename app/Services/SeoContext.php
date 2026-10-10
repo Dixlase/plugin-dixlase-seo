@@ -33,21 +33,35 @@
 namespace Plugins\DixlaseSEO\App\Services;
 
 /**
- * Request-scoped holder for the meta description of the content currently
- * being rendered.
+ * Request-scoped holder for the SEO meta of the content currently being
+ * rendered.
  *
  * A front-end view (e.g. DixlasePages / DixlaseLegal `front/page.blade.php`)
- * resolves its own meta description for the current locale and hands the
- * final string to SEO via the `dls_seo_set_page_meta()` helper.
- * SeoMetaGenerator then emits it when building the `<head>` instead of the
- * site-wide default.
+ * hands its own values to SEO via the `dls_seo_set_page_meta()` helper.
+ * SeoMetaGenerator then emits them when building the `<head>` instead of the
+ * site-wide defaults.
  *
  * Registered as a container singleton, so it lives for the duration of one
- * request and is empty by default (site-wide default description applies).
+ * request and is empty by default (the site-wide settings apply).
+ *
+ * Every slot is optional and independent: a page that sets only a description
+ * still gets the site-wide image, title and OGP type.
  */
 class SeoContext
 {
     private ?string $description = null;
+
+    private ?string $title = null;
+
+    private ?int $ogpMediaId = null;
+
+    private ?int $fallbackOgpMediaId = null;
+
+    private ?string $ogType = null;
+
+    private ?string $entityPluginSlug = null;
+
+    private ?string $entityId = null;
 
     public function setDescription(?string $description): void
     {
@@ -57,5 +71,82 @@ class SeoContext
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    /**
+     * The rendered page's own title, already resolved for the request locale
+     * by the caller. Takes precedence over the site-wide `default_title`.
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Media id the editor picked for this entity, read from the SEO meta
+     * table. The first candidate for `og:image` / `twitter:image`.
+     */
+    public function setOgpMediaId(?int $ogpMediaId): void
+    {
+        $this->ogpMediaId = $ogpMediaId;
+    }
+
+    public function getOgpMediaId(): ?int
+    {
+        return $this->ogpMediaId;
+    }
+
+    /**
+     * Media id to use when the entity has no SEO image of its own — for
+     * instance a blog post's featured image. Tried after `ogpMediaId` and
+     * before the site-wide `default_ogp_image`.
+     */
+    public function setFallbackOgpMediaId(?int $fallbackOgpMediaId): void
+    {
+        $this->fallbackOgpMediaId = $fallbackOgpMediaId;
+    }
+
+    public function getFallbackOgpMediaId(): ?int
+    {
+        return $this->fallbackOgpMediaId;
+    }
+
+    /**
+     * OGP type for this page (e.g. `article` for a blog post). Takes
+     * precedence over the site-wide `ogp_type` setting.
+     */
+    public function setOgType(?string $ogType): void
+    {
+        $this->ogType = $ogType;
+    }
+
+    public function getOgType(): ?string
+    {
+        return $this->ogType;
+    }
+
+    /**
+     * Record which entity is being rendered, so anything building the
+     * `<head>` can identify it without deriving it from the route again.
+     */
+    public function setEntity(?string $pluginSlug, ?string $entityId): void
+    {
+        $this->entityPluginSlug = $pluginSlug;
+        $this->entityId = $entityId;
+    }
+
+    public function getEntityPluginSlug(): ?string
+    {
+        return $this->entityPluginSlug;
+    }
+
+    public function getEntityId(): ?string
+    {
+        return $this->entityId;
     }
 }
