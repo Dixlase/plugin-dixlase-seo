@@ -62,6 +62,14 @@ class SeoMetaGeneratorTest extends TestCase
             '--realpath' => true,
         ]);
 
+
+        // This suite does not boot the plugin's service provider, which is
+        // what registers SeoContext as a singleton. Without an explicit
+        // binding the container hands out a fresh object on every resolve, so
+        // nothing the helper or a test puts in the context would be visible
+        // to the generator. Production is unaffected — the provider binds it.
+        app()->instance(SeoContext::class, new SeoContext());
+
         $this->generator = new SeoMetaGenerator;
     }
 
