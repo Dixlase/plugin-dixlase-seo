@@ -70,20 +70,23 @@ class DlsSeoSetPageMetaTest extends TestCase
      */
     private function stubPage(string $id = '42'): Model
     {
-        return new class($id) extends Model
+        $page = new class extends Model
         {
             protected $table = 'dls_seo_stub_pages';
 
-            public function __construct(private string $stubKey = '42')
-            {
-                parent::__construct();
-            }
+            // A declared property, so Eloquent's __get/__set magic does not
+            // turn it into an attribute.
+            public string $stubKey = '42';
 
             public function getKey(): string
             {
                 return $this->stubKey;
             }
         };
+
+        $page->stubKey = $id;
+
+        return $page;
     }
 
     /**
