@@ -83,11 +83,7 @@ class SeoMetaGenerator
      */
     private function resolveDescription(): string
     {
-        try {
-            $explicit = app(SeoContext::class)->getDescription();
-        } catch (\Throwable) {
-            $explicit = null;
-        }
+        $explicit = $this->context()?->getDescription();
 
         if (is_string($explicit) && $explicit !== '') {
             return $explicit;
@@ -121,7 +117,7 @@ class SeoMetaGenerator
         $lines[] = '<link rel="canonical" href="'.e($url).'">';
 
         // OGP tags
-        $lines[] = '<meta property="og:type" content="'.e($settings['ogp_type'] ?? 'website').'">';
+        $lines[] = '<meta property="og:type" content="'.e($this->resolveOgType($settings)).'">';
         $lines[] = '<meta property="og:url" content="'.e($url).'">';
         $title = $this->buildTitle();
         $lines[] = '<meta property="og:title" content="'.e($title).'">';
@@ -130,8 +126,7 @@ class SeoMetaGenerator
             $lines[] = '<meta property="og:description" content="'.e($description).'">';
         }
 
-        $ogpImageValue = $settings['default_ogp_image'] ?? '';
-        $ogpImageUrl = $this->resolveMediaUrl($ogpImageValue) ?: url('assets/images/default-ogp.png');
+        $ogpImageUrl = $this->resolveOgpImageUrl($settings);
         $lines[] = '<meta property="og:image" content="'.e($ogpImageUrl).'">';
 
         $lines[] = '<meta property="og:site_name" content="'.e(config('app.name', '')).'">';
@@ -168,10 +163,13 @@ class SeoMetaGenerator
      * Resolve the OGP / social title for the current request locale.
      *
      * Precedence:
-     *   1. The site-wide default social title, resolved through
+     *   1. The rendered page's own title, when a front view handed one over
+     *      via dls_seo_set_page_meta() — already resolved for the request
+     *      locale by the caller.
+     *   2. The site-wide default social title, resolved through
      *      dls_seo_localized_setting() so the multilingual overlay for the
      *      request locale wins over the primary-locale value.
-     *   2. The application name, which is what every install emitted before
+     *   3. The application name, which is what every install emitted before
      *      this setting existed, so an empty field changes nothing.
      *
      * Deliberately distinct from og:site_name: the site name answers "which
@@ -180,6 +178,12 @@ class SeoMetaGenerator
      */
     private function buildTitle(): string
     {
+        $entityTitle = (string) ($this->context()?->getTitle() ?? '');
+
+        if ($entityTitle !== '') {
+            return $entityTitle;
+        }
+
         $title = (string) (dls_seo_localized_setting('default_title') ?? '');
 
         if ($title !== '') {
@@ -187,6 +191,75 @@ class SeoMetaGenerator
         }
 
         return config('app.name', '');
+    }
+
+    /**
+     * Resolve the request-scoped SEO context, or null when it is unavailable
+     * (plugin disabled, console command, no container binding).
+     */
+    private function context(): ?SeoContext
+    {
+        try {
+            return app(SeoContext::class);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * Resolve the OGP type for this request.
+     *
+     * The page's own type (e.g. `article` for a blog post) wins over the
+     * site-wide `ogp_type` setting.
+     *
+     * @param  array<string, mixed>  $settings
+     */
+    private function resolveOgType(array $settings): string
+    {
+        $entityType = (string) ($this->context()?->getOgType() ?? '');
+
+        if ($entityType !== '') {
+            return $entityType;
+        }
+
+        return (string) ($settings['ogp_type'] ?? 'website');
+    }
+
+    /**
+     * Resolve the share-card image URL, trying each source in turn:
+     *
+     *   1. The image the editor picked for this entity (`ogp_media_id` in
+     *      the SEO meta table).
+     *   2. A caller-supplied fallback for entities that have no SEO image
+     *      of their own — a blog post's featured image, for instance.
+     *   3. The site-wide `default_ogp_image` setting.
+     *   4. The image bundled with this plugin, so the tag is never empty.
+     *
+     * A candidate that does not resolve to a URL (a media row that was
+     * deleted, say) falls through to the next one rather than emitting an
+     * empty `og:image`.
+     *
+     * @param  array<string, mixed>  $settings
+     */
+    private function resolveOgpImageUrl(array $settings): string
+    {
+        $context = $this->context();
+
+        $candidates = [
+            $context?->getOgpMediaId(),
+            $context?->getFallbackOgpMediaId(),
+            $settings['default_ogp_image'] ?? '',
+        ];
+
+        foreach ($candidates as $candidate) {
+            $url = $this->resolveMediaUrl($candidate);
+
+            if ($url !== '') {
+                return $url;
+            }
+        }
+
+        return url('assets/images/default-ogp.png');
     }
 
     /**

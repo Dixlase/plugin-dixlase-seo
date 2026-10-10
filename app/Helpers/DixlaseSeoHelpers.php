@@ -38,26 +38,50 @@ use Plugins\DixlaseSEO\App\Services\SeoContext;
 
 if (! function_exists('dls_seo_set_page_meta')) {
     /**
-     * Resolve a content page's meta description for the current locale and
-     * hand it to SEO so SeoMetaGenerator emits it in the `<head>` instead
-     * of the site-wide default.
+     * Hand a content page's own SEO meta to SEO so SeoMetaGenerator emits it
+     * in the `<head>` instead of the site-wide defaults.
      *
-     * Resolution: the page's `seo_description` translation for the current
+     * Description: the page's `seo_description` translation for the current
      * locale (stored under the page's own translation morph and edited in
      * the central translation manager alongside title/content), falling
      * back to the primary value stored in the SEO meta table (authored in
      * the page editor). Empty results leave the site-wide default to apply.
+     *
+     * OGP image: the `ogp_media_id` the editor picked for this entity, read
+     * from the same SEO meta table. Needs no argument — a caller that still
+     * passes only `$page` and `$pluginSlug` gets its per-page image.
+     *
+     * The remaining arguments are optional, so every existing two-argument
+     * call keeps working unchanged; pass them by name:
+     *
+     *     dls_seo_set_page_meta($post, 'dixlase-blog',
+     *         title: $post->title,
+     *         fallbackOgpMediaId: $post->featured_media_id,
+     *         ogType: 'article',
+     *     );
      *
      * Called from a front view (e.g. `front/page.blade.php`) before the
      * layout's `<head>` is rendered. No-op and never throws when the SEO
      * plugin or its context is unavailable.
      *
      * @param  Model  $page  A TranslatableTrait model (DixlasePagesPage / DixlaseLegalPage)
+     * @param  string  $pluginSlug  Slug of the plugin that owns the entity
+     * @param  string|null  $title  The page's title in the current locale, for `og:title`
+     * @param  int|null  $fallbackOgpMediaId  Image to use when the entity has no SEO image of its own
+     * @param  string|null  $ogType  OGP type for this page, e.g. `article`
      */
-    function dls_seo_set_page_meta(Model $page, string $pluginSlug): void
-    {
+    function dls_seo_set_page_meta(
+        Model $page,
+        string $pluginSlug,
+        ?string $title = null,
+        ?int $fallbackOgpMediaId = null,
+        ?string $ogType = null,
+    ): void {
         try {
             $locale = app()->getLocale();
+            $context = app(SeoContext::class);
+
+            $context->setEntity($pluginSlug, (string) $page->getKey());
 
             // Per-locale translation (no column fallback — primary lives in
             // the SEO meta table, not on the page).
@@ -69,16 +93,39 @@ if (! function_exists('dls_seo_set_page_meta')) {
                 }
             }
 
-            // Fall back to the primary-locale value from the SEO meta table.
-            if ($description === null && app()->bound(SeoMetaProviderInterface::class)) {
+            // Read the entity's stored meta once. This is not gated on the
+            // description being empty: the row also carries the OGP image,
+            // which is needed whether or not a translation supplied the
+            // description.
+            $meta = null;
+            if (app()->bound(SeoMetaProviderInterface::class)) {
                 $meta = app(SeoMetaProviderInterface::class)->getMeta($pluginSlug, (string) $page->getKey());
-                if ($meta !== null && is_string($meta->description) && $meta->description !== '') {
-                    $description = $meta->description;
-                }
+            }
+
+            // Fall back to the primary-locale value from the SEO meta table.
+            if ($description === null && $meta !== null
+                && is_string($meta->description) && $meta->description !== '') {
+                $description = $meta->description;
             }
 
             if ($description !== null) {
-                app(SeoContext::class)->setDescription($description);
+                $context->setDescription($description);
+            }
+
+            if ($meta !== null && $meta->ogpMediaId !== null) {
+                $context->setOgpMediaId((int) $meta->ogpMediaId);
+            }
+
+            if ($title !== null && $title !== '') {
+                $context->setTitle($title);
+            }
+
+            if ($fallbackOgpMediaId !== null) {
+                $context->setFallbackOgpMediaId($fallbackOgpMediaId);
+            }
+
+            if ($ogType !== null && $ogType !== '') {
+                $context->setOgType($ogType);
             }
         } catch (\Throwable) {
             // SEO context not bound (plugin disabled / console) — ignore.
