@@ -2,7 +2,7 @@
     "name": "Dixlase SEO",
     "package_name": "dixlase/dixlase-seo",
     "slug": "dixlase-seo",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": {
         "en": "SEO optimization plugin for Dixlase. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
         "ja": "Dixlase用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
@@ -135,8 +135,8 @@
         "middleware": true
     },
     "files": {
-        "CHANGELOG.ja.md": "sha256:e929c8650b6a82ce911f99c050aa8c41908c28ee2a64ae0f119cdeee99867ebd",
-        "CHANGELOG.md": "sha256:22d326ac8ca61a47bb17176ac5f02fd06265bea861bba32ab8003dc364967a20",
+        "CHANGELOG.ja.md": "sha256:e5fd4a0b941be0ee4c35d061a0d20c18d8fa18fb728ece0325e50f3ccdc0e5ec",
+        "CHANGELOG.md": "sha256:3c3b98394472638eca2757b986891d1c2c2e0acdc45780fa486aed0a9b96bc2f",
         "CONTRIBUTING.ja.md": "sha256:9f42b9eb016487f6df95953ac3ebf7da1661f0f8e5c52f537d7e56c7e54373b9",
         "CONTRIBUTING.md": "sha256:ed2ed0e9f3945bc73649e0e860a68ff5a8770e64e07f902b16ddd11b767e8ef3",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -150,7 +150,7 @@
         "README.md": "sha256:cb3d5d133c70ba69b100a39ddf778ce0a69da8d09e0dfa07681e671a4ea79ec3",
         "SECURITY.ja.md": "sha256:bbf3bd32a485c54a6730495d2d1a8de02fb2e4905c7fdccdcbe2b530ae813763",
         "SECURITY.md": "sha256:07a4dfaccdff21a6a2a7ae01982ca987e95356b7076a5c86455ea39ad7695038",
-        "app/Helpers/DixlaseSeoHelpers.php": "sha256:0090ce8d2401d3a2e5e53bb1c2c1463f04022d3afaf90331a01c98d04f2e4c25",
+        "app/Helpers/DixlaseSeoHelpers.php": "sha256:453376251866949f0847f0409b3c1c7ae8e99c0759a548451588ae552fbd6e23",
         "app/Http/Controllers/Admin/BaseSettingsController.php": "sha256:4e54e5a96445f62f91535f559e3c91a4de75edd35c9597687a530f31cf2d7026",
         "app/Http/Controllers/Admin/ExternalSettingsController.php": "sha256:9be07d5ed9bdad63b32ac4e946373d41fe432b7baddf1469ee9f0c66fec46b58",
         "app/Http/Controllers/Admin/IntegrationsController.php": "sha256:f9bb76f57378a7c16c2317f5f9f2ef91ac63401b7205243866f7be53dcbc8e8a",
@@ -168,10 +168,10 @@
         "app/Providers/DixlaseSEOServiceProvider.php": "sha256:9891c8653707842ec490d9f02af4c52933d98a0c6af14c17b193ded3db9ee8a0",
         "app/Services/DixlaseSeoMetaProvider.php": "sha256:f58c39b5c6c169500707acca0c754320af26619ea4f334c8d6781b9a103b5c08",
         "app/Services/JsonLdGenerator.php": "sha256:af66f8724c0dea203598682997aacc17ea2c13751dedba16a2b80b7254792543",
-        "app/Services/SeoContext.php": "sha256:1852d12f199cf0abfac7316c969b007f7395d9087ca9ac8fd5c6094921af3a85",
-        "app/Services/SeoMetaGenerator.php": "sha256:8885a08301f4e91f615d53467064e1ef7327d25190899eef514d4415eb792930",
+        "app/Services/SeoContext.php": "sha256:dd2f2a01a98388df9ec8b92c1db0a0e62288eb0cfc7c26b759f7146b7e1c3aff",
+        "app/Services/SeoMetaGenerator.php": "sha256:0a8b1f4354c00f111af5f46c708a3731a0f07362aee009ec05abeacdf7db8759",
         "app/Services/SitemapGenerator.php": "sha256:bed14a49b9b71254f02d4fbad072d7c6b5c92b86b567eb9376557c24a01be25d",
-        "composer.json": "sha256:ce6d43d9b5e09cbc5961b92ae864d1b0c75b7c724328d6caedc4dfd31f9d9187",
+        "composer.json": "sha256:2a04373be20470dfcf66c38fcec9664a33570c050e48ba3b2eec0c0d73de85bb",
         "config/admin.php": "sha256:043a00086e4fe4cd2faf4350bfcc1a200c6b3b585ce94ae7331628d126039d31",
         "config/admin/database-cleanup.php": "sha256:a9fa65ba14aaff1096172d9807f90dbde4f7262d4e6ccc95669963b156e48fd9",
         "config/admin/navigation.php": "sha256:ee1974bc2ea0ecafad4d8a5bd379d52a7f77369cd0aaa465fa29eaee42885afd",
@@ -200,8 +200,8 @@
         "lang/ja/dixlase_seo.php": "sha256:cb6ae0715626dfcbc0808dca388978dc682fcf593351fe04000e3255aaa4ca4f",
         "lang/ja/multilingual_types.php": "sha256:780f3e8bb795a88712fd1860683eb3f55ed1876d15ae786214187c55398fe47a",
         "lisence-info.json": "sha256:062f7101e48f5976f66dc01627fffd8d8e6d6d0709aaca63c5001ba08fe4e7a3",
-        "package-lock.json": "sha256:fc8d80d354836b4f23d49dc7c3a5cd939832d0f8ab1cf6716479dd7a0bb145b8",
-        "package.json": "sha256:803f97c60488512a5d1ad9fae4cb8f0106e9b29c755adce439335ca2663ed69f",
+        "package-lock.json": "sha256:af3a7f608a4db5a668692162644dd73a1bc3c50c34fcc46e9e91d31bd5d72541",
+        "package.json": "sha256:d7427b507fe5584cfc3401785f1406de1cb1a705385f4573b3d9067774022e18",
         "phpunit.xml": "sha256:ffe4d2ee99b82670f68f9cb98c7f7b36693ce160cfc377e9e023b83c56cc7239",
         "resources/ai/custom-rules-en.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "resources/ai/custom-rules-ja.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -252,10 +252,11 @@
         "tests/Feature/Controllers/RobotsTxtControllerTest.php": "sha256:54f6e1718ee75b59c76059bb231857c583f615907e83a8bcea52bde4e00ef5fa",
         "tests/Feature/Controllers/SitemapControllerTest.php": "sha256:ff2e27220cfb4558bb99e6aec4668ac02845155df86339e504b54aa816aaf4ba",
         "tests/Feature/ExampleTest.php": "sha256:110c681111103513761f063eb7263f06fe7ae2ab0fa68d348596f707b3dacb71",
+        "tests/Feature/Helpers/DlsSeoSetPageMetaTest.php": "sha256:0c10f5ac7beace7742139cf1fbf8ad8f1507eba712d6b2389c7d29297eb912b2",
         "tests/Feature/Models/DixlaseSeoSettingMissingTableTest.php": "sha256:db088813c47fd310ef893f3dd3619937a813cf326d28c5725c4906414573967a",
         "tests/Feature/Models/DixlaseSeoSettingTest.php": "sha256:e1e8a31f87318e4b3b8598ff4c255e0ca6d61c2d3eeab19a29a34b23c207a929",
         "tests/Feature/Services/JsonLdGeneratorTest.php": "sha256:ea405d2a635a1e0ceaf7122336808713303df40cf0073b7f93ca5f373ea3e982",
-        "tests/Feature/Services/SeoMetaGeneratorTest.php": "sha256:d02e9f84a2060bdbea11e71d0448faf41dd8526b95a3141e907703127118ae52",
+        "tests/Feature/Services/SeoMetaGeneratorTest.php": "sha256:164cffc8285ed29e6b13090eb01998fbd2c08c1186f2bd71376a0fd1c7e1bb89",
         "tests/Unit/ExampleTest.php": "sha256:a0d50ee6db9939de9674ccc64d4bd0c0f8030c3e271217dfcee22e76502ff69f",
         "tests/Unit/Http/Middleware/InjectSeoMetaTagsConsentGateTest.php": "sha256:81f82df34ade9c66a1db8f9c5fb421ac07c89180acd53e6630d30e05bbea026d",
         "tests/Unit/VersionManifestConsistencyTest.php": "sha256:85e01423ae78557d0d2b89ab8026c162570ff7be1fdc6a22f53454b52e9a9b59",
@@ -265,6 +266,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-10-01T09:19:09+00:00"
+        "signed_at": "2026-10-11T11:53:51+00:00"
     }
 }

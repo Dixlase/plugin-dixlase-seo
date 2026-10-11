@@ -5,6 +5,27 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.0] — 2026-10-11
+
+### Added
+
+- Each page now emits its own OGP image, title and type, instead of falling back
+  to the site-wide values for every page (#42).
+
+### Fixed
+
+- Re-signed. The signature no longer matched the tree, so sites reported the plugin
+  as `signature_invalid` and deducted from its health score. Changes had reached
+  `main` through pull-request merges, which do not run the local signing hook.
+
+### Changed
+
+- Built front-end assets are no longer tracked in git; the release build produces
+  them (#36).
+- CI and dependency maintenance: `source-map-js` 1.2.1 → 1.2.2 (#39), the dead
+  `COMPOSER_AUTH` block removed (#38), and the checkout token no longer passed as
+  a secret (#40).
+
 ## [0.1.2] — 2026-10-01
 
 ### Changed
