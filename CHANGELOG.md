@@ -5,6 +5,20 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.1] — 2026-10-12
+
+### Fixed
+
+- The first item under "SEO Management" in the admin menu now reads "SEO Base Settings"
+  instead of "Base Settings", so it says what it configures (#48, fixes #47).
+
+### Development
+
+- A smoke test opens every admin GET route of the plugin as the admin and the editor
+  role and checks that none returns a server error (#44, fixes #43).
+- Tests that only configure return values use test stubs instead of mocks, which clears
+  nine PHPUnit notices (#46, fixes #45).
+
 ## [0.2.0] — 2026-10-11
 
 ### Added
