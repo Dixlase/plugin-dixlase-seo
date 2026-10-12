@@ -33,7 +33,7 @@
 return [
     'dixlase-seo' => [
         'text' => 'SEO管理',
-        'base' => '基本設定',
+        'base' => 'SEO基本設定',
         'sitemap' => 'サイトマップ',
         'external' => '外部サービス連携',
         'integrations' => 'プラグイン連携',
