@@ -33,7 +33,7 @@
 return [
     'dixlase-seo' => [
         'text' => 'SEO Management',
-        'base' => 'Base Settings',
+        'base' => 'SEO Base Settings',
         'sitemap' => 'Sitemap',
         'external' => 'External Services',
         'integrations' => 'Plugin Integrations',
