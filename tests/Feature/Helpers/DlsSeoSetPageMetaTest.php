@@ -94,7 +94,7 @@ class DlsSeoSetPageMetaTest extends TestCase
      */
     private function bindMeta(?SeoMetaDTO $meta): void
     {
-        $provider = $this->createMock(SeoMetaProviderInterface::class);
+        $provider = $this->createStub(SeoMetaProviderInterface::class);
         $provider->method('getMeta')->willReturn($meta);
 
         app()->instance(SeoMetaProviderInterface::class, $provider);
