@@ -380,7 +380,7 @@ class SeoMetaGeneratorTest extends TestCase
      */
     private function mediaRepositoryFor(array $paths): MediaRepositoryInterface
     {
-        $repository = $this->createMock(MediaRepositoryInterface::class);
+        $repository = $this->createStub(MediaRepositoryInterface::class);
         $repository->method('find')->willReturnCallback(
             function (int $id) use ($paths): ?Media {
                 if (! isset($paths[$id])) {
