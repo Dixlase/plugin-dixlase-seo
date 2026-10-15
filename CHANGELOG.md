@@ -5,6 +5,14 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.2] — 2026-10-16
+
+### Development
+
+- A self-audit test replays the admin plugin audit's own checks: it fails when a
+  permission declared in `plugin.json` does not match the code, or when a view breaks
+  the CSP strict mode (#52, fixes #51). No runtime code changed.
+
 ## [0.2.1] — 2026-10-12
 
 ### Fixed

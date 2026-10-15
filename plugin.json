@@ -2,7 +2,7 @@
     "name": "Dixlase SEO",
     "package_name": "dixlase/dixlase-seo",
     "slug": "dixlase-seo",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": {
         "en": "SEO optimization plugin for Dixlase. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
         "ja": "Dixlase用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
@@ -135,8 +135,8 @@
         "middleware": true
     },
     "files": {
-        "CHANGELOG.ja.md": "sha256:332b050e7f62239669b66e85a72216245d143653648eb9e9f499b7afc33620f0",
-        "CHANGELOG.md": "sha256:8d2fbbd4a858ec4be26dc868b4fc8cb22372446c5b15f39814fe3ea469181dee",
+        "CHANGELOG.ja.md": "sha256:97742e80bf4e8357cafef39300aeb784b544a9561aeeb4ad8025fb0a57b4d7ba",
+        "CHANGELOG.md": "sha256:6a2ce41ab9a2a1da46e37e0d6c7ca6b07ad8ad161ea15159868fe4b647ad7f7a",
         "CONTRIBUTING.ja.md": "sha256:9f42b9eb016487f6df95953ac3ebf7da1661f0f8e5c52f537d7e56c7e54373b9",
         "CONTRIBUTING.md": "sha256:ed2ed0e9f3945bc73649e0e860a68ff5a8770e64e07f902b16ddd11b767e8ef3",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -171,7 +171,7 @@
         "app/Services/SeoContext.php": "sha256:dd2f2a01a98388df9ec8b92c1db0a0e62288eb0cfc7c26b759f7146b7e1c3aff",
         "app/Services/SeoMetaGenerator.php": "sha256:0a8b1f4354c00f111af5f46c708a3731a0f07362aee009ec05abeacdf7db8759",
         "app/Services/SitemapGenerator.php": "sha256:bed14a49b9b71254f02d4fbad072d7c6b5c92b86b567eb9376557c24a01be25d",
-        "composer.json": "sha256:2e24a7ce8eb105993a7a21a0c19df916c24c295319234e57aba324c46ed4d535",
+        "composer.json": "sha256:1f6cbd4393e156521f6ec6166da02e1f82078719bc275d05c36a481306921ad9",
         "config/admin.php": "sha256:043a00086e4fe4cd2faf4350bfcc1a200c6b3b585ce94ae7331628d126039d31",
         "config/admin/database-cleanup.php": "sha256:a9fa65ba14aaff1096172d9807f90dbde4f7262d4e6ccc95669963b156e48fd9",
         "config/admin/navigation.php": "sha256:ee1974bc2ea0ecafad4d8a5bd379d52a7f77369cd0aaa465fa29eaee42885afd",
@@ -201,7 +201,7 @@
         "lang/ja/multilingual_types.php": "sha256:780f3e8bb795a88712fd1860683eb3f55ed1876d15ae786214187c55398fe47a",
         "lisence-info.json": "sha256:062f7101e48f5976f66dc01627fffd8d8e6d6d0709aaca63c5001ba08fe4e7a3",
         "package-lock.json": "sha256:af3a7f608a4db5a668692162644dd73a1bc3c50c34fcc46e9e91d31bd5d72541",
-        "package.json": "sha256:633465b4c458a0dba0e786f7db7b94cbb2dd61ba6f7c12197e283132fcc218c0",
+        "package.json": "sha256:a90cf495d3a2e92d289743768967dfd0bea87a65ee6475e2a8b72d8a00a8fad5",
         "phpunit.xml": "sha256:ffe4d2ee99b82670f68f9cb98c7f7b36693ce160cfc377e9e023b83c56cc7239",
         "resources/ai/custom-rules-en.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "resources/ai/custom-rules-ja.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -256,6 +256,7 @@
         "tests/Feature/Helpers/DlsSeoSetPageMetaTest.php": "sha256:373fa4fc28bcf0b51390d039931768b620949929ef1d45a86db247149703e67c",
         "tests/Feature/Models/DixlaseSeoSettingMissingTableTest.php": "sha256:db088813c47fd310ef893f3dd3619937a813cf326d28c5725c4906414573967a",
         "tests/Feature/Models/DixlaseSeoSettingTest.php": "sha256:e1e8a31f87318e4b3b8598ff4c255e0ca6d61c2d3eeab19a29a34b23c207a929",
+        "tests/Feature/PluginSelfAuditTest.php": "sha256:1090e6c7ef5184bd1253b3fa16b5fed16ed53a15873924265968fc4b753eda09",
         "tests/Feature/Services/JsonLdGeneratorTest.php": "sha256:ea405d2a635a1e0ceaf7122336808713303df40cf0073b7f93ca5f373ea3e982",
         "tests/Feature/Services/SeoMetaGeneratorTest.php": "sha256:8349d678a9b487e26ee53ca38b462cb504e764392c08e050d4b3691e696d2ace",
         "tests/Unit/ExampleTest.php": "sha256:a0d50ee6db9939de9674ccc64d4bd0c0f8030c3e271217dfcee22e76502ff69f",
@@ -267,6 +268,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-10-12T14:52:00+00:00"
+        "signed_at": "2026-10-15T16:33:40+00:00"
     }
 }
