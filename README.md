@@ -29,7 +29,7 @@ The sitemap and robots.txt are published automatically at `/sitemap.xml` and `/r
 
 This plugin declares the following capability in `plugin.json`:
 
-- **`seo`** — Marks this plugin as the site's SEO provider. It consumes the `seo-meta` capability exposed by other plugins (e.g. DixlasePages) to read and write per-entity meta descriptions and OGP images, and surfaces them under **Plugin Integrations**.
+- **`seo`** — Marks this plugin as the site's SEO provider. It consumes the `seo-meta` capability exposed by other plugins (e.g. DixlasePages) to read and write per-entity meta descriptions and OGP images, and surfaces them under **Plugin Integrations**. A plugin that also declares `seo_description` and `seo_ogp_media_id` (type `media`) in its `multilingual_content` gets a description and an OGP image per language: each locale URL shares its own image, and the stored one applies where there is no translation.
 
 ## License
 

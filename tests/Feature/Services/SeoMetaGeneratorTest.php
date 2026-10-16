@@ -452,6 +452,44 @@ class SeoMetaGeneratorTest extends TestCase
     }
 
     /**
+     * The image made for the current locale wins over the stored one and
+     * the fallback.
+     */
+    public function test_generate_prefers_localized_ogp_media(): void
+    {
+        $context = app(SeoContext::class);
+        $context->setLocalizedOgpMediaId(33);
+        $context->setOgpMediaId(11);
+        $context->setFallbackOgpMediaId(22);
+
+        $generator = new SeoMetaGenerator(null, $this->mediaRepositoryFor([
+            11 => 'entity.jpg',
+            22 => 'featured.jpg',
+            33 => 'entity-en.jpg',
+        ]));
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:image" content="'.asset('storage/media/entity-en.jpg').'">', $output);
+        $this->assertStringNotContainsString('entity.jpg', $output);
+    }
+
+    /**
+     * A localized image whose media item is gone falls through to the
+     * stored one.
+     */
+    public function test_generate_skips_a_missing_localized_ogp_media(): void
+    {
+        $context = app(SeoContext::class);
+        $context->setLocalizedOgpMediaId(99);
+        $context->setOgpMediaId(11);
+
+        $generator = new SeoMetaGenerator(null, $this->mediaRepositoryFor([11 => 'entity.jpg']));
+        $output = $generator->generate('https://example.com/page');
+
+        $this->assertStringContainsString('<meta property="og:image" content="'.asset('storage/media/entity.jpg').'">', $output);
+    }
+
+    /**
      * With neither an entity image nor a fallback, the site-wide setting
      * applies — the behaviour every page had before this change.
      */
