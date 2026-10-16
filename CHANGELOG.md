@@ -5,6 +5,17 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.3] — 2026-10-17
+
+### Added
+
+- A page can carry its own OGP image per language. A content plugin opts in by declaring
+  `seo_ogp_media_id` (type `media`) in its `multilingual_content`; each locale URL then
+  shares the image translated for that locale, and a language with no translation keeps
+  the stored image. A translated image whose media item has been deleted falls through to
+  the stored one rather than emitting a broken URL. Plugins that do not declare the field
+  are unchanged (#54, fixes #53).
+
 ## [0.2.2] — 2026-10-16
 
 ### Development
