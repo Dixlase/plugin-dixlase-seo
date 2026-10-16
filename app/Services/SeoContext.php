@@ -53,6 +53,8 @@ class SeoContext
 
     private ?string $title = null;
 
+    private ?int $localizedOgpMediaId = null;
+
     private ?int $ogpMediaId = null;
 
     private ?int $fallbackOgpMediaId = null;
@@ -85,6 +87,21 @@ class SeoContext
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    /**
+     * Media id made for the current locale: the page's `seo_ogp_media_id`
+     * translation. Tried before `ogpMediaId`, so each language URL can
+     * share its own image.
+     */
+    public function setLocalizedOgpMediaId(?int $localizedOgpMediaId): void
+    {
+        $this->localizedOgpMediaId = $localizedOgpMediaId;
+    }
+
+    public function getLocalizedOgpMediaId(): ?int
+    {
+        return $this->localizedOgpMediaId;
     }
 
     /**

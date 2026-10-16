@@ -47,9 +47,11 @@ if (! function_exists('dls_seo_set_page_meta')) {
      * back to the primary value stored in the SEO meta table (authored in
      * the page editor). Empty results leave the site-wide default to apply.
      *
-     * OGP image: the `ogp_media_id` the editor picked for this entity, read
-     * from the same SEO meta table. Needs no argument — a caller that still
-     * passes only `$page` and `$pluginSlug` gets its per-page image.
+     * OGP image: the page's `seo_ogp_media_id` translation for the current
+     * locale, when the plugin declares that field, then the `ogp_media_id`
+     * the editor picked for this entity, read from the same SEO meta table.
+     * Needs no argument — a caller that still passes only `$page` and
+     * `$pluginSlug` gets its per-page image.
      *
      * The remaining arguments are optional, so every existing two-argument
      * call keeps working unchanged; pass them by name:
@@ -126,6 +128,17 @@ if (! function_exists('dls_seo_set_page_meta')) {
 
             if ($ogType !== null && $ogType !== '') {
                 $context->setOgType($ogType);
+            }
+
+            // The image made for this locale, tried before the stored one.
+            // Looked up last, so a page that fails here still has everything
+            // else set. The generator falls through when the media item is
+            // gone.
+            if (method_exists($page, 'getTranslation')) {
+                $translatedImage = $page->getTranslation('seo_ogp_media_id', $locale, false);
+                if (is_int($translatedImage) || (is_string($translatedImage) && ctype_digit($translatedImage))) {
+                    $context->setLocalizedOgpMediaId((int) $translatedImage);
+                }
             }
         } catch (\Throwable) {
             // SEO context not bound (plugin disabled / console) — ignore.

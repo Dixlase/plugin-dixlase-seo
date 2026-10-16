@@ -228,12 +228,14 @@ class SeoMetaGenerator
     /**
      * Resolve the share-card image URL, trying each source in turn:
      *
-     *   1. The image the editor picked for this entity (`ogp_media_id` in
+     *   1. The image made for the current locale (the page's
+     *      `seo_ogp_media_id` translation).
+     *   2. The image the editor picked for this entity (`ogp_media_id` in
      *      the SEO meta table).
-     *   2. A caller-supplied fallback for entities that have no SEO image
+     *   3. A caller-supplied fallback for entities that have no SEO image
      *      of their own — a blog post's featured image, for instance.
-     *   3. The site-wide `default_ogp_image` setting.
-     *   4. The image bundled with this plugin, so the tag is never empty.
+     *   4. The site-wide `default_ogp_image` setting.
+     *   5. The image bundled with this plugin, so the tag is never empty.
      *
      * A candidate that does not resolve to a URL (a media row that was
      * deleted, say) falls through to the next one rather than emitting an
@@ -246,6 +248,7 @@ class SeoMetaGenerator
         $context = $this->context();
 
         $candidates = [
+            $context?->getLocalizedOgpMediaId(),
             $context?->getOgpMediaId(),
             $context?->getFallbackOgpMediaId(),
             $settings['default_ogp_image'] ?? '',

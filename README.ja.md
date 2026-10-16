@@ -36,7 +36,7 @@ Dixlase 用の SEO 最適化プラグイン。
 
 本プラグインは `plugin.json` で以下の capability を宣言しています。
 
-- **`seo`** — 本プラグインをサイトの SEO プロバイダとして登録します。他プラグイン(DixlasePages など)が公開する `seo-meta` capability を消費して、エンティティごとのメタディスクリプションや OGP 画像を読み書きし、**プラグイン連携** 画面に表示します。
+- **`seo`** — 本プラグインをサイトの SEO プロバイダとして登録します。他プラグイン(DixlasePages など)が公開する `seo-meta` capability を消費して、エンティティごとのメタディスクリプションや OGP 画像を読み書きし、**プラグイン連携** 画面に表示します。`multilingual_content` に `seo_description` と `seo_ogp_media_id`(type `media`)も宣言したプラグインは、説明文と OGP 画像を言語ごとに持てます。言語ごとの URL がそれぞれの画像で共有され、翻訳がない言語では保存済みの画像が使われます。
 
 ## ライセンス
 

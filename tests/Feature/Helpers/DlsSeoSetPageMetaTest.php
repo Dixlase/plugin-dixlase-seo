@@ -118,6 +118,7 @@ class DlsSeoSetPageMetaTest extends TestCase
         $this->assertSame('42', $context->getEntityId());
 
         // Nothing the caller did not pass:
+        $this->assertNull($context->getLocalizedOgpMediaId());
         $this->assertNull($context->getTitle());
         $this->assertNull($context->getFallbackOgpMediaId());
         $this->assertNull($context->getOgType());
@@ -210,5 +211,69 @@ class DlsSeoSetPageMetaTest extends TestCase
 
         $this->assertSame('Translated description', $context->getDescription());
         $this->assertSame(33, $context->getOgpMediaId());
+    }
+
+    /**
+     * A page that translates seo_ogp_media_id hands the image for the
+     * current locale over, next to the stored one.
+     */
+    public function test_a_translated_image_is_recorded_next_to_the_stored_one(): void
+    {
+        $this->bindMeta(new SeoMetaDTO(ogpMediaId: 11));
+
+        dls_seo_set_page_meta($this->translatingPage(['seo_ogp_media_id' => '33']), 'dixlase-blog');
+
+        $context = app(SeoContext::class);
+
+        $this->assertSame(33, $context->getLocalizedOgpMediaId());
+        $this->assertSame(11, $context->getOgpMediaId());
+    }
+
+    /**
+     * No translation, or a value that is not a media id, leaves the slot
+     * empty so the stored image applies.
+     */
+    public function test_a_missing_or_malformed_translated_image_is_ignored(): void
+    {
+        $this->bindMeta(new SeoMetaDTO(ogpMediaId: 11));
+
+        foreach ([[], ['seo_ogp_media_id' => ''], ['seo_ogp_media_id' => 'abc']] as $translations) {
+            app()->instance(SeoContext::class, new SeoContext());
+
+            dls_seo_set_page_meta($this->translatingPage($translations), 'dixlase-blog');
+
+            $this->assertNull(app(SeoContext::class)->getLocalizedOgpMediaId());
+            $this->assertSame(11, app(SeoContext::class)->getOgpMediaId());
+        }
+    }
+
+    /**
+     * A stand-in model whose getTranslation() answers from a fixed map.
+     *
+     * @param  array<string, string>  $translations
+     */
+    private function translatingPage(array $translations): Model
+    {
+        $page = new class extends Model
+        {
+            protected $table = 'dls_seo_stub_translated_pages';
+
+            /** @var array<string, string> */
+            public array $stubTranslations = [];
+
+            public function getKey(): string
+            {
+                return '99';
+            }
+
+            public function getTranslation(string $field, string $locale, bool $fallback = true): ?string
+            {
+                return $this->stubTranslations[$field] ?? null;
+            }
+        };
+
+        $page->stubTranslations = $translations;
+
+        return $page;
     }
 }
