@@ -36,8 +36,9 @@ namespace Plugins\DixlaseSEO\App\Services;
  * Request-scoped holder for the SEO meta of the content currently being
  * rendered.
  *
- * A front-end view (e.g. DixlasePages / DixlaseLegal `front/page.blade.php`)
- * hands its own values to SEO via the `dls_seo_set_page_meta()` helper.
+ * A content plugin's front-end view (e.g. DixlasePages'
+ * `front/page.blade.php`) hands its own values to SEO via the
+ * `dls_seo_set_page_meta()` helper.
  * SeoMetaGenerator then emits them when building the `<head>` instead of the
  * site-wide defaults.
  *

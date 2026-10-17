@@ -66,7 +66,7 @@ if (! function_exists('dls_seo_set_page_meta')) {
      * layout's `<head>` is rendered. No-op and never throws when the SEO
      * plugin or its context is unavailable.
      *
-     * @param  Model  $page  A TranslatableTrait model (DixlasePagesPage / DixlaseLegalPage)
+     * @param  Model  $page  The entity being rendered; a model using core's TranslatableTrait
      * @param  string  $pluginSlug  Slug of the plugin that owns the entity
      * @param  string|null  $title  The page's title in the current locale, for `og:title`
      * @param  int|null  $fallbackOgpMediaId  Image to use when the entity has no SEO image of its own
@@ -152,15 +152,15 @@ if (! function_exists('dls_seo_localized_setting')) {
      *
      * Lookup chain:
      *
-     *   1. DixlaseMultilingual's SingletonTranslationResolver for the
+     *   1. Core's `SingletonTranslationResolver` contract for the
      *      current locale (anchored on
      *      `(translatable_type='dixlase-seo:settings', translatable_id=1)`)
      *   2. Same resolver for the site's default locale
      *   3. The primary value from `plg_dixlase_seo_settings`
      *
-     * On single-language sites (no DixlaseMultilingual installed) steps
-     * 1 and 2 are skipped because no resolver is bound, and the helper
-     * returns the primary value directly.
+     * On a single-language site steps 1 and 2 are skipped because
+     * nothing binds that contract, and the helper returns the primary
+     * value directly.
      *
      * Intended fields: default_title and default_description. Callers
      * outside this set get the primary value via the same path.

@@ -41,10 +41,11 @@ use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
  * site-wide settings (currently `default_title` and `default_description`).
  *
  * Registered in plugin.json as the `provider` for the
- * `dixlase-seo:settings` singleton type. DixlaseMultilingual calls this
- * when no per-locale translation exists for the requested locale, so the
- * front end falls back to the primary value stored in the plugin's
- * existing key-value `plg_dixlase_seo_settings` table.
+ * `dixlase-seo:settings` singleton type. The extension that provides the
+ * central translation manager calls this when no per-locale translation
+ * exists for the requested locale, so the front end falls back to the
+ * primary value stored in the plugin's existing key-value
+ * `plg_dixlase_seo_settings` table.
  *
  * Mirrors `Plugins\DixlaseInquiry\App\Multilingual\InquirySettingsProvider`
  * and `Themes\DixlaseOnePage\App\Multilingual\DixlaseOnePageSettingsProvider`

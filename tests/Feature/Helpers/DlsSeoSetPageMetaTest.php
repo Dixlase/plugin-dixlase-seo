@@ -156,13 +156,13 @@ class DlsSeoSetPageMetaTest extends TestCase
     {
         $this->bindMeta(null);
 
-        dls_seo_set_page_meta($this->stubPage(), 'dixlase-legal');
+        dls_seo_set_page_meta($this->stubPage(), 'acme-example');
 
         $context = app(SeoContext::class);
 
         $this->assertNull($context->getDescription());
         $this->assertNull($context->getOgpMediaId());
-        $this->assertSame('dixlase-legal', $context->getEntityPluginSlug());
+        $this->assertSame('acme-example', $context->getEntityPluginSlug());
     }
 
     /**

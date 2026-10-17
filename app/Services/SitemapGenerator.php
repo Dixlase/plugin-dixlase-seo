@@ -92,9 +92,11 @@ class SitemapGenerator
      * when locale URL routing is off or fewer than two locales are enabled
      * (in which case a single non-localised <loc> is emitted, as before).
      *
-     * Soft dependency: the enabled-locale list is owned by DixlaseMultilingual.
-     * When that plugin is absent the resolver is unbound and we fall back to
-     * single-locale output.
+     * Soft dependency: the enabled-locale list is owned by the extension
+     * that provides locale URL routing. When that extension is absent the
+     * resolver is unbound and we fall back to single-locale output. The
+     * list is still reached by class name rather than through a core
+     * contract — see issue #59.
      *
      * @return array{locales: list<string>, default: string}|null
      */
