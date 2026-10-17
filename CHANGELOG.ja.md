@@ -71,7 +71,7 @@ Dixlase SEO プラグインの主要な変更はすべてこのファイルに�
 ### 追加
 
 - 管理画面の SEO 基本設定に**デフォルトのSNSタイトル**（`default_title`）を追加。
-  `og:title` に使用され、DixlaseMultilingual 経由でロケールごとに翻訳可能
+  `og:title` に使用され、ロケールごとに翻訳可能
   （`dixlase-seo:settings` シングルトン型に登録）。空の場合はアプリケーション名に
   フォールバックするため、既存インストールの出力は変わりません。
 - `twitter:title` を明示的に出力。X の `og:title` フォールバックに依存しない形に
