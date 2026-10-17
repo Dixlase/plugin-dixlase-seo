@@ -2,7 +2,7 @@
     "name": "Dixlase SEO",
     "package_name": "dixlase/dixlase-seo",
     "slug": "dixlase-seo",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": {
         "en": "SEO optimization plugin for Dixlase. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
         "ja": "Dixlase用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
@@ -135,8 +135,8 @@
         "middleware": true
     },
     "files": {
-        "CHANGELOG.ja.md": "sha256:b69ce17d1e586e080ea2581b7bc21e0a763ff2c762bf8c5e6f2b25dc00fd0f70",
-        "CHANGELOG.md": "sha256:8ab9ca368bf3b19e3e6bfe8a35de02f90951033e2d25a98499e3108d96fb068b",
+        "CHANGELOG.ja.md": "sha256:11272a05ccc9164c653f5da50eb08f300df0c097a7ed5ecd1b622d3ab89352ef",
+        "CHANGELOG.md": "sha256:e47543c703fabb8722415f9c6f0410cc0fd4321cdbdbf3676fdf849adde640fb",
         "CONTRIBUTING.ja.md": "sha256:9f42b9eb016487f6df95953ac3ebf7da1661f0f8e5c52f537d7e56c7e54373b9",
         "CONTRIBUTING.md": "sha256:ed2ed0e9f3945bc73649e0e860a68ff5a8770e64e07f902b16ddd11b767e8ef3",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -171,7 +171,7 @@
         "app/Services/SeoContext.php": "sha256:49a4f1f764056785c62cdf6d74570ee67b5593f98d9d6eb53614bc019e59a2ac",
         "app/Services/SeoMetaGenerator.php": "sha256:42520c37f0c7f2f28ff1d2bba91e0150118fcd9c7d0bbac1c1cc2bb0cfc2a814",
         "app/Services/SitemapGenerator.php": "sha256:bed14a49b9b71254f02d4fbad072d7c6b5c92b86b567eb9376557c24a01be25d",
-        "composer.json": "sha256:6179898de8697f9ddf780c30e925caf5a762bf8088e4d3f53c4b87c56a896cb2",
+        "composer.json": "sha256:70864fef87529886be075fa5ae81e94a515293396dadd8b907c54228405555ce",
         "config/admin.php": "sha256:043a00086e4fe4cd2faf4350bfcc1a200c6b3b585ce94ae7331628d126039d31",
         "config/admin/database-cleanup.php": "sha256:a9fa65ba14aaff1096172d9807f90dbde4f7262d4e6ccc95669963b156e48fd9",
         "config/admin/navigation.php": "sha256:ee1974bc2ea0ecafad4d8a5bd379d52a7f77369cd0aaa465fa29eaee42885afd",
@@ -201,7 +201,7 @@
         "lang/ja/multilingual_types.php": "sha256:780f3e8bb795a88712fd1860683eb3f55ed1876d15ae786214187c55398fe47a",
         "lisence-info.json": "sha256:062f7101e48f5976f66dc01627fffd8d8e6d6d0709aaca63c5001ba08fe4e7a3",
         "package-lock.json": "sha256:af3a7f608a4db5a668692162644dd73a1bc3c50c34fcc46e9e91d31bd5d72541",
-        "package.json": "sha256:835ced03e234d9f490c1d0bc1fe60b7556a1b3c0b61dd0190e871486158fdc4d",
+        "package.json": "sha256:c51b8ebfd7435051cac55ad5974b8220a57e5c0f73982cbc118e7f7a0a1f42a3",
         "phpunit.xml": "sha256:ffe4d2ee99b82670f68f9cb98c7f7b36693ce160cfc377e9e023b83c56cc7239",
         "resources/ai/custom-rules-en.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "resources/ai/custom-rules-ja.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -268,6 +268,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-10-16T17:57:12+00:00"
+        "signed_at": "2026-10-17T15:12:44+00:00"
     }
 }
