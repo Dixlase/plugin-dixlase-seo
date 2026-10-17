@@ -74,9 +74,8 @@ and this plugin follows Semantic Versioning.
 ### Added
 
 - **Default social title** setting (`default_title`) in admin SEO base settings.
-  It feeds `og:title`, is translatable per locale through DixlaseMultilingual
-  (registered on the `dixlase-seo:settings` singleton type), and falls back to
-  the application name when left empty, so existing installs keep their current
+  It feeds `og:title`, is translatable per locale (registered on the
+  `dixlase-seo:settings` singleton type), and falls back to the application name when left empty, so existing installs keep their current
   output.
 - `twitter:title` is now emitted explicitly instead of relying on X's `og:title`
   fallback — the same reasoning already applied to `twitter:image`.
