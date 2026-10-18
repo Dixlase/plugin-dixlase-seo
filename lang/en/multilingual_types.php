@@ -31,8 +31,8 @@
  */
 
 return [
-    // Card label shown in the DixlaseMultilingual central translation
-    // manager UI for the `dixlase-seo:settings` type (see plugin.json
+    // Card label shown in the central translation manager UI for the
+    // `dixlase-seo:settings` type (see plugin.json
     // `multilingual_content.types[0].label_key`).
     'settings' => 'SEO Settings',
 ];
