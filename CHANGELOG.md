@@ -5,6 +5,13 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.4] — 2026-10-18
+
+### Changed
+
+- The README and this changelog no longer name plugins that are not distributed publicly. Each integration is
+  described by the core mechanism it goes through (#57, fixes #56). No behaviour changed.
+
 ## [0.2.3] — 2026-10-17
 
 ### Added
