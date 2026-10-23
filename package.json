@@ -1,6 +1,6 @@
 {
   "name": "plugins/dixlase-seo",
-  "version": "0.2.5",
+  "version": "0.2.6-dev",
   "description": "DixlaseSEO - A custom plugin for Dixlase",
   "type": "module",
   "private": true,
