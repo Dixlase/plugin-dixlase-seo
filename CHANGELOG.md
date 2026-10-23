@@ -5,6 +5,22 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.5] — 2026-10-24
+
+### Changed
+
+- Comments name the core mechanism an integration goes through instead of the extensions that
+  provide it, and a test no longer uses such an extension's slug as its fixture (#60, fixes #58).
+  No behaviour changed.
+
+### Development
+
+- The deploy workflow ships a published release only, never a push to `main`, and both the release
+  build and the deploy refuse a tree that does not match the signature manifest (#63, #64; part of
+  Dixlase/dixlase-core#520).
+- Between releases `main` carries a development version, such as `0.2.5-dev` (#61).
+- Bump `vite` from 8.3.1 to 8.3.3, a build-time dependency that is not shipped to sites (#62).
+
 ## [0.2.4] — 2026-10-18
 
 ### Changed
