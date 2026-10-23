@@ -3,10 +3,13 @@ name: Test
 on:
   push:
     branches-ignore:
-      - main # on main, deploy.yml runs the tests instead
+      # main only fast-forwards to a release tag, whose commit was already
+      # tested on next
+      - main
   pull_request:
     branches:
-      - main
+      - next # development: every pull request targets next
+      - main # a hotfix released from main
 
 jobs:
   test:
