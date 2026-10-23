@@ -200,8 +200,8 @@
         "lang/ja/dixlase_seo.php": "sha256:cb6ae0715626dfcbc0808dca388978dc682fcf593351fe04000e3255aaa4ca4f",
         "lang/ja/multilingual_types.php": "sha256:1f1d18995a45af801e78d9f59fed83ddde9b2f61ea699257cc0df5e34aa6b994",
         "lisence-info.json": "sha256:062f7101e48f5976f66dc01627fffd8d8e6d6d0709aaca63c5001ba08fe4e7a3",
-        "package-lock.json": "sha256:af3a7f608a4db5a668692162644dd73a1bc3c50c34fcc46e9e91d31bd5d72541",
-        "package.json": "sha256:8f130bef3e45d790d4c26eb84fad4680ea3c56b7c19ae0ee4277b0c604e874b9",
+        "package-lock.json": "sha256:30aa74f06ccb6cfba0d48311c650f464671c6460ce2f04f14bdcef5ad4869bd2",
+        "package.json": "sha256:d339492f843de19b70da186e14836bfadd2dfd4d7214427167ac7eb679a5a9e4",
         "phpunit.xml": "sha256:ffe4d2ee99b82670f68f9cb98c7f7b36693ce160cfc377e9e023b83c56cc7239",
         "resources/ai/custom-rules-en.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "resources/ai/custom-rules-ja.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -268,6 +268,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-10-23T09:57:11+00:00"
+        "signed_at": "2026-10-23T12:20:33+00:00"
     }
 }
