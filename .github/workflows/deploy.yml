@@ -1,9 +1,21 @@
 name: Deploy Plugin
 
 on:
-  push:
-    branches:
-      - main
+  # Production receives a tagged release, never a merge. Nothing signs on a
+  # merge -- signing happens in one place, from a working copy -- so `main`
+  # is free to drift. What ships is the release, whose tree release.yml has
+  # already checked against the signature manifest.
+  # Dixlase/dixlase-core#520.
+  release:
+    types: [published]
+
+  # Manual entry point, for re-running the deploy of a tag that is already
+  # published (the recovery path core#529 added for the core deploy).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy, e.g. v0.2.4'
+        required: true
 
 jobs:
   test:
@@ -14,6 +26,7 @@ jobs:
       - name: Checkout plugin
         uses: actions/checkout@v5
         with:
+          ref: ${{ github.event.release.tag_name || github.event.inputs.tag }}
           path: plugin
 
       - name: Checkout core
@@ -112,6 +125,8 @@ jobs:
       # ------------------------------------------------------------------
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name || github.event.inputs.tag }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -158,6 +173,7 @@ jobs:
             BASE="${{ steps.target.outputs.base_dir }}"
             PLUGIN_DIR="DixlaseSEO"
             EXPECTED_URL="git@github.com:${{ github.repository }}.git"
+            TAG="${{ github.event.release.tag_name || github.event.inputs.tag }}"
 
             for SITE in brand demo; do
               # Resolve the site layout. A Docker Installer instance keeps the app in
@@ -217,7 +233,7 @@ jobs:
               # Resolve $DEST into one of three shapes and act accordingly:
               #
               #   (a) Proper nested clone of this plugin
-              #       -> restore ownership, fetch + reset to origin/main
+              #       -> restore ownership, fetch the tags and move it onto $TAG
               #
               #   (b) Directory exists but with no nested .git
               #       -> likely the outer parent repo was re-cloned over it and
@@ -245,14 +261,14 @@ jobs:
                   echo "       Refusing to fetch+reset against an unrelated repo." >&2
                   echo "       Manual recovery (one-time):" >&2
                   echo "         sudo mv $DEST ${DEST}.stale.\$(date +%Y%m%d-%H%M%S)" >&2
-                  echo "         git clone --branch main $EXPECTED_URL $DEST" >&2
+                  echo "         git clone --branch $TAG $EXPECTED_URL $DEST" >&2
                   exit 1
                 fi
 
                 fix_owner "$CONTAINER_DEST"
                 cd "$DEST"
-                git fetch origin
-                git reset --hard origin/main
+                git fetch origin --tags --force --prune
+                git reset --hard "refs/tags/$TAG"
 
               elif [ -d "$DEST" ]; then
                 BACKUP_BASENAME="${PLUGIN_DIR}.stale.$(date +%Y%m%d-%H%M%S)"
@@ -261,11 +277,11 @@ jobs:
                 # recurs, something between deploys removes the nested .git.
                 echo "  Contents before move-aside: $(ls -A "$DEST" | wc -l) entr(ies); .git present: no"
                 docker exec "$PHP_CONTAINER" mv "$CONTAINER_DEST" "$CONTAINER_BACKUP_ROOT/$BACKUP_BASENAME"
-                git clone --branch main "$EXPECTED_URL" "$DEST"
+                git clone --branch "$TAG" "$EXPECTED_URL" "$DEST"
                 fix_owner "$CONTAINER_DEST"
 
               else
-                git clone --branch main "$EXPECTED_URL" "$DEST"
+                git clone --branch "$TAG" "$EXPECTED_URL" "$DEST"
                 fix_owner "$CONTAINER_DEST"
               fi
 
