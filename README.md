@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/social-preview.png" alt="Dixlase SEO" width="640">
+</p>
+
 # Dixlase SEO
 
 For Japanese, see [README.ja.md](./README.ja.md).

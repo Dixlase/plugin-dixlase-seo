@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/social-preview.png" alt="Dixlase SEO" width="640">
+</p>
+
 # Dixlase SEO
 
 For English, see [README.md](./README.md).
