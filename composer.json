@@ -2,7 +2,7 @@
     "name": "dixlase/dixlase-seo",
     "description": "This is the DixlaseSEO plugin.",
     "type": "dixlase-plugin",
-    "version": "0.2.6",
+    "version": "0.2.7-dev",
     "license": "GPL-3.0-or-later",
     "authors": [
         {
