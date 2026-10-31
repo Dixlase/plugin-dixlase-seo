@@ -70,8 +70,25 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     private string $integrationsUrl;
 
+    /**
+     * INSTALLED as the harness had it, per superglobal: an empty array when
+     * the harness set none, otherwise ['INSTALLED' => its exact value].
+     *
+     * @var array{env: array<string, mixed>, server: array<string, mixed>}
+     */
+    private array $installedBefore = ['env' => [], 'server' => []];
+
     protected function setUp(): void
     {
+        // Remember it before overwriting, so tearDown() can put the
+        // harness's own value back instead of writing a constant. Measured
+        // on PHPUnit 12: this plugin's phpunit.xml sets INSTALLED in $_ENV
+        // only, so "the harness set none" has to survive the round trip too.
+        $this->installedBefore = [
+            'env' => array_intersect_key($_ENV, ['INSTALLED' => null]),
+            'server' => array_intersect_key($_SERVER, ['INSTALLED' => null]),
+        ];
+
         // インストール済みとして扱う
         $_ENV['INSTALLED'] = 'true';
         $_SERVER['INSTALLED'] = 'true';
@@ -156,8 +173,12 @@ class DixlaseSeoAdminSettingsTest extends TestCase
 
     protected function tearDown(): void
     {
-        $_ENV['INSTALLED'] = 'false';
-        $_SERVER['INSTALLED'] = 'false';
+        // Drop ours, then put back whatever the harness had -- nothing, for
+        // a superglobal it never set.
+        unset($_ENV['INSTALLED'], $_SERVER['INSTALLED']);
+        $_ENV += $this->installedBefore['env'];
+        $_SERVER += $this->installedBefore['server'];
+
         parent::tearDown();
     }
 
