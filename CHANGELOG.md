@@ -5,6 +5,17 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.7] — 2026-11-01
+
+### Changed
+
+- Both READMEs open with the social preview image (#72, fixes #71).
+
+### Development
+
+- The tests that pin `INSTALLED` put back the value they found instead of writing `false` over it
+  (#74, fixes #49).
+
 ## [0.2.6] — 2026-10-30
 
 ### Changed
