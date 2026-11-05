@@ -2,7 +2,7 @@
     "name": "Dixlase SEO",
     "package_name": "dixlase/dixlase-seo",
     "slug": "dixlase-seo",
-    "version": "0.2.8-dev",
+    "version": "0.2.8",
     "description": {
         "en": "SEO optimization plugin for Dixlase. Provides meta tags, OGP, JSON-LD, XML sitemap, and robots.txt management.",
         "ja": "Dixlase用SEO最適化プラグイン。メタタグ、OGP、JSON-LD、XMLサイトマップ、robots.txtの管理機能を提供します。"
@@ -135,8 +135,8 @@
         "middleware": true
     },
     "files": {
-        "CHANGELOG.ja.md": "sha256:0eeb3f8236fe6a591e6b7493190aefb93e5619fe8864578ae338a09dd3201878",
-        "CHANGELOG.md": "sha256:1e377cc4adee7c348b58178a1159de09f61f5cbc020bf025ddda5ecf2779c3bf",
+        "CHANGELOG.ja.md": "sha256:107ba74e0bfec8ce6c0bde897ae28c00c3dae83797047f5258ad98573012cda8",
+        "CHANGELOG.md": "sha256:8dda4cae8f79decd11ff08bfae77e1ef5536806185540efcc0477a9519420886",
         "CONTRIBUTING.ja.md": "sha256:9f42b9eb016487f6df95953ac3ebf7da1661f0f8e5c52f537d7e56c7e54373b9",
         "CONTRIBUTING.md": "sha256:ed2ed0e9f3945bc73649e0e860a68ff5a8770e64e07f902b16ddd11b767e8ef3",
         "COPYRIGHT-POLICY.ja.md": "sha256:0c4ec8e48238ecaa23fb5df0c497cd5ba133f85b43228d72f00884b44263bf7f",
@@ -171,7 +171,7 @@
         "app/Services/SeoContext.php": "sha256:85a27479c3a70723562e15bb0d3ea6de520b18fcf83cbbe3f2faa4f84c6d2e49",
         "app/Services/SeoMetaGenerator.php": "sha256:42520c37f0c7f2f28ff1d2bba91e0150118fcd9c7d0bbac1c1cc2bb0cfc2a814",
         "app/Services/SitemapGenerator.php": "sha256:c134f5a867c0808fb47721b701ef32d4b16b38a3ceb664091d1544e0aec0f1ce",
-        "composer.json": "sha256:29a1033d44f737449f3108572a7de553d1d136cad69c88c2a284108e443c7d4d",
+        "composer.json": "sha256:f1d6b47c5598ac56b8b4c48bf255f9310cb4326ab2c1772d34909594a9ddcb52",
         "config/admin.php": "sha256:043a00086e4fe4cd2faf4350bfcc1a200c6b3b585ce94ae7331628d126039d31",
         "config/admin/database-cleanup.php": "sha256:a9fa65ba14aaff1096172d9807f90dbde4f7262d4e6ccc95669963b156e48fd9",
         "config/admin/navigation.php": "sha256:ee1974bc2ea0ecafad4d8a5bd379d52a7f77369cd0aaa465fa29eaee42885afd",
@@ -201,10 +201,13 @@
         "lang/ja/multilingual_types.php": "sha256:1f1d18995a45af801e78d9f59fed83ddde9b2f61ea699257cc0df5e34aa6b994",
         "lisence-info.json": "sha256:062f7101e48f5976f66dc01627fffd8d8e6d6d0709aaca63c5001ba08fe4e7a3",
         "package-lock.json": "sha256:30aa74f06ccb6cfba0d48311c650f464671c6460ce2f04f14bdcef5ad4869bd2",
-        "package.json": "sha256:c699fe53e7535bcdb112b238f54c2c7862889c1d4cb8cf19ca407607d5afa9f6",
+        "package.json": "sha256:fd4baf8786e8548733c8da47ff2baba77bf74994e887417df9cbb26a25100a09",
         "phpunit.xml": "sha256:ffe4d2ee99b82670f68f9cb98c7f7b36693ce160cfc377e9e023b83c56cc7239",
         "resources/ai/custom-rules-en.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "resources/ai/custom-rules-ja.md": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "resources/assets/css/style-x1XGuNl0.css": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+        "resources/assets/js/app-BvRk9kiK.js": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "resources/assets/manifest.json": "sha256:d3afa29e4a77b21630bf989b98acc6c6967809cb44a2d0c1d89fa5466f9920d7",
         "resources/comment-translations/ja/app/Http/Controllers/Admin/BaseSettingsController.php": "sha256:7c76f60096fb04fb5417a2830aab2405da11b0d2241ef13e6fa440a03a1abb8a",
         "resources/comment-translations/ja/app/Http/Controllers/Admin/ExternalSettingsController.php": "sha256:0ede3dc948c0e61b4bbc70d4ac64962819d09ffdcb316974571dc279756eb484",
         "resources/comment-translations/ja/app/Http/Controllers/Admin/IntegrationsController.php": "sha256:d81f44a2b84f55d53a4cbbd2c19829de8a3e4a495421b5a3bf1aa66dc2cebe85",
@@ -268,6 +271,6 @@
     "signing": {
         "algo": "ed25519",
         "key_id": "dixlase-authority-2026",
-        "signed_at": "2026-11-01T14:18:26+00:00"
+        "signed_at": "2026-11-05T18:45:04+00:00"
     }
 }

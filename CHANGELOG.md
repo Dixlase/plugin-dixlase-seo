@@ -5,6 +5,13 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.8] — 2026-11-06
+
+### Changed
+
+- The front-end assets are built once, when the plugin is released, and ship with it in
+  `resources/assets`. A site no longer builds them itself (#77).
+
 ## [0.2.7] — 2026-11-01
 
 ### Changed
