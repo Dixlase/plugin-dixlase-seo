@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\View;
 use Plugins\DixlaseSEO\App\Models\DixlaseSeoSetting;
 use Plugins\DixlaseSEO\App\Services\JsonLdGenerator;
 use Plugins\DixlaseSEO\App\Services\SeoMetaGenerator;
+use Plugins\DixlaseSEO\App\Support\CanonicalUrl;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -55,7 +56,12 @@ class InjectSeoMetaTags
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $url = $request->url();
+        // Not $request->url(): that takes the Host from the request, and
+        // nothing validates it (TrustHosts is off by design). See
+        // CanonicalUrl -- the request's host is used when this install
+        // serves it, APP_URL's otherwise, and the path is always the
+        // request's.
+        $url = CanonicalUrl::forRequest($request);
 
         // Share the head content as a deferred Stringable instead of a
         // pre-rendered string. The meta description is locale-aware, but
@@ -113,9 +119,9 @@ class InjectSeoMetaTags
                 }
 
                 // Combine all head content
-                $headMeta = trim($metaHtml . "\n    " . $jsonLdHtml);
+                $headMeta = trim($metaHtml."\n    ".$jsonLdHtml);
                 if ($gaHtml) {
-                    $headMeta = $gaHtml . "\n    " . $headMeta;
+                    $headMeta = $gaHtml."\n    ".$headMeta;
                 }
 
                 return $headMeta;
