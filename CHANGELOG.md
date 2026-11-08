@@ -5,6 +5,14 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.10] — 2026-11-08
+
+### Performance
+
+- The sitemap is built once per five-minute window per host instead of once per request, and
+  it is served with `Cache-Control: public, max-age=300` (#83, fixes #81). The sitemap route is
+  rate-limited to 60 requests a minute.
+
 ## [0.2.9] — 2026-11-08
 
 ### Fixed
