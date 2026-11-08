@@ -113,6 +113,111 @@ class SitemapControllerTest extends TestCase
     /**
      * サイトマップが有効な場合に200レスポンスを返すこと
      */
+    /**
+     * 2 回目のリクエストでプロバイダのクエリが走らないこと
+     */
+    public function test_a_second_request_does_not_rebuild_the_sitemap(): void
+    {
+        DixlaseSeoSetting::setValue('sitemap_enabled', '1');
+
+        // Counts generate() itself, not how often the container hands
+        // the generator out: the controller is constructed on every
+        // request either way, so counting resolutions would pass with or
+        // without the cache and prove nothing.
+        $generator = new class extends SitemapGenerator
+        {
+            public int $builds = 0;
+
+            public function __construct() {}
+
+            public function generate(): string
+            {
+                $this->builds++;
+
+                return '<?xml version="1.0"?><urlset></urlset>';
+            }
+        };
+        $this->app->instance(SitemapGenerator::class, $generator);
+
+        $this->get('/sitemap.xml')->assertStatus(200);
+        $this->assertSame(1, $generator->builds);
+
+        $this->get('/sitemap.xml')->assertStatus(200);
+
+        $this->assertSame(
+            1,
+            $generator->builds,
+            'Every request used to ask every provider for its rows; within the window it is built once.'
+        );
+    }
+
+    /**
+     * クローラーが尊重できる寿命を応答が持つこと
+     */
+    public function test_the_response_says_how_long_it_may_be_reused(): void
+    {
+        DixlaseSeoSetting::setValue('sitemap_enabled', '1');
+
+        $this->get('/sitemap.xml')
+            ->assertStatus(200)
+            ->assertHeader('Cache-Control', 'max-age=300, public');
+    }
+
+    /**
+     * 無効にした瞬間から 404 で、キャッシュが配り続けないこと
+     */
+    public function test_switching_it_off_takes_effect_at_once(): void
+    {
+        DixlaseSeoSetting::setValue('sitemap_enabled', '1');
+        $this->get('/sitemap.xml')->assertStatus(200);
+
+        DixlaseSeoSetting::setValue('sitemap_enabled', '0');
+
+        $this->get('/sitemap.xml')->assertStatus(404);
+    }
+
+    /**
+     * 別のホストの文書を互いに配らないこと
+     */
+    public function test_two_hosts_do_not_serve_each_others_document(): void
+    {
+        DixlaseSeoSetting::setValue('sitemap_enabled', '1');
+        config(['app.url' => 'https://first.example.test']);
+
+        \App\Models\Site::query()->create([
+            'name' => 'Second',
+            'slug' => 'second',
+            'host' => 'second.example.test',
+            'primary_locale' => 'ja',
+            'timezone' => 'Asia/Tokyo',
+            'is_active' => true,
+        ]);
+
+        $first = $this->get('https://first.example.test/sitemap.xml')->getContent();
+        $second = $this->get('https://second.example.test/sitemap.xml')->getContent();
+
+        $this->assertStringContainsString('https://first.example.test', $first);
+        $this->assertStringContainsString('https://second.example.test', $second);
+        $this->assertStringNotContainsString('https://second.example.test', $first);
+    }
+
+    /**
+     * 提供していないホストの URL を作らず、キャッシュにも残さないこと
+     */
+    public function test_an_unserved_host_neither_mints_urls_nor_poisons_the_cache(): void
+    {
+        DixlaseSeoSetting::setValue('sitemap_enabled', '1');
+        config(['app.url' => 'https://example.test']);
+
+        $forged = $this->get('https://forwarded.example.com/sitemap.xml')->getContent();
+        $this->assertStringNotContainsString('forwarded.example.com', $forged);
+        $this->assertStringContainsString('https://example.test', $forged);
+
+        // And the next caller is handed the site's own document.
+        $next = $this->get('https://example.test/sitemap.xml')->getContent();
+        $this->assertStringNotContainsString('forwarded.example.com', $next);
+    }
+
     public function test_returns_200_when_sitemap_enabled(): void
     {
         DixlaseSeoSetting::setValue('sitemap_enabled', '1');
