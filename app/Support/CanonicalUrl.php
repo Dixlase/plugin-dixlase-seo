@@ -77,6 +77,28 @@ class CanonicalUrl
     }
 
     /**
+     * The origin to build this request's URLs on.
+     *
+     * Same rule as forRequest(), without the path: the request's own
+     * origin when this install serves its host, APP_URL's otherwise.
+     * The sitemap needs it, because the URLs it lists are built with
+     * url(), which resolves against the request -- and a cached document
+     * built on a host this install does not serve would then be handed to
+     * everyone who asks next.
+     */
+    public static function originForRequest(Request $request): string
+    {
+        $appUrl = trim((string) config('app.url'));
+        $appHost = strtolower((string) parse_url($appUrl, PHP_URL_HOST));
+
+        if ($appHost === '' || in_array(strtolower($request->getHost()), self::servedHosts($appHost), true)) {
+            return rtrim($request->getSchemeAndHttpHost(), '/');
+        }
+
+        return self::origin($appUrl);
+    }
+
+    /**
      * The hosts this install serves: APP_URL's, and every active site's.
      *
      * @return list<string>

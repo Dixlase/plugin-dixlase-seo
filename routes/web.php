@@ -40,7 +40,11 @@ use Plugins\DixlaseSEO\App\Http\Controllers\SitemapController;
 |--------------------------------------------------------------------------
 */
 
+// Generous enough that a well-behaved crawler never meets it: the
+// document is cached, so the limit only bounds how often one client can
+// ask to be handed it.
 Route::get('sitemap.xml', [SitemapController::class, 'index'])
+    ->middleware('throttle:60,1')
     ->name('dixlase-seo.sitemap');
 
 Route::get('robots.txt', [RobotsTxtController::class, 'index'])
