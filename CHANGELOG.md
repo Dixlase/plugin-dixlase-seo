@@ -5,6 +5,14 @@ All notable changes to the Dixlase SEO plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin follows Semantic Versioning.
 
+## [0.2.9] — 2026-11-08
+
+### Fixed
+
+- The canonical URL is published on a host this install actually serves, instead of echoing
+  the request's host (#82, fixes #80). A page reached under another host name no longer
+  advertises that host as its canonical address.
+
 ## [0.2.8] — 2026-11-06
 
 ### Changed
